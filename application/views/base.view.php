@@ -37,17 +37,17 @@ if(!class_exists('Base_View')) {
             $html .= '<div id="main_container">' . "\n";
             $html .= '<header>' . "\n";
 
-            if(isset($_SESSION['auth'])) {
+            if(isset($_SESSION['auth']) && $page_id != 'index' && $page_id != 'login' && $page_id != 'register') {
                 $html .= '<div id="welcome">' . "\n";
                 $html .= '<p>Logged in as <span>' . $_SESSION['username'] . '</span></p>' . "\n";
                 $html .= '</div>' . "\n";
                 $html .= '<div id="logo">' . "\n";
                 $html .= '<div id="logo_inner">' . "\n";
                 $html .= '<h1><a href="member.php">DNDHelper</a></h1>' . "\n";
-                $html .= '<img id="hamburger" src="../../public/images/hamburger_black_small.png" alt="menu trigger image"/>' . "\n";
+                //$html .= '<img id="hamburger" src="../../public/images/hamburger_black_small.png" alt="menu trigger image"/>' . "\n";
                 $html .= '</div> <!-- end #logo_inner -->' . "\n";
                 $html .= '</div> <!-- end #logo -->' . "\n";
-                $html .= $this->buildNavigation();
+                //$html .= $this->buildNavigation();
             } else {
                 $html .= '<h1><a href="index.php">DNDHelper</a></h1>' . "\n";
             }
