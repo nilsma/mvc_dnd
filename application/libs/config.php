@@ -12,18 +12,21 @@ require_once '../application/models/base.model.php';
 require_once '../application/models/login.model.php';
 require_once '../application/models/register.model.php';
 require_once '../application/models/member.model.php';
+require_once '../application/models/create_character.model.php';
 require_once '../application/models/logout.model.php';
 
 require_once '../application/controllers/base.controller.php';
 require_once '../application/controllers/login.controller.php';
 require_once '../application/controllers/register.controller.php';
 require_once '../application/controllers/member.controller.php';
+require_once '../application/controllers/create_character.controller.php';
 require_once '../application/controllers/logout.controller.php';
 
 require_once '../application/views/base.view.php';
 require_once '../application/views/login.view.php';
 require_once '../application/views/about.view.php';
 require_once '../application/views/register.view.php';
+require_once '../application/views/create_character.view.php';
 require_once '../application/views/member.view.php';
 
 /**

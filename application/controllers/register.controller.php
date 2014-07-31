@@ -73,6 +73,7 @@ if(!class_exists('Register_Controller')) {
                 $this->model->addUserToDatabase($username, $email, $pwd1);
                 $_SESSION['auth'] = true;
                 $_SESSION['username'] = $username;
+                $_SESSION['user_id'] = $this->model->getUserId($_POST['username']);
                 header('Location: member.php');
             } else {
                 $_SESSION['errors'] = $errors;
