@@ -118,8 +118,6 @@ if(!class_exists('Member_Model')) {
             }
 
             $db->close();
-vvvvvvvvvvvvvvvvvvvv
-^^^^^^^^^^^^^^^^^^^^
             return $gamemaster_screens;
         }
 
