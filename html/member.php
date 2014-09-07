@@ -10,8 +10,6 @@ if(!isset($_SESSION['auth'])) {
 
 require_once '../application/libs/config.php';
 
-var_dump($_SESSION);
-
 $model = new Member_Model();
 $ctrl = new Member_Controller($model);
 $view = new Member_View($model, $ctrl, 'MVC DND', 'member');

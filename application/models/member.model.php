@@ -10,24 +10,87 @@ if(!class_exists('Member_Model')) {
             parent::__construct();
         }
 
-        public function getAvailableCharacters() {
+        public function getGamemasterScreenOverview($screen_id) {
+            $db = $this->connect();
+
+            $query = "SELECT g.alias, c.title FROM gamemasters as g, campaigns as c WHERE g.id=? and g.id=c.owner";
+            $query = $db->real_escape_string($query);
+
+            $screen_overview = array();
+
+            $stmt = $db->stmt_init();
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $screen_id);
+                $stmt->execute();
+                $stmt->bind_result($alias, $title);
+                $stmt->fetch();
+                $screen_overview = array(
+                    'alias' => $alias,
+                    'title' => $title
+                );
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $screen_overview;
+        }
+
+        public function getCharacterSheetOverview($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT p.name, p.class, p.level FROM sheets as s, personalia as p WHERE s.id=? AND s.personalia=p.id";
+            $query = $db->real_escape_string($query);
+
+            $sheet_overview = array();
+
+            $stmt = $db->stmt_init();
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($name, $class, $level);
+                $stmt->fetch();
+                $sheet_overview = array(
+                    'name' => $name,
+                    'class' => $class,
+                    'level' => $level
+                );
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $sheet_overview;
+        }
+
+        public function getAvailableCharacters($user_id) {
             $db = $this->connect();
 
             $character_sheets = array();
 
-            $query = "SELECT p.name, p.class, p.level FROM personalia as p, sheets as s WHERE s.owner=? AND s.personalia=p.id";
+            $query = "SELECT id FROM sheets WHERE owner=?";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
             if(!$stmt->prepare($query)) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
-                $stmt->bind_param('i', $_SESSION['user_id']);
+                $stmt->bind_param('i', $user_id);
+                $stmt->execute();
+                $stmt->bind_result($sheet_id);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $character_sheets[] = $sheet_id;
+                }
+
+                $stmt->close();
             }
 
-            $stmt->close();
             $db->close();
-
             return $character_sheets;
         }
 
@@ -36,7 +99,7 @@ if(!class_exists('Member_Model')) {
 
             $gamemaster_screens = array();
 
-            $query = "SELECT p.name, p.class, p.level FROM personalia as p, sheets as s WHERE s.owner=? AND s.personalia=p.id";
+            $query = "SELECT id FROM gamemasters WHERE owner=?";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -44,11 +107,19 @@ if(!class_exists('Member_Model')) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
                 $stmt->bind_param('i', $user_id);
+                $stmt->execute();
+                $stmt->bind_result($screen_id);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $gamemaster_screens[] = $screen_id;
+                }
+
+                $stmt->close();
             }
 
-            $stmt->close();
             $db->close();
-
+vvvvvvvvvvvvvvvvvvvv
+^^^^^^^^^^^^^^^^^^^^
             return $gamemaster_screens;
         }
 

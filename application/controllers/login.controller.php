@@ -37,8 +37,10 @@ if(!class_exists('Login_Controller')) {
                 $_SESSION['username'] = $_POST['username'];
                 $_SESSION['user_id'] = $this->model->getUserId($username);
                 header('Location: member.php');
+vvvvvvvvvvvvvvvvvvvv
             } else {
                 $_SESSION['errors'] = $errors;
+^^^^^^^^^^^^^^^^^^^^
             }
         }
 
