@@ -32,7 +32,7 @@ if(!class_exists('Member_View')) {
 
             $html .= '<div id="mode_chooser">' . "\n";
             $html .= '<div>' . "\n";
-            $html .= '<h2 class="gui"><a href="character_sheet.php">Character Mode</a></h2>' . "\n";
+            $html .= '<h2 class="gui">Characters (<a href="create-character.php">Create Character</a>)</h2>' . "\n";
             $html .= '<div id="available_characters">' . "\n";
 
             $character_sheets = $this->model->getAvailableCharacters();
@@ -43,8 +43,8 @@ if(!class_exists('Member_View')) {
             }
 
             $html .= '</div> <!-- end #available_characters -->' . "\n";
-            $html .= '<h2 class="gui"><a href="gamemaster_screen.php">Gamemaster Mode</a></h2>' . "\n";
-            $gamemaster_screens = $this->model->getAvailableGamemasters();
+            $html .= '<h2 class="gui">Gamemasters (<a href="create-gamemaster.php">Create Gamemaster</a>)</h2>' . "\n";
+            $gamemaster_screens = $this->model->getAvailableGamemasters($_SESSION['user_id']);
             if(count($gamemaster_screens) > 1) {
                 $html .= '<p class="gui">You have created gamemaster screens!</p>' . "\n";
             } else {

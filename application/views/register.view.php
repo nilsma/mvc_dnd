@@ -36,11 +36,14 @@ if(!class_exists('Register_View')) {
             $html .= '<div id="registration">' . "\n";
 
             if(isset($_SESSION['errors']) && count($_SESSION['errors']) >= 1) {
-                $username = $_POST['username'];
-                $email = $_POST['email'];
-                $html .= $this->buildErrors($_SESSION['errors']);
+                $errors = $_SESSION['errors'];
+                $_SESSION['errors'] = array();
                 $_SESSION['errors'] = false;
                 unset($_SESSION['errors']);
+
+                $username = $_POST['username'];
+                $email = $_POST['email'];
+                $html .= $this->buildErrors($errors);
             }
 
             $html .= '<form name="register_form" action="' . $_SERVER['PHP_SELF'] . '" method="POST">' . "\n";

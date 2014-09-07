@@ -26,6 +26,7 @@ if(!class_exists('Base_Model')) {
                 $stmt->execute();
                 $stmt->bind_result($fetched);
                 $stmt->fetch();
+
                 if(crypt($password, $fetched) == $fetched) {
                     return true;
                 } else {

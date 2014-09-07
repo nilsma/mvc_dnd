@@ -37,8 +37,13 @@ if(!class_exists('Login_View')) {
             $html = '';
             $html .= '<div id="login">' . "\n";
 
-            if(count($_SESSION['errors']) >= 1) {
-                $html .= $this->buildErrors($_SESSION['errors']);
+            if(isset($_SESSION['errors']) && count($_SESSION['errors']) >= 1) {
+                $errors = $_SESSION['errors'];
+                $_SESSION['errors'] = array();
+                $_SESSION['errors'] = false;
+                unset($_SESSION['errors']);
+
+                $html .= $this->buildErrors($errors);
             }
 
             $html .= '<form name="login_form" action="' . $_SERVER['PHP_SELF'] . '" method="POST">' . "\n";

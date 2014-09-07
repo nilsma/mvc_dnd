@@ -10,8 +10,6 @@ $model = new Login_Model();
 $ctrl = new Login_Controller($model);
 $view = new Login_View($model, $ctrl, 'MVC DND', 'login');
 
-$_SESSION['errors'] = array();
-
 if(isset($_POST['submit'])) {
     $ctrl->login($_POST['username'], $_POST['password']);
     header('Location: member.php');

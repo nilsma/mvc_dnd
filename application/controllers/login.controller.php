@@ -35,7 +35,10 @@ if(!class_exists('Login_Controller')) {
             if(count($errors) < 1) {
                 $_SESSION['auth'] = true;
                 $_SESSION['username'] = $_POST['username'];
+                $_SESSION['user_id'] = $this->model->getUserId($username);
                 header('Location: member.php');
+            } else {
+                $_SESSION['errors'] = $errors;
             }
         }
 

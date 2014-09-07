@@ -31,7 +31,7 @@ if(!class_exists('Member_Model')) {
             return $character_sheets;
         }
 
-        public function getAvailableGamemasters() {
+        public function getAvailableGamemasters($user_id) {
             $db = $this->connect();
 
             $gamemaster_screens = array();
@@ -43,7 +43,7 @@ if(!class_exists('Member_Model')) {
             if(!$stmt->prepare($query)) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
-                $stmt->bind_param('i', $_SESSION['user_id']);
+                $stmt->bind_param('i', $user_id);
             }
 
             $stmt->close();

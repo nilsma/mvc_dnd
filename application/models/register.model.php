@@ -14,12 +14,12 @@ if(!class_exists('Register_Model')) {
         public function addUserToDatabase($username, $email, $password) {
             $hashed = $this->hashPassword($password);
 
-            $sql = $this->connect();
+            $db = $this->connect();
 
             $query = "INSERT INTO users VALUES (null, ?,?,?)";
-            $query = $sql->real_escape_string($query);
+            $query = $db->real_escape_string($query);
 
-            $stmt = $sql->stmt_init();
+            $stmt = $db->stmt_init();
             if(!$stmt->prepare($query)) {
                 print("Failed to prepare statement!");
             } else {
@@ -27,7 +27,7 @@ if(!class_exists('Register_Model')) {
                 $stmt->execute();
 
                 $stmt->close();
-                $sql->close();
+                $db->close();
             }
         }
 
