@@ -380,8 +380,6 @@ if(!class_exists('Create_Character_View')) {
         }
 
         public function buildLanguages() {
-            $languages_base = 6;
-
             $html = '';
 
             $html .= '<div id="languages_holder">' . "\n";
@@ -391,10 +389,10 @@ if(!class_exists('Create_Character_View')) {
 
             $html .= '<table>' . "\n";
 
-            for($x = 0; $x < $languages_base; $x++) {
+            for($x = 0; $x < NO_OF_LANGUAGES; $x++) {
                 $html .= '<tr>' . "\n";
                 $html .= '<td><label for="language' . $x . '">Language ' . $x . ': </label></td>' . "\n";
-                $html .= '<td><input id="language' . $x . '" name="language' . $x . '" type="text" value="a language"></td>' . "\n";
+                $html .= '<td><input id="language' . $x . '" name="language' . $x . '" type="text" value="a language ' . $x . '"></td>' . "\n";
                 $html .= '</tr>' . "\n";
             }
 
@@ -559,7 +557,7 @@ if(!class_exists('Create_Character_View')) {
             $html .= '<h3>Armor</h3>' . "\n";
             foreach($armor_segments as $key => $value) {
                 $html .= '<label for="' . $key . '">' . $value . ': </label>';
-                $html .= '<input id="' . $key . '" name="' . $key . '" type="text">' . "\n";
+                $html .= '<input id="' . $key . '" name="' . $key . '" type="text" value="' . $value . '">' . "\n";
             }
 
             return $html;
@@ -580,7 +578,7 @@ if(!class_exists('Create_Character_View')) {
 
             foreach($shield_segments as $key => $value) {
                 $html .= '<label for="' . $key . '">' . $value . ': </label>';
-                $html .= '<input id="' . $key . '" name="' . $key . '" type="text">' . "\n";
+                $html .= '<input id="' . $key . '" name="' . $key . '" type="text" value="' . $value . '">' . "\n";
             }
 
             return $html;
@@ -588,10 +586,10 @@ if(!class_exists('Create_Character_View')) {
 
         public function buildProtectiveItems() {
             $protective_item_segments = array(
-                'prot_item_name' => 'Name',
-                'prot_item_ac_bonus' => 'AC Bonus',
-                'prot_item_weight' => 'Weight',
-                'prot_item_special_properties' => 'Special Properties'
+                'protective_item_name' => 'Name',
+                'protective_item_ac_bonus' => 'AC Bonus',
+                'protective_item_weight' => 'Weight',
+                'protective_item_special_properties' => 'Special Properties'
             );
 
             $html = '';
@@ -601,7 +599,7 @@ if(!class_exists('Create_Character_View')) {
 
                 foreach($protective_item_segments as $key => $value) {
                     $html .= '<label for="' . $key . '_' . $i . '">' . $value . ': </label>';
-                    $html .= '<input id="' . $key . '_' . $i . '" name="' . $key . '_' . $i . '" type="text">' . "\n";
+                    $html .= '<input id="' . $key . '_' . $i . '" name="' . $key . '_' . $i . '" type="text" value="' . $value . '">' . "\n";
                 }
 
             }

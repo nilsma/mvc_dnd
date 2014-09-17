@@ -15,7 +15,7 @@ $ctrl = new Create_Character_Controller($model);
 $view = new Create_Character_View($model, $ctrl, 'MVC DND', 'create_character');
 
 if(isset($_POST['submit'])) {
-    $ctrl->registerCharacter($_POST);
+    //$ctrl->registerCharacter($_POST);
     header('Location: create_character.php');
     exit();
 }

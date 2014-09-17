@@ -50,8 +50,8 @@ if(!class_exists('Create_Character_Controller')) {
             );
 
             $sheet = new Character_Sheet($segments);
-            var_dump($armors);
-            //$this->model->addCharacter($_SESSION['user_id'], $sheet);
+            $this->model->addCharacter($_SESSION['user_id'], $sheet);
+            //var_dump($sheet);
         }
 
         /**
@@ -382,10 +382,8 @@ if(!class_exists('Create_Character_Controller')) {
          * @return array - an array of Language
          */
         public function createLanguages() {
-            $base_languages = 6;
-
             $languages = array();
-            for ($x = 0; $x < $base_languages; $x++) {
+            for ($x = 0; $x < NO_OF_LANGUAGES; $x++) {
                 $language = $_POST['language' . $x];
                 array_push($languages, $language);
             }
@@ -567,16 +565,22 @@ if(!class_exists('Create_Character_Controller')) {
 
         //TODO create comment
         public function createProtectiveItems() {
-            $protective_item_entries = array(
-                'protective_item_name' => $_POST['protective_item_name'],
-                'protective_item_ac_bonus' => $_POST['protective_item_ac_bonus'],
-                'protective_item_weight' => $_POST['protective_item_weight'],
-                'protective_item_special_properties' => $_POST['protective_item_special_properties']
-            );
 
-            $protective_item = new shield($protective_item_entries);
+            $protective_items = array();
 
-            return $protective_item;
+            for($i = 0; $i < NO_OF_PROTECTIVE_ITEMS; $i++) {
+                $protective_item_entries = array(
+                    'protective_item_name' => $_POST['protective_item_name_' . $i],
+                    'protective_item_ac_bonus' => $_POST['protective_item_ac_bonus_' . $i],
+                    'protective_item_weight' => $_POST['protective_item_weight_' . $i],
+                    'protective_item_special_properties' => $_POST['protective_item_special_properties_' . $i]
+                );
+
+                $protective_item = new Protective_Item($protective_item_entries);
+                array_push($protective_items, $protective_item);
+            }
+
+            return $protective_items;
         }
 
     }

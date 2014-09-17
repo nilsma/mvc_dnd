@@ -65,7 +65,7 @@ if(!class_exists('Member_View')) {
                 $html .= '<p class="guv">You havent created any sheets yet!</p>' . "\n";
             }
 
-            $html .= '<p class="gui"><a href="create_character.php">Create New Character</a></p>' . "\n";
+            $html .= '<p class="gui"><a href="create-character.php">Create New Character</a></p>' . "\n";
             $html .= '</div> <!-- end #characters_overview -->' . "\n";
 
             return $html;

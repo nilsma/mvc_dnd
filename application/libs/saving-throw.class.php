@@ -17,7 +17,7 @@ if(!class_exists('Saving_Throw')) {
         
         public function __construct($entries) {
             $this->name = $entries['name'];
-            $this->key_ability = $entries['key_ability'];
+            $this->setKeyAbility($entries['name']);
             $this->total = $entries['total'];
             $this->base_save = $entries['base_save'];
             $this->ability_modifier = $entries['ability_modifier'];
@@ -61,9 +61,18 @@ if(!class_exists('Saving_Throw')) {
         /**
          * @param mixed $key_ability
          */
-        public function setKeyAbility($key_ability)
+        public function setKeyAbility($name)
         {
-            $this->key_ability = $key_ability;
+            $name = strtolower($name);
+            if($name = 'fortitude') {
+                $this->key_ability = 'CON';
+            } elseif($name = 'reflex') {
+                $this->key_ability = 'DEX';
+            } elseif($name = 'will') {
+                $this->key_ability = 'WIS';
+            } else {
+                $this->key_ability = 'STR';
+            }
         }
 
         /**

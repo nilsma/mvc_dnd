@@ -9,27 +9,27 @@ if(!class_exists('Languages')) {
     class Languages {
 
         protected $max_number_of_languages;
-        protected $languages;
+        protected $languages_array;
 
         public function __construct($entries) {
             $this->max_number_of_languages = $entries['max_no_of_languages'];
-            $this->languages = $entries['languages'];
+            $this->languages_array = $entries['languages'];
         }
 
         /**
          * @param mixed $languages
          */
-        public function setLanguages($languages)
+        public function setLanguagesArray($languages)
         {
-            $this->languages = $languages;
+            $this->languages_array = $languages;
         }
 
         /**
          * @return mixed
          */
-        public function getLanguages()
+        public function getLanguagesArray()
         {
-            return $this->languages;
+            return $this->languages_array;
         }
 
         /**

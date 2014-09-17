@@ -10,6 +10,7 @@ define("NO_OF_SPECIAL_ABILITIES", 10);
 define("NO_OF_FEATS", 10);
 define("NO_OF_INVENTORY_ITEMS", 20);
 define("NO_OF_PROTECTIVE_ITEMS", 2);
+define("NO_OF_LANGUAGES", 6);
 
 /**
  * includes
@@ -17,27 +18,27 @@ define("NO_OF_PROTECTIVE_ITEMS", 2);
 require_once '../application/libs/utils.class.php';
 require_once '../application/libs/character-sheet.class.php';
 require_once '../application/libs/personalia.class.php';
-require_once '../application/libs/armor_class.class.php';
+require_once '../application/libs/armor-class.class.php';
 require_once '../application/libs/stats.class.php';
 require_once '../application/libs/attacks.class.php';
 require_once '../application/libs/grapple.class.php';
 require_once '../application/libs/attack.class.php';
 require_once '../application/libs/attribute.class.php';
 require_once '../application/libs/skills.class.php';
-require_once '../application/libs/skill_template.class.php';
+require_once '../application/libs/skill-template.class.php';
 require_once '../application/libs/skill.class.php';
 require_once '../application/libs/purse.class.php';
 require_once '../application/libs/languages.class.php';
-require_once '../application/libs/special_abilities.class.php';
+require_once '../application/libs/special-abilities.class.php';
 require_once '../application/libs/feats.class.php';
 require_once '../application/libs/inventory.class.php';
 require_once '../application/libs/item.class.php';
-require_once '../application/libs/saving_throw.class.php';
-require_once '../application/libs/saving_throws.class.php';
+require_once '../application/libs/saving-throw.class.php';
+require_once '../application/libs/saving-throws.class.php';
 require_once '../application/libs/armors.class.php';
 require_once '../application/libs/armor.class.php';
 require_once '../application/libs/shield.class.php';
-require_once '../application/libs/protective_item.class.php';
+require_once '../application/libs/protective-item.class.php';
 
 require_once '../application/models/base.model.php';
 require_once '../application/models/login.model.php';

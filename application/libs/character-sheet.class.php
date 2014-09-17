@@ -8,18 +8,18 @@ if(!class_exists('Character_Sheet')) {
 
     class Character_Sheet {
 
-        protected $personalia;
-        protected $stats;
-        protected $attributes;
-        protected $attacks;
+        protected $personalia; //implemented
+        protected $stats; //implemented
+        protected $attributes; //implemented
+        protected $attacks; //implemented
         protected $skills;
-        protected $purse;
-        protected $languages;
+        protected $purse; //implemented
+        protected $languages; //implemented
         protected $special_abilities;
         protected $feats;
-        protected $inventory;
-        protected $saving_throws;
-        protected $armors;
+        protected $inventory; //implemented
+        protected $saving_throws; //implemented
+        protected $armors; //implemented
 
         public function __construct ($segments) {
             $this->personalia = $segments['personalia'];
@@ -32,7 +32,7 @@ if(!class_exists('Character_Sheet')) {
             $this->special_abilities = $segments['special_abilities'];
             $this->feats = $segments['feats'];
             $this->inventory = $segments['inventory'];
-            $this->inventory = $segments['saving_throws'];
+            $this->saving_throws = $segments['saving_throws'];
             $this->armors = $segments['armors'];
         }
 
