@@ -787,6 +787,119 @@ function updateAttacksQuery(segments) {
     xmlhttp.send(params);
 }
 
+function updateAttack() {
+    getAttackLabel(this, function(element) {
+        getAttackSegments(element, function(segments) {
+            updateAttackQuery(segments);
+        });
+    });
+}
+
+function getAttackLabel(element, callback) {
+    var element = element.parentNode;
+    callback(element);
+}
+
+function getAttackSegments(element, callback) {
+    var segments = new Object();
+    var nodes = element.childNodes;
+
+    var id = nodes[1].value;
+    var name = nodes[4].value;
+    var base_attack_bonus = nodes[7].value;
+    var attack_damage = nodes[10].value;
+    var attack_critical_floor = nodes[13].value;
+    var attack_critical_ceiling = nodes[15].value;
+    var attack_range = nodes[18].value;
+    var attack_type = nodes[21].value;
+    var attack_notes = nodes[24].value;
+    var attack_ammunition = nodes[27].value;
+
+    segments.id = id;
+    segments.attack_name = name;
+    segments.attack_bonus = base_attack_bonus;
+    segments.attack_damage = attack_damage;
+    segments.critical_floor = attack_critical_floor;
+    segments.critical_ceiling = attack_critical_ceiling;
+    segments.weapon_range = attack_range;
+    segments.attack_type = attack_type;
+    segments.attack_notes = attack_notes;
+    segments.ammunition = attack_ammunition;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+function updateAttackQuery(segments) {
+    var result;
+
+    if (window.XMLHttpRequest) {
+        xmlhttp=new XMLHttpRequest();
+    } else {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            result = xmlhttp.responseText;
+        }
+    }
+
+    var params = "update_attack=".concat(segments);
+    xmlhttp.open("POST", "character-sheet.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(params);
+}
+
+function updateGrapple() {
+    getGrappleSegments(function(segments) {
+        updateGrappleQuery(segments);
+    });
+}
+
+function getGrappleSegments(callback) {
+    var segments = new Object();
+
+    var label = 'grapple';
+    var total = label.concat('_total');
+    var bab = label.concat('_bab');
+    var str_mod = label.concat('_str_mod');
+    var size_mod = label.concat('_size_mod');
+    var misc_mod = label.concat('_misc_mod');
+
+    segments.grapple_total = document.getElementById(total).value;
+    segments.grapple_bab = document.getElementById(bab).value;
+    segments.grapple_str_mod = document.getElementById(str_mod).value;
+    segments.grapple_size_mod = document.getElementById(size_mod).value;
+    segments.grapple_misc_mod = document.getElementById(misc_mod).value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+function updateGrappleQuery(segments) {
+    var result;
+
+    if (window.XMLHttpRequest) {
+        xmlhttp=new XMLHttpRequest();
+    } else {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            result = xmlhttp.responseText;
+        }
+    }
+
+    var params = "update_grapple=".concat(segments);
+    xmlhttp.open("POST", "character-sheet.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(params);
+}
+
 /**
  * A function to add eventlisteners to the stated elements
  * @param els array - an array of elements of which to add listeners to
@@ -802,6 +915,14 @@ function addListeners(els, type, fnc) {
  * a function to initialize functions on load
  */
 function init() {
+    var els = new Array();
+    els = document.getElementsByClassName('grapple_input');
+    addListeners(els, 'blur', updateGrapple);
+
+    var els = new Array();
+    els = document.getElementsByClassName('attack_input');
+    addListeners(els, 'blur', updateAttack);
+
     var els = new Array();
     els = document.getElementsByClassName('attacks_input');
     addListeners(els, 'blur', updateAttacks);

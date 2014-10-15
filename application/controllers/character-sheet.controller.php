@@ -41,6 +41,16 @@ if(!class_exists('Character_Sheet_Controller')) {
             $this->model->writeAttacks($sheet_id, $segments);
         }
 
+        public function updateAttack($sheet_id, $segments) {
+            $attack = new Attack($segments, $segments['id']);
+            $this->model->writeAttack($sheet_id, $attack);
+        }
+
+        public function updateGrapple($sheet_id, $segments) {
+            $grapple = new Grapple($segments);
+            $this->model->writeGrapple($sheet_id, $grapple);
+        }
+
         public function addSpecialAbility($sheet_id, $template_name) {
             $this->model->insertSpecialAbility($sheet_id, $template_name);
         }

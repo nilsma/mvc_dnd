@@ -51,6 +51,16 @@ if(isset($_POST['update_attacks'])) {
     $ctrl->updateAttacks($_SESSION['current_sheet'], $segments);
 }
 
+if(isset($_POST['update_attack'])) {
+    $segments = json_decode($_POST['update_attack'], true);
+    $ctrl->updateAttack($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_grapple'])) {
+    $segments = json_decode($_POST['update_grapple'], true);
+    $ctrl->updateGrapple($_SESSION['current_sheet'], $segments);
+}
+
 if(isset($_POST['add_language'])) {
     $ctrl->addLanguage($_SESSION['current_sheet'], $_POST['new_language']);
     header('Location: character-sheet.php');
@@ -163,6 +173,8 @@ if(!isset($_POST['add_attack']) &&
     !isset($_POST['update_attribute']) &&
     !isset($_POST['update_saving_throw']) &&
     !isset($_POST['update_attacks']) &&
+    !isset($_POST['update_attack']) &&
+    !isset($_POST['update_grapple']) &&
     !isset($_POST['feat_info']) &&
     !isset($_POST['get_feat_suggestions']) &&
     !isset($_POST['special_ability_info']) &&

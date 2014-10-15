@@ -181,6 +181,63 @@ if(!class_exists('Character_Sheet_Model')) {
             $db->close();
         }
 
+        public function writeAttack($sheet_id, Attack $attack) {
+            $attack_id = $attack->getId();
+            $name = $attack->getName();
+            $bonus = $attack->getAttackBonus();
+            $damage = $attack->getDamage();
+            $critical_floor = $attack->getCriticalFloor();
+            $critical_ceiling = $attack->getCriticalCeiling();
+            $weapon_range = $attack->getWeaponRange();
+            $attack_type = $attack->getType();
+            $attack_notes = $attack->getNotes();
+            $ammunition = $attack->getAmmunition();
+
+            $db = $this->connect();
+
+            $query = "UPDATE attack as a, attacks as atts, sheets as s SET a.name=?, a.attack_bonus=?, a.damage=?, a.critical_floor=?, a.critical_ceiling=?, a.weapon_range=?, a.type=?, a.notes=?, a.ammunition=? WHERE a.id=? AND a.owner=atts.id AND atts.id=s.attacks AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('sssiiissiii', $name, $bonus, $damage, $critical_floor, $critical_ceiling, $weapon_range, $attack_type, $attack_notes, $ammunition, $attack_id, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeGrapple($sheet_id, Grapple $grapple) {
+            $total = $grapple->getGrappleTotal();
+            $base_attack_bonus = $grapple->getGrappleBab();
+            $str_mod = $grapple->getGrappleStrMod();
+            $size_mod = $grapple->getGrappleSizeMod();
+            $misc_mod = $grapple->getGrappleMiscMod();
+
+            $db = $this->connect();
+
+            $query = "UPDATE grapple as g, sheets as s SET g.total=?, g.base_attack_bonus=?, g.str_mod=?, g.size_mod=?, g.misc_mod=? WHERE s.id=? AND s.grapple=g.id";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('iiiiii', $total, $base_attack_bonus, $str_mod, $size_mod, $misc_mod, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
         public function insertItem($sheet_id, Item $item) {
             $name = $item->getName();
             $quantity = $item->getQuantity();
