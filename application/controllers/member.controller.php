@@ -12,6 +12,10 @@ if(!class_exists('Member_Controller')) {
             parent::__construct($model);
         }
 
+        public function loadCharacter($sheet_id) {
+            $_SESSION['current_sheet'] = $sheet_id;
+        }
+
     }
 
 }

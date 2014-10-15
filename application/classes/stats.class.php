@@ -6,41 +6,19 @@ if(!class_exists('Stats')) {
         protected $hp;
         protected $wounds;
         protected $non_lethal;
-        protected $armor_class;
-        protected $touch_ac;
-        protected $flat_footed;
         protected $initiative_mod;
         protected $spell_resistance;
         protected $speed;
         protected $damage_reduction;
         
         public function __construct($entries) {
-            $this->hp = $entries['hp'];
-            $this->wounds = $entries['wounds'];
-            $this->non_lethal = $entries['non_lethal'];
-            $this->armor_class = $entries['armor_class'];
-            $this->touch_ac = $entries['touch_ac'];
-            $this->flat_footed = $entries['flat_footed'];
-            $this->initiative_mod = $entries['initiative_mod'];
-            $this->spell_resistance = $entries['spell_resistance'];
-            $this->speed = $entries['speed'];
-            $this->damage_reduction = $entries['damage_reduction'];
-        }
-
-        /**
-         * @param mixed $armor_class
-         */
-        public function setArmorClass($armor_class)
-        {
-            $this->armor_class = $armor_class;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getArmorClass()
-        {
-            return $this->armor_class;
+            $this->setHp($entries['stats_hp']);
+            $this->setWounds($entries['stats_wounds']);
+            $this->setNonLethal($entries['stats_non_lethal']);
+            $this->setInitiativeMod($entries['stats_initiative_mod']);
+            $this->setSpellResistance($entries['stats_spell_resistance']);
+            $this->setSpeed($entries['stats_speed']);
+            $this->setDamageReduction($entries['stats_damage_reduction']);
         }
 
         /**
@@ -48,7 +26,12 @@ if(!class_exists('Stats')) {
          */
         public function setDamageReduction($damage_reduction)
         {
-            $this->damage_reduction = $damage_reduction;
+            if(!empty($damage_reduction) && $damage_reduction >= 0) {
+                $this->damage_reduction = $damage_reduction;
+            } else {
+                $this->damage_reduction = 0;
+            }
+
         }
 
         /**
@@ -60,27 +43,16 @@ if(!class_exists('Stats')) {
         }
 
         /**
-         * @param mixed $flat_footed
-         */
-        public function setFlatFooted($flat_footed)
-        {
-            $this->flat_footed = $flat_footed;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getFlatFooted()
-        {
-            return $this->flat_footed;
-        }
-
-        /**
          * @param mixed $hp
          */
         public function setHp($hp)
         {
-            $this->hp = $hp;
+            if(!empty($hp) && $hp >= -10) {
+                $this->hp = $hp;
+            } else {
+                $this->hp = 1;
+            }
+
         }
 
         /**
@@ -96,7 +68,12 @@ if(!class_exists('Stats')) {
          */
         public function setInitiativeMod($initiative_mod)
         {
-            $this->initiative_mod = $initiative_mod;
+            if(!empty($initiative_mod) && $initiative_mod >= 0) {
+                $this->initiative_mod = $initiative_mod;
+            } else {
+                $this->initiative_mod = 0;
+            }
+
         }
 
         /**
@@ -112,7 +89,12 @@ if(!class_exists('Stats')) {
          */
         public function setNonLethal($non_lethal)
         {
-            $this->non_lethal = $non_lethal;
+            if(!empty($non_lethal) && $non_lethal >= 0) {
+                $this->non_lethal = $non_lethal;
+            } else {
+                $this->non_lethal = 0;
+            }
+
         }
 
         /**
@@ -128,7 +110,12 @@ if(!class_exists('Stats')) {
          */
         public function setSpeed($speed)
         {
-            $this->speed = $speed;
+            if(!empty($speed) && $speed >= 0) {
+                $this->speed = $speed;
+            } else {
+                $this->speed = 0;
+            }
+
         }
 
         /**
@@ -144,7 +131,12 @@ if(!class_exists('Stats')) {
          */
         public function setSpellResistance($spell_resistance)
         {
-            $this->spell_resistance = $spell_resistance;
+            if(!empty($spell_resistance) && $spell_resistance >= 0) {
+                $this->spell_resistance = $spell_resistance;
+            } else {
+                $this->spell_resistance = 0;
+            }
+
         }
 
         /**
@@ -156,27 +148,16 @@ if(!class_exists('Stats')) {
         }
 
         /**
-         * @param mixed $touch_ac
-         */
-        public function setTouchAc($touch_ac)
-        {
-            $this->touch_ac = $touch_ac;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getTouchAc()
-        {
-            return $this->touch_ac;
-        }
-
-        /**
          * @param mixed $wounds
          */
-        public function setWounds($wounds)
+        public function setWounds($wounds = 0)
         {
-            $this->wounds = $wounds;
+            if(!empty($wounds) && $wounds >= 0) {
+                $this->wounds = $wounds;
+            } else {
+                $this->wounds = 0;
+            }
+
         }
 
         /**

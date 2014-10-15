@@ -4,41 +4,36 @@
  */
 
 /**
- * constants
- */
-define("NO_OF_SPECIAL_ABILITIES", 10);
-define("NO_OF_FEATS", 10);
-define("NO_OF_INVENTORY_ITEMS", 20);
-define("NO_OF_PROTECTIVE_ITEMS", 2);
-define("NO_OF_LANGUAGES", 6);
-
-/**
  * includes
  */
 require_once '../application/libs/utils.class.php';
-require_once '../application/libs/character-sheet.class.php';
-require_once '../application/libs/personalia.class.php';
-require_once '../application/libs/armor-class.class.php';
-require_once '../application/libs/stats.class.php';
-require_once '../application/libs/attacks.class.php';
-require_once '../application/libs/grapple.class.php';
-require_once '../application/libs/attack.class.php';
-require_once '../application/libs/attribute.class.php';
-require_once '../application/libs/skills.class.php';
-require_once '../application/libs/skill-template.class.php';
-require_once '../application/libs/skill.class.php';
-require_once '../application/libs/purse.class.php';
-require_once '../application/libs/languages.class.php';
-require_once '../application/libs/special-abilities.class.php';
-require_once '../application/libs/feats.class.php';
-require_once '../application/libs/inventory.class.php';
-require_once '../application/libs/item.class.php';
-require_once '../application/libs/saving-throw.class.php';
-require_once '../application/libs/saving-throws.class.php';
-require_once '../application/libs/armors.class.php';
-require_once '../application/libs/armor.class.php';
-require_once '../application/libs/shield.class.php';
-require_once '../application/libs/protective-item.class.php';
+
+require_once '../application/classes/personalia.class.php';
+require_once '../application/classes/armor-class.class.php';
+require_once '../application/classes/armor.class.php';
+require_once '../application/classes/special-ability.class.php';
+require_once '../application/classes/character-sheet.class.php';
+require_once '../application/classes/stats.class.php';
+require_once '../application/classes/attacks.class.php';
+require_once '../application/classes/grapple.class.php';
+require_once '../application/classes/attack.class.php';
+require_once '../application/classes/attribute.class.php';
+require_once '../application/classes/skills.class.php';
+require_once '../application/classes/skill-template.class.php';
+require_once '../application/classes/skill.class.php';
+require_once '../application/classes/purse.class.php';
+require_once '../application/classes/languages.class.php';
+require_once '../application/classes/special-abilities.class.php';
+require_once '../application/classes/feats.class.php';
+require_once '../application/classes/feat.class.php';
+require_once '../application/classes/inventory.class.php';
+require_once '../application/classes/item.class.php';
+require_once '../application/classes/saving-throw.class.php';
+require_once '../application/classes/saving-throws.class.php';
+require_once '../application/classes/armors.class.php';
+require_once '../application/classes/shield.class.php';
+require_once '../application/classes/protective-item.class.php';
+require_once '../application/classes/currency.class.php';
 
 require_once '../application/models/base.model.php';
 require_once '../application/models/login.model.php';
@@ -63,6 +58,15 @@ require_once '../application/views/register.view.php';
 require_once '../application/views/member.view.php';
 require_once '../application/views/create-character.view.php';
 require_once '../application/views/character-sheet.view.php';
+
+/**
+ * constants
+ */
+define("NO_OF_PROTECTIVE_ITEMS", 2);
+define("MIN_NO_OF_ATTACKS", 1);
+define("MIN_NO_OF_PROTECTIVE_ITEMS", 1);
+define("MIN_NO_OF_INVENTORY_ITEMS", 5);
+define("CURRENCIES", serialize(array('gold', 'silver', 'copper')));
 
 /**
  * PHP configuration * enable error reporting

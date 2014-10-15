@@ -14,12 +14,12 @@ if(!class_exists('Shield')) {
         protected $special_properties;
 
         public function __construct($entries) {
-            $this->name = $entries['shield_name'];
-            $this->ac_bonus = $entries['shield_ac_bonus'];
-            $this->check_penalty = $entries['shield_check_penalty'];
-            $this->spell_failure = $entries['shield_spell_failure'];
-            $this->weight = $entries['shield_weight'];
-            $this->special_properties = $entries['shield_special_properties'];
+            $this->setName($entries['shield_name']);
+            $this->setAcBonus($entries['shield_ac_bonus']);
+            $this->setCheckPenalty($entries['shield_check_penalty']);
+            $this->setSpellFailure($entries['shield_spell_failure']);
+            $this->setWeight($entries['shield_weight']);
+            $this->setSpecialProperties($entries['shield_special_properties']);
         }
 
         /**
@@ -27,7 +27,12 @@ if(!class_exists('Shield')) {
          */
         public function setAcBonus($ac_bonus)
         {
-            $this->ac_bonus = $ac_bonus;
+            if(!empty($ac_bonus) && $ac_bonus >= 0) {
+                $this->ac_bonus = $ac_bonus;
+            } else {
+                $this->ac_bonus = 0;
+            }
+
         }
 
         /**
@@ -43,7 +48,12 @@ if(!class_exists('Shield')) {
          */
         public function setCheckPenalty($check_penalty)
         {
-            $this->check_penalty = $check_penalty;
+            if(!empty($check_penalty) && $check_penalty >= 0) {
+                $this->check_penalty = $check_penalty;
+            } else {
+                $this->check_penalty = 0;
+            }
+
         }
 
         /**
@@ -59,7 +69,12 @@ if(!class_exists('Shield')) {
          */
         public function setName($name)
         {
-            $this->name = $name;
+            if(!empty($name)) {
+                $this->name = $name;
+            } else {
+                $this->name = 'Shield Name';
+            }
+
         }
 
         /**
@@ -75,7 +90,12 @@ if(!class_exists('Shield')) {
          */
         public function setSpecialProperties($special_properties)
         {
-            $this->special_properties = $special_properties;
+            if(!empty($special_properties)) {
+                $this->special_properties = $special_properties;
+            } else {
+                $this->special_properties = 'Shield Special Properties';
+            }
+
         }
 
         /**
@@ -91,7 +111,12 @@ if(!class_exists('Shield')) {
          */
         public function setSpellFailure($spell_failure)
         {
-            $this->spell_failure = $spell_failure;
+            if(!empty($spell_failure) && $spell_failure >= 0) {
+                $this->spell_failure = $spell_failure;
+            } else {
+                $this->spell_failure = 0;
+            }
+
         }
 
         /**
@@ -107,7 +132,12 @@ if(!class_exists('Shield')) {
          */
         public function setWeight($weight)
         {
-            $this->weight = $weight;
+            if(!empty($weight) && $weight >= 0) {
+                $this->weight = $weight;
+            } else {
+                $this->weight = 0;
+            }
+
         }
 
         /**

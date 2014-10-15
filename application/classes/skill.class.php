@@ -14,11 +14,11 @@ if(!class_exists('Skill')) {
         protected $misc_mod;
 
         public function __construct($skill_entries) {
-            $this->template_name = $skill_entries['template_name'];
-            $this->skill_mod = $skill_entries['skill_mod'];
-            $this->ability_mod = $skill_entries['ability_mod'];
-            $this->ranks = $skill_entries['ranks'];
-            $this->misc_mod = $skill_entries['misc_mod'];
+            $this->setTemplateName($skill_entries['template_name']);
+            $this->setSkillMod($skill_entries['skill_mod']);
+            $this->setAbilityMod($skill_entries['ability_mod']);
+            $this->setRanks($skill_entries['ranks']);
+            $this->setMiscMod($skill_entries['misc_mod']);
         }
 
         /**
@@ -26,7 +26,12 @@ if(!class_exists('Skill')) {
          */
         public function setAbilityMod($ability_mod)
         {
-            $this->ability_mod = $ability_mod;
+            if(!empty($ability_mod) && $ability_mod >= 0) {
+                $this->ability_mod = $ability_mod;
+            } else {
+                $this->ability_mod = 0;
+            }
+
         }
 
         /**
@@ -42,7 +47,12 @@ if(!class_exists('Skill')) {
          */
         public function setMiscMod($misc_mod)
         {
-            $this->misc_mod = $misc_mod;
+            if(!empty($misc_mod) && $misc_mod >= 0) {
+                $this->misc_mod = $misc_mod;
+            } else {
+                $this->misc_mod = 0;
+            }
+
         }
 
         /**
@@ -58,7 +68,12 @@ if(!class_exists('Skill')) {
          */
         public function setRanks($ranks)
         {
-            $this->ranks = $ranks;
+            if(!empty($ranks) && $ranks >= 0) {
+                $this->ranks = $ranks;
+            } else {
+                $this->ranks = 0;
+            }
+
         }
 
         /**
@@ -74,7 +89,12 @@ if(!class_exists('Skill')) {
          */
         public function setSkillMod($skill_mod)
         {
-            $this->skill_mod = $skill_mod;
+            if(!empty($skill_mod) && $skill_mod >= 0) {
+                $this->skill_mod = $skill_mod;
+            } else {
+                $this->skill_mod = 0;
+            }
+
         }
 
         /**
@@ -90,7 +110,12 @@ if(!class_exists('Skill')) {
          */
         public function setTemplateName($template_name)
         {
-            $this->template_name = $template_name;
+            if(!empty($template_name)) {
+                $this->template_name = $template_name;
+            } else {
+                $this->template_name = 'Template Name';
+            }
+
         }
 
         /**

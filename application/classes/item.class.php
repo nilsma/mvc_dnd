@@ -5,15 +5,33 @@
 if(!class_exists('Item')) {
     
     class Item {
-        
+
+        protected $id;
         protected $name;
         protected $weight;
         protected $quantity;
         
-        public function __construct($entries) {
-            $this->name = $entries['name'];
-            $this->weight = $entries['weight'];
-            $this->quantity = $entries['quantity'];
+        public function __construct($entries, $id = NULL) {
+            $this->setId($id);
+            $this->setName($entries['item_name']);
+            $this->setWeight($entries['item_weight']);
+            $this->setQuantity($entries['item_quantity']);
+        }
+
+        /**
+         * @param mixed $id
+         */
+        public function setId($id)
+        {
+            $this->id = $id;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getId()
+        {
+            return $this->id;
         }
 
         /**
@@ -21,7 +39,12 @@ if(!class_exists('Item')) {
          */
         public function setName($name)
         {
-            $this->name = $name;
+            if(!empty($name)) {
+                $this->name = $name;
+            } else {
+                $this->name = '';
+            }
+
         }
 
         /**
@@ -37,7 +60,12 @@ if(!class_exists('Item')) {
          */
         public function setQuantity($quantity)
         {
-            $this->quantity = $quantity;
+            if(!empty($quantity) && $quantity >= 0) {
+                $this->quantity = $quantity;
+            } else {
+                $this->quantity = '';
+            }
+
         }
 
         /**
@@ -53,7 +81,12 @@ if(!class_exists('Item')) {
          */
         public function setWeight($weight)
         {
-            $this->weight = $weight;
+            if(!empty($weight) && $weight >=0) {
+                $this->weight = $weight;
+            } else {
+                $this->weight = '';
+            }
+
         }
 
         /**

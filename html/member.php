@@ -14,4 +14,10 @@ $model = new Member_Model();
 $ctrl = new Member_Controller($model);
 $view = new Member_View($model, $ctrl, 'MVC DND', 'member');
 
+if(isset($_POST['submit_character'])) {
+    $ctrl->loadCharacter($_POST['sheet_id']);
+    header('Location: character-sheet.php');
+    exit();
+}
+
 $view->render();

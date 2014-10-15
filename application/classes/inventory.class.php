@@ -16,19 +16,19 @@ if(!class_exists('Inventory')) {
         protected $items;
 
         public function __construct($entries) {
-            $this->light_load = $entries['light_load'];
-            $this->medium_load = $entries['medium_load'];
-            $this->heavy_load = $entries['heavy_load'];
-            $this->lift_over_head = $entries['lift_over_head'];
-            $this->lift_off_ground = $entries['lift_off_ground'];
-            $this->push_or_drag = $entries['push_or_drag'];
-            $this->items = $entries['items'];
+            $this->setLightLoad($entries['light_load']);
+            $this->setMediumLoad($entries['medium_load']);
+            $this->setHeavyLoad($entries['heavy_load']);
+            $this->setLiftOverHead($entries['lift_over_head']);
+            $this->setLiftOffGround($entries['lift_off_ground']);
+            $this->setPushOrDrag($entries['push_or_drag']);
+            $this->setItems($entries['items']);
         }
 
         /**
          * @param mixed $items
          */
-        public function setItems($items)
+        public function setItems(Array $items)
         {
             $this->items = $items;
         }
@@ -46,7 +46,12 @@ if(!class_exists('Inventory')) {
          */
         public function setHeavyLoad($heavy_load)
         {
-            $this->heavy_load = $heavy_load;
+            if(!empty($heavy_load) && $heavy_load >=0) {
+                $this->heavy_load = $heavy_load;
+            } else {
+                $this->heavy_load = 0;
+            }
+
         }
 
         /**
@@ -62,7 +67,12 @@ if(!class_exists('Inventory')) {
          */
         public function setLiftOffGround($lift_off_ground)
         {
-            $this->lift_off_ground = $lift_off_ground;
+            if(!empty($lift_off_ground) && $lift_off_ground >=0) {
+                $this->lift_off_ground = $lift_off_ground;
+            } else {
+                $this->lift_off_ground = 0;
+            }
+
         }
 
         /**
@@ -78,7 +88,12 @@ if(!class_exists('Inventory')) {
          */
         public function setLiftOverHead($lift_over_head)
         {
-            $this->lift_over_head = $lift_over_head;
+            if(!empty($lift_over_head) && $lift_over_head >= 0) {
+                $this->lift_over_head = $lift_over_head;
+            } else {
+                $this->lift_over_head = 0;
+            }
+
         }
 
         /**
@@ -94,7 +109,12 @@ if(!class_exists('Inventory')) {
          */
         public function setLightLoad($light_load)
         {
-            $this->light_load = $light_load;
+            if(!empty($light_load) && $light_load >=0) {
+                $this->light_load = $light_load;
+            } else {
+                $this->light_load = 0;
+            }
+
         }
 
         /**
@@ -110,7 +130,12 @@ if(!class_exists('Inventory')) {
          */
         public function setMediumLoad($medium_load)
         {
-            $this->medium_load = $medium_load;
+            if(!empty($medium_load) && $medium_load >= 0) {
+                $this->medium_load = $medium_load;
+            } else {
+                $this->medium_load = 0;
+            }
+
         }
 
         /**
@@ -126,7 +151,12 @@ if(!class_exists('Inventory')) {
          */
         public function setPushOrDrag($push_or_drag)
         {
-            $this->push_or_drag = $push_or_drag;
+            if(!empty($push_or_drag) && $push_or_drag >= 0) {
+                $this->push_or_drag = $push_or_drag;
+            } else {
+                $this->push_or_drag = 0;
+            }
+
         }
 
         /**

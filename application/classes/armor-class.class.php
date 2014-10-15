@@ -11,6 +11,8 @@ if(!class_exists('Armor_Class')) {
         protected $ac_dex_mod;
         protected $ac_size_mod;
         protected $ac_natural_armor;
+        protected $ac_touch_ac;
+        protected $ac_flat_footed_ac;
         
         public function __construct($entries) {
             $this->ac_total = $entries['ac_total'];
@@ -20,6 +22,48 @@ if(!class_exists('Armor_Class')) {
             $this->ac_dex_mod = $entries['ac_dex_mod'];
             $this->ac_size_mod = $entries['ac_size_mod'];
             $this->ac_natural_armor = $entries['ac_natural_armor'];
+            $this->ac_touch_ac = $entries['ac_touch_ac'];
+            $this->ac_flat_footed_ac = $entries['ac_flat_footed_ac'];
+        }
+
+        /**
+         * @param mixed $ac_flat_footed_ac
+         */
+        public function setAcFlatFootedAc($ac_flat_footed_ac)
+        {
+            if($ac_flat_footed_ac >= 0) {
+                $this->ac_flat_footed_ac = $ac_flat_footed_ac;
+            } else {
+                $this->ac_flat_footed_ac = 0;
+            }
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getAcFlatFootedAc()
+        {
+            return $this->ac_flat_footed_ac;
+        }
+
+        /**
+         * @param mixed $ac_touch_ac
+         */
+        public function setAcTouchAc($ac_touch_ac)
+        {
+            if($ac_touch_ac >= 0) {
+                $this->ac_touch_ac = $ac_touch_ac;
+            } else {
+                $this->ac_touch_ac = 0;
+            }
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getAcTouchAc()
+        {
+            return $this->ac_touch_ac;
         }
 
         /**

@@ -47,8 +47,8 @@ if(!class_exists('Login_View')) {
             }
 
             $html .= '<form name="login_form" action="' . $_SERVER['PHP_SELF'] . '" method="POST">' . "\n";
-            $html .= '<label for="username">Username:</label><input name="username" id="username" type="text" value="'. $username . '" required>' . "\n";
-            $html .= '<label for="password">Password:</label><input name="password" id="password" type="password" required>' . "\n";
+            $html .= '<label for="username">Username: </label><input name="username" id="username" type="text" value="'. $username . '" required>' . "\n";
+            $html .= '<label for="password">Password: </label><input name="password" id="password" type="password" required>' . "\n";
             $html .= '<input type="submit" name="submit" value="Login">' . "\n";
             $html .= '</form>' . "\n";
 

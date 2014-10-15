@@ -4,6 +4,7 @@ if(!class_exists('Attack')) {
 
     class Attack {
 
+        protected $id;
         protected $name;
         protected $attack_bonus;
         protected $damage;
@@ -14,16 +15,33 @@ if(!class_exists('Attack')) {
         protected $notes;
         protected $ammunition;
 
-        public function __construct($entries) {
-            $this->name = $entries['attack_name'];
-            $this->attack_bonus = $entries['attack_bonus'];
-            $this->damage = $entries['attack_damage'];
-            $this->critical_floor = $entries['critical_floor'];
-            $this->critical_ceiling = $entries['critical_ceiling'];
-            $this->weapon_range = $entries['weapon_range'];
-            $this->type = $entries['attack_type'];
-            $this->notes = $entries['attack_notes'];
-            $this->ammunition = $entries['ammunition'];
+        public function __construct($entries, $id = NULL) {
+            $this->setId($id);
+            $this->setName($entries['attack_name']);
+            $this->setAttackBonus($entries['attack_bonus']);
+            $this->setDamage($entries['attack_damage']);
+            $this->setCriticalFloor($entries['critical_floor']);
+            $this->setCriticalCeiling($entries['critical_ceiling']);
+            $this->setWeaponRange($entries['weapon_range']);
+            $this->setType($entries['attack_type']);
+            $this->setNotes($entries['attack_notes']);
+            $this->setAmmunition($entries['ammunition']);
+        }
+
+        /**
+         * @param mixed $id
+         */
+        public function setId($id)
+        {
+            $this->id = $id;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getId()
+        {
+            return $this->id;
         }
 
         /**
@@ -31,7 +49,12 @@ if(!class_exists('Attack')) {
          */
         public function setAmmunition($ammunition)
         {
-            $this->ammunition = $ammunition;
+            if(!empty($ammunition) && $ammunition >= 0) {
+                $this->ammunition = $ammunition;
+            } else {
+                $this->ammunition = 0;
+            }
+
         }
 
         /**
@@ -47,7 +70,12 @@ if(!class_exists('Attack')) {
          */
         public function setAttackBonus($attack_bonus)
         {
-            $this->attack_bonus = $attack_bonus;
+            if(!empty($attack_bonus) && $attack_bonus >= 0) {
+                $this->attack_bonus = $attack_bonus;
+            } else {
+                $this->attack_bonus = 0;
+            }
+
         }
 
         /**
@@ -63,7 +91,12 @@ if(!class_exists('Attack')) {
          */
         public function setCriticalCeiling($critical_ceiling)
         {
-            $this->critical_ceiling = $critical_ceiling;
+            if(!empty($critical_ceiling) && $critical_ceiling >= 0) {
+                $this->critical_ceiling = $critical_ceiling;
+            } else {
+                $this->critical_ceiling = 0;
+            }
+
         }
 
         /**
@@ -79,7 +112,12 @@ if(!class_exists('Attack')) {
          */
         public function setCriticalFloor($critical_floor)
         {
-            $this->critical_floor = $critical_floor;
+            if(!empty($critical_floor) && $critical_floor >= 0) {
+                $this->critical_floor = $critical_floor;
+            } else {
+                $this->critical_floor = 0;
+            }
+
         }
 
         /**
@@ -95,7 +133,12 @@ if(!class_exists('Attack')) {
          */
         public function setDamage($damage)
         {
-            $this->damage = $damage;
+            if(!empty($damage) >= 0) {
+                $this->damage = $damage;
+            } else {
+                $this->damage = 0;
+            }
+
         }
 
         /**
@@ -111,7 +154,12 @@ if(!class_exists('Attack')) {
          */
         public function setName($name)
         {
-            $this->name = $name;
+            if(!empty($name)) {
+                $this->name = $name;
+            } else {
+                $this->name = 'Attack Name';
+            }
+
         }
 
         /**
@@ -127,7 +175,12 @@ if(!class_exists('Attack')) {
          */
         public function setNotes($notes)
         {
-            $this->notes = $notes;
+            if(!empty($notes)) {
+                $this->notes = $notes;
+            } else {
+                $this->notes = 'Attack Notes';
+            }
+
         }
 
         /**
@@ -143,7 +196,12 @@ if(!class_exists('Attack')) {
          */
         public function setType($type)
         {
-            $this->type = $type;
+            if(!empty($type)) {
+                $this->type = $type;
+            } else {
+                $this->type = 'Attack Type';
+            }
+
         }
 
         /**
@@ -159,7 +217,12 @@ if(!class_exists('Attack')) {
          */
         public function setWeaponRange($weapon_range)
         {
-            $this->weapon_range = $weapon_range;
+            if(!empty($weapon_range) && $weapon_range >= 0) {
+                $this->weapon_range = $weapon_range;
+            } else {
+                $this->weapon_range = 0;
+            }
+
         }
 
         /**

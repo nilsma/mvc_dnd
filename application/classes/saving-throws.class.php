@@ -9,13 +9,13 @@ if(!class_exists('Saving_Throws')) {
         protected $saving_throws;
 
         public function __construct($array) {
-            $this->saving_throws = $array;
+            $this->setSavingThrows($array);
         }
 
         /**
          * @param mixed $saving_throws
          */
-        public function setSavingThrows($saving_throws)
+        public function setSavingThrows(Array $saving_throws)
         {
             $this->saving_throws = $saving_throws;
         }

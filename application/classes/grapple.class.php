@@ -14,11 +14,11 @@ if(!class_exists('Grapple')) {
         protected $grapple_misc_mod;
 
         public function __construct($entries) {
-            $this->grapple_total = $entries['grapple_total'];
-            $this->grapple_bab = $entries['grapple_bab'];
-            $this->grapple_str_mod = $entries['grapple_str_mod'];
-            $this->grapple_size_mod = $entries['grapple_size_mod'];
-            $this->grapple_misc_mod = $entries['grapple_misc_mod'];
+            $this->setGrappleTotal($entries['grapple_total']);
+            $this->setGrappleBab($entries['grapple_bab']);
+            $this->setGrappleStrMod($entries['grapple_str_mod']);
+            $this->setGrappleSizeMod($entries['grapple_size_mod']);
+            $this->setGrappleMiscMod($entries['grapple_misc_mod']);
         }
 
         /**
@@ -26,7 +26,12 @@ if(!class_exists('Grapple')) {
          */
         public function setGrappleBab($grapple_bab)
         {
-            $this->grapple_bab = $grapple_bab;
+            if(!empty($grapple_bab) && $grapple_bab >= 0) {
+                $this->grapple_bab = $grapple_bab;
+            } else {
+                $this->grapple_bab = 0;
+            }
+
         }
 
         /**
@@ -42,7 +47,12 @@ if(!class_exists('Grapple')) {
          */
         public function setGrappleMiscMod($grapple_misc_mod)
         {
-            $this->grapple_misc_mod = $grapple_misc_mod;
+            if(!empty($grapple_misc_mod) && $grapple_misc_mod >= 0) {
+                $this->grapple_misc_mod = $grapple_misc_mod;
+            } else {
+                $this->grapple_misc_mod = 0;
+            }
+
         }
 
         /**
@@ -58,7 +68,12 @@ if(!class_exists('Grapple')) {
          */
         public function setGrappleSizeMod($grapple_size_mod)
         {
-            $this->grapple_size_mod = $grapple_size_mod;
+            if(!empty($grapple_size_mod) && $grapple_size_mod >= 0) {
+                $this->grapple_size_mod = $grapple_size_mod;
+            } else {
+                $this->grapple_size_mod = 0;
+            }
+
         }
 
         /**
@@ -74,7 +89,12 @@ if(!class_exists('Grapple')) {
          */
         public function setGrappleStrMod($grapple_str_mod)
         {
-            $this->grapple_str_mod = $grapple_str_mod;
+            if(!empty($grapple_str_mod) && $grapple_str_mod >= 0) {
+                $this->grapple_str_mod = $grapple_str_mod;
+            } else {
+                $this->grapple_str_mod = 0;
+            }
+
         }
 
         /**
@@ -90,7 +110,12 @@ if(!class_exists('Grapple')) {
          */
         public function setGrappleTotal($grapple_total)
         {
-            $this->grapple_total = $grapple_total;
+            if(!empty($grapple_total) && $grapple_total >= 0) {
+                $this->grapple_total = $grapple_total;
+            } else {
+                $this->grapple_total = 0;
+            }
+
         }
 
         /**

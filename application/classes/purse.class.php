@@ -12,9 +12,9 @@ if(!class_exists('Purse')) {
         protected $copper;
 
         public function __construct($purse_entries) {
-            $this->gold = $purse_entries['gold'];
-            $this->silver = $purse_entries['silver'];
-            $this->copper = $purse_entries['copper'];
+            $this->setGold($purse_entries['gold']);
+            $this->setSilver($purse_entries['silver']);
+            $this->setCopper($purse_entries['copper']);
         }
 
         /**
@@ -22,7 +22,12 @@ if(!class_exists('Purse')) {
          */
         public function setCopper($copper)
         {
-            $this->copper = $copper;
+            if(!empty($copper) && $copper >= 0) {
+                $this->copper = $copper;
+            } else {
+                $this->copper = 0;
+            }
+
         }
 
         /**
@@ -38,7 +43,12 @@ if(!class_exists('Purse')) {
          */
         public function setGold($gold)
         {
-            $this->gold = $gold;
+            if(!empty($gold) && $gold >= 0) {
+                $this->gold = $gold;
+            } else {
+                $this->gold = 0;
+            }
+
         }
 
         /**
@@ -54,7 +64,12 @@ if(!class_exists('Purse')) {
          */
         public function setSilver($silver)
         {
-            $this->silver = $silver;
+            if(!empty($silver) && $silver >= 0) {
+                $this->silver = $silver;
+            } else {
+                $this->silver = 0;
+            }
+
         }
 
         /**

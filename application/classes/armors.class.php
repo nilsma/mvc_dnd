@@ -11,15 +11,15 @@ if(!class_exists('Armors')) {
         protected $protective_items;
 
         public function __construct($entries) {
-            $this->armor = $entries['armor'];
-            $this->shield = $entries['shield'];
-            $this->protective_items = $entries['protective_items'];
+            $this->setArmor($entries['armor']);
+            $this->setShield($entries['shield']);
+            $this->setProtectiveItems($entries['protective_items']);
         }
 
         /**
          * @param mixed $armor
          */
-        public function setArmor($armor)
+        public function setArmor(Armor $armor)
         {
             $this->armor = $armor;
         }
@@ -35,7 +35,7 @@ if(!class_exists('Armors')) {
         /**
          * @param mixed $protective_items
          */
-        public function setProtectiveItems($protective_items)
+        public function setProtectiveItems(Array $protective_items)
         {
             $this->protective_items = $protective_items;
         }
@@ -51,7 +51,7 @@ if(!class_exists('Armors')) {
         /**
          * @param mixed $shield
          */
-        public function setShield($shield)
+        public function setShield(Shield $shield)
         {
             $this->shield = $shield;
         }

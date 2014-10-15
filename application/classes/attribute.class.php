@@ -14,11 +14,11 @@ if(!class_exists('Attribute')) {
         protected $temp_mod;
 
         public function __construct($entries) {
-            $this->name = $entries['name'];
-            $this->ability_score = $entries['ability_score'];
-            $this->ability_mod = $entries['ability_mod'];
-            $this->temp_score = $entries['temp_score'];
-            $this->temp_mod = $entries['temp_mod'];
+            $this->setName($entries['name']);
+            $this->setAbilityScore($entries['ability_score']);
+            $this->setAbilityMod($entries['ability_mod']);
+            $this->setTempScore($entries['temp_score']);
+            $this->setTempMod($entries['temp_mod']);
         }
 
         /**
@@ -26,7 +26,12 @@ if(!class_exists('Attribute')) {
          */
         public function setAbilityMod($ability_mod)
         {
-            $this->ability_mod = $ability_mod;
+            if(!empty($ability_mod) && $ability_mod >= 0) {
+                $this->ability_mod = $ability_mod;
+            } else {
+                $this->ability_mod = 0;
+            }
+
         }
 
         /**
@@ -42,7 +47,12 @@ if(!class_exists('Attribute')) {
          */
         public function setAbilityScore($ability_score)
         {
-            $this->ability_score = $ability_score;
+            if(!empty($ability_score) && $ability_score >= 0) {
+                $this->ability_score = $ability_score;
+            } else {
+                $this->ability_score = 0;
+            }
+
         }
 
         /**
@@ -58,7 +68,12 @@ if(!class_exists('Attribute')) {
          */
         public function setName($name)
         {
-            $this->name = $name;
+            if(!empty($name)) {
+                $this->name = $name;
+            } else {
+                $this->name = 'Ability Name';
+            }
+
         }
 
         /**
@@ -74,7 +89,12 @@ if(!class_exists('Attribute')) {
          */
         public function setTempMod($temp_mod)
         {
-            $this->temp_mod = $temp_mod;
+            if(!empty($temp_mod) && $temp_mod >= 0) {
+                $this->temp_mod = $temp_mod;
+            } else {
+                $this->temp_mod = 0;
+            }
+
         }
 
         /**
@@ -90,7 +110,12 @@ if(!class_exists('Attribute')) {
          */
         public function setTempScore($temp_score)
         {
-            $this->temp_score = $temp_score;
+            if(!empty($temp_score) && $temp_score >= 0) {
+                $this->temp_score = $temp_score;
+            } else {
+                $this->temp_score = 0;
+            }
+
         }
 
         /**

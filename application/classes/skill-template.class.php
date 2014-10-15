@@ -12,10 +12,10 @@ if(!class_exists('Skill_Template')) {
         protected $description;
 
         public function __construct($template_name, $common_name, $key_ability, $description) {
-            $this->template_name = $template_name;
-            $this->common_name = $common_name;
-            $this->key_ability = $key_ability;
-            $this->description = $description;
+            $this->setTemplateName($template_name);
+            $this->setCommonName($common_name);
+            $this->setKeyAbility($key_ability);
+            $this->setDescription($description);
         }
 
         /**
@@ -23,7 +23,12 @@ if(!class_exists('Skill_Template')) {
          */
         public function setCommonName($common_name)
         {
-            $this->common_name = $common_name;
+            if(!empty($common_name)) {
+                $this->common_name = $common_name;
+            } else {
+                $this->common_name = 'Common Name';
+            }
+
         }
 
         /**
@@ -39,7 +44,12 @@ if(!class_exists('Skill_Template')) {
          */
         public function setDescription($description)
         {
-            $this->description = $description;
+            if(!empty($description)) {
+                $this->description = $description;
+            } else {
+                $this->description = 'Description';
+            }
+
         }
 
         /**
@@ -55,7 +65,12 @@ if(!class_exists('Skill_Template')) {
          */
         public function setKeyAbility($key_ability)
         {
-            $this->key_ability = $key_ability;
+            if(!empty($key_ability)) {
+                $this->key_ability = $key_ability;
+            } else {
+                $this->key_ability = 'Key Ability';
+            }
+
         }
 
         /**
@@ -71,7 +86,12 @@ if(!class_exists('Skill_Template')) {
          */
         public function setTemplateName($template_name)
         {
-            $this->template_name = $template_name;
+            if(!empty($template_name)) {
+                $this->template_name = $template_name;
+            } else {
+                $this->template_name = 'Template Name';
+            }
+
         }
 
         /**

@@ -119,6 +119,107 @@ if(!class_exists('Base_Model')) {
             return $hashed;
         }
 
+        public function getSkillsTemplates() {
+            $db = $this->connect();
+
+            $query = "SELECT template_name, common_name, key_ability, description FROM skill_templates";
+            $query = $db->real_escape_string($query);
+
+            $skill_templates = array();
+
+            $stmt = $db->stmt_init();
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name, $key_ability, $description);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $skill_templates[] = array(
+                        "template_name" => $template_name,
+                        "common_name" => $common_name,
+                        "key_ability" => $key_ability,
+                        "description" => $description
+                    );
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $skill_templates;
+
+        }
+
+        /**
+         * A method to get all the special ability templates' template_name and common_name in the database ordered
+         * alphabetically by common_name as an associative array
+         * @param $input - the string which the special ability template must contain to be selected
+         * @return array - an associative array where the template_name is the key
+         */
+        public function getSpecialAbilityTemplates($input) {
+            $db = $this->connect();
+            $input = '%' . $input . '%';
+
+            $query = "SELECT template_name, common_name FROM special_ability_templates WHERE common_name LIKE ? ORDER BY common_name";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $templates = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('s', $input);
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $templates[$template_name] = $common_name;
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $templates;
+        }
+
+        /**
+         * A method to get all the feat templates' template_name and common_name in the database ordered
+         * alphabetically by common_name as an associative array
+         * @param $input - the string which the feat template must contain to be selected
+         * @return array - an associative array where the template_name is the key
+         */
+        public function getFeatTemplates($input) {
+            $db = $this->connect();
+            $input = '%' . $input . '%';
+
+            $query = "SELECT template_name, common_name FROM feat_templates WHERE common_name LIKE ? ORDER BY common_name";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $templates = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('s', $input);
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $templates[$template_name] = $common_name;
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $templates;
+        }
 
     }
 }

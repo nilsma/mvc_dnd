@@ -51,12 +51,12 @@ if(!class_exists('Member_View')) {
             $sheet_ids = $this->model->getAvailableCharacters($_SESSION['user_id']);
 
             if(count($sheet_ids) >= 1) {
-                $html .= '<form name="character_mode" action="' . $_SERVER['PHP_SELF'] . '" method="GET">' . "\n";
+                $html .= '<form name="character_mode" action="' . $_SERVER['PHP_SELF'] . '" method="POST">' . "\n";
 
                 foreach($sheet_ids as $sheet_id) {
                     $sheet_overview = $this->model->getCharacterSheetOverview($sheet_id);
-                    $html .= '<input type="radio" name="character" value="' . $sheet_overview['name'] . '">';
-                    $html .= '<label for="character">' . ucwords($sheet_overview['name']) . ' (' . ucwords($sheet_overview['class']) . ' ' . $sheet_overview['level'] . ')</label><br/>' . "\n";
+                    $html .= '<input type="radio" id="sheet_id_' . $sheet_id . '" name="sheet_id" value="' . $sheet_id . '">';
+                    $html .= '<label for="sheet_id_' . $sheet_id . '">' . ucwords($sheet_overview['name']) . ' (' . ucwords($sheet_overview['class']) . ' ' . $sheet_overview['level'] . ')</label><br/>' . "\n";
                 }
 
                 $html .= '<input type="submit" name="submit_character" value="Load Character">' . "\n";

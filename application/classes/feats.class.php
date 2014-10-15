@@ -9,13 +9,13 @@ if(!class_exists('Feats')) {
         protected $feats;
 
         public function __construct($entries) {
-            $this->feats = $entries['feats_array'];
+            $this->setFeats($entries['feats_array']);
         }
 
         /**
          * @param mixed $feats
          */
-        public function setFeats($feats)
+        public function setFeats(Array $feats)
         {
             $this->feats = $feats;
         }

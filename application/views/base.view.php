@@ -23,12 +23,13 @@ if(!class_exists('Base_View')) {
         public function buildHeader($page_id) {
             $html = '';
             $html .= '<meta name="viewport" content="width=device-width, user-scalable=yes">' . "\n";
+            $html .= '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>' . "\n";
             $html .= '<link rel="stylesheet" href="../../public/css/main.css">' . "\n";
             $html .= '<link rel="stylesheet" href="../../public/css/navigation.css">' . "\n";
             $html .= '<link rel="stylesheet" href="../../public/css/' . $page_id . '.css">' . "\n";
 
             if(isset($_SESSION['auth'])) {
-                $html .= '<script src="../../public/js/' . $page_id . '.js"></script>' . "\n";
+                $html .= '<script src="javascript/' . $page_id . '.js"></script>' . "\n";
             }
 
             $html .= '<title>DNDHelper</title>' . "\n";
@@ -88,6 +89,69 @@ if(!class_exists('Base_View')) {
             $html .= '</div> <!-- end #success -->' . "\n";
 
             return $html;
+        }
+
+        public function getFeatSuggestionsHTML($suggestions_array) {
+            $data = '';
+            $data .= '<ul id="feat_sugggestions_list">' . "\n";
+
+            if(count($suggestions_array) < 1) {
+                $data .= '<li>No suggestions!</li>' . "\n";
+            } else {
+                foreach($suggestions_array as $key => $val) {
+                    $data .= '<li class="gui offered_suggestion" onClick="chooseFeatTemplate(\'' . $key . '\', \'' . ucwords($val) .'\');"><a href="javascript:void()">' . ucwords($val) . '</a></li>' . "\n";
+                }
+            }
+
+            $data .= '</ul>' . "\n";
+
+            header('Content-type: application/json');
+            echo json_encode($data, JSON_FORCE_OBJECT);
+
+        }
+
+        /**
+         * a function to get the description of the special ability template and echo it as a
+         * string representation of HTML
+         * @param $common_name
+         */
+        public function getSpecialAbilityInfo($common_name) {
+            $info = $this->model->getSpecialAbilityInfo($common_name);
+
+            $data = '';
+            $data .= '<p>' . $info . '</p>' . "\n";
+            $data .= '<p><a class="gui close_special_ability_info" href="javascript:void()" onClick="closeSpecialAbilityInfo();">Close</a></p>' . "\n";
+
+            echo $data;
+        }
+
+        public function getFeatInfo($common_name) {
+            $info = $this->model->getFeatInfo($common_name);
+
+            $data = '';
+            $data .= '<p>' . $info . '</p>' . "\n";
+            $data .= '<p><a class="gui close_feat_info" href="javascript:void()" onClick="closeFeatInfo();">Close</a></p>' . "\n";
+
+            echo $data;
+        }
+
+        public function getSpecialAbilitySuggestionsHTML($suggestions_array) {
+            $data = '';
+            $data .= '<ul id="suggestions_list">' . "\n";
+
+            if(count($suggestions_array) < 1) {
+                $data .= '<li>No suggestions!</li>' . "\n";
+            } else {
+                foreach($suggestions_array as $key => $val) {
+                    $data .= '<li class="gui offered_suggestion" onClick="chooseTemplate(\'' . $key . '\', \'' . ucwords($val) .'\');"><a href="javascript:void()">' . ucwords($val) . '</a></li>' . "\n";
+                }
+            }
+
+            $data .= '</ul>' . "\n";
+
+            header('Content-type: application/json');
+            echo json_encode($data, JSON_FORCE_OBJECT);
+
         }
 
     }

@@ -12,14 +12,14 @@ if(!class_exists('Languages')) {
         protected $languages_array;
 
         public function __construct($entries) {
-            $this->max_number_of_languages = $entries['max_no_of_languages'];
-            $this->languages_array = $entries['languages'];
+            $this->setMaxNumberOfLanguages($entries['max_number_of_languages']);
+            $this->setLanguagesArray($entries['languages']);
         }
 
         /**
          * @param mixed $languages
          */
-        public function setLanguagesArray($languages)
+        public function setLanguagesArray(Array $languages)
         {
             $this->languages_array = $languages;
         }
@@ -37,7 +37,12 @@ if(!class_exists('Languages')) {
          */
         public function setMaxNumberOfLanguages($max_number_of_languages)
         {
-            $this->max_number_of_languages = $max_number_of_languages;
+            if(!empty($max_number_of_languages) && $max_number_of_languages >= 0) {
+                $this->max_number_of_languages = $max_number_of_languages;
+            } else {
+                $this->max_number_of_languages = 0;
+            }
+
         }
 
         /**

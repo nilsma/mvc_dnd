@@ -6,26 +6,26 @@ if(!class_exists('Special_Abilities')) {
 
     class Special_Abilities {
 
-        protected $special_abilities;
+        protected $special_abilities_array;
 
         public function __construct($entries) {
-            $this->special_abilities = $entries['special_abilities_array'];
+            $this->setSpecialAbilitiesArray($entries['special_abilities_array']);
         }
 
         /**
          * @param mixed $special_abilities
          */
-        public function setSpecialAbilities($special_abilities)
+        public function setSpecialAbilitiesArray(Array $special_abilities)
         {
-            $this->special_abilities = $special_abilities;
+            $this->special_abilities_array = $special_abilities;
         }
 
         /**
          * @return mixed
          */
-        public function getSpecialAbilities()
+        public function getSpecialAbilitiesArray()
         {
-            return $this->special_abilities;
+            return $this->special_abilities_array;
         }
 
     }
