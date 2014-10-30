@@ -23,10 +23,10 @@ if(!class_exists('Base_View')) {
         public function buildHeader($page_id) {
             $html = '';
             $html .= '<meta name="viewport" content="width=device-width, user-scalable=yes">' . "\n";
-            $html .= '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>' . "\n";
-            $html .= '<link rel="stylesheet" href="../../public/css/main.css">' . "\n";
-            $html .= '<link rel="stylesheet" href="../../public/css/navigation.css">' . "\n";
-            $html .= '<link rel="stylesheet" href="../../public/css/' . $page_id . '.css">' . "\n";
+            //$html .= '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>' . "\n";
+            //$html .= '<link rel="stylesheet" href="../../public/css/main.css">' . "\n";
+            //$html .= '<link rel="stylesheet" href="../../public/css/navigation.css">' . "\n";
+            //$html .= '<link rel="stylesheet" href="../../public/css/' . $page_id . '.css">' . "\n";
 
             if(isset($_SESSION['auth'])) {
                 $html .= '<script src="javascript/' . $page_id . '.js"></script>' . "\n";
@@ -113,6 +113,23 @@ if(!class_exists('Base_View')) {
         /**
          * a function to get the description of the special ability template and echo it as a
          * string representation of HTML
+         * @param $template_name
+         */
+        public function getSkillInfo($template_name) {
+            $info = $this->model->getSkillInfo($template_name);
+
+            $data = '';
+            $data .= '<div>' . "\n";
+            $data .= '<p>' . $info . '</p>' . "\n";
+            $data .= '</div>' . "\n";
+            $data .= '<p><a class="gui close_skill_info" href="javascript:void()" onClick="closeSkillInfo();">Close</a></p>' . "\n";
+
+            echo $data;
+        }
+
+        /**
+         * a function to get the description of the special ability template and echo it as a
+         * string representation of HTML
          * @param $common_name
          */
         public function getSpecialAbilityInfo($common_name) {
@@ -142,8 +159,12 @@ if(!class_exists('Base_View')) {
             if(count($suggestions_array) < 1) {
                 $data .= '<li>No suggestions!</li>' . "\n";
             } else {
-                foreach($suggestions_array as $key => $val) {
-                    $data .= '<li class="gui offered_suggestion" onClick="chooseTemplate(\'' . $key . '\', \'' . ucwords($val) .'\');"><a href="javascript:void()">' . ucwords($val) . '</a></li>' . "\n";
+                foreach($suggestions_array as $suggestion) {
+                    $base_class = $suggestion['base_class'];
+                    $template_name = $suggestion['template_name'];
+                    $common_name = $suggestion['common_name'];
+
+                    $data .= '<li class="gui offered_suggestion" onClick="chooseTemplate(\'' . $base_class . '\', \'' . $template_name . '\', \'' . ucwords($common_name) .'\');"><a href="javascript:void()">' . ucwords($common_name) . '</a> (' . ucwords($base_class) . ')</li>' . "\n";
                 }
             }
 
@@ -151,7 +172,6 @@ if(!class_exists('Base_View')) {
 
             header('Content-type: application/json');
             echo json_encode($data, JSON_FORCE_OBJECT);
-
         }
 
     }

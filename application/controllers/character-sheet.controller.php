@@ -27,14 +27,14 @@ if(!class_exists('Character_Sheet_Controller')) {
             $this->model->writeArmorClass($sheet_id, $armor_class);
         }
 
-        public function updateAttribute($sheet_id, $segments, $attribute_label) {
+        public function updateAttribute($sheet_id, $segments) {
             $attribute = new Attribute($segments);
-            $this->model->writeAttribute($sheet_id, $attribute, $attribute_label);
+            $this->model->writeAttribute($sheet_id, $attribute, $segments['name']);
         }
 
-        public function updateSavingThrow($sheet_id, $segments, $saving_throw_label) {
+        public function updateSavingThrow($sheet_id, $segments) {
             $saving_throw = new Saving_Throw($segments);
-            $this->model->writeSavingThrow($sheet_id, $saving_throw, $saving_throw_label);
+            $this->model->writeSavingThrow($sheet_id, $saving_throw, strtolower($segments['name']));
         }
 
         public function updateAttacks($sheet_id, $segments) {
@@ -51,8 +51,50 @@ if(!class_exists('Character_Sheet_Controller')) {
             $this->model->writeGrapple($sheet_id, $grapple);
         }
 
-        public function addSpecialAbility($sheet_id, $template_name) {
-            $this->model->insertSpecialAbility($sheet_id, $template_name);
+        public function updateArmor($sheet_id, $segments) {
+            $armor = new Armor($segments);
+            $this->model->writeArmor($sheet_id, $armor);
+        }
+
+        public function updateShield($sheet_id, $segments) {
+            $shield = new Shield($segments);
+            $this->model->writeShield($sheet_id, $shield);
+        }
+
+        public function updateProtectiveItem($sheet_id, $segments) {
+            $protective_item = new Protective_Item($segments, $segments['protective_item_id']);
+            $this->model->writeProtectiveItem($sheet_id, $protective_item);
+        }
+
+        public function updateSkills($sheet_id, $segments) {
+            $this->model->writeSkills($sheet_id, $segments);
+        }
+
+        public function updateSkill($sheet_id, $segments) {
+            $skill = new Skill($segments);
+            $this->model->writeSkill($sheet_id, $skill);
+        }
+
+        public function updateLanguages($sheet_id, $segments) {
+            $this->model->writeLanguages($sheet_id, $segments);
+        }
+
+        public function updateCurrency($sheet_id, $segments) {
+            $currency = new Currency($segments);
+            $this->model->writeCurrency($sheet_id, $currency);
+        }
+
+        public function updateItem($sheet_id, $segments) {
+            $item = new Item($segments, $segments['item_id']);
+            $this->model->writeItem($sheet_id, $item);
+        }
+
+        public function updateInventory($sheet_id, $segments) {
+            $this->model->writeInventory($sheet_id, $segments);
+        }
+
+        public function addSpecialAbility($sheet_id, $template_name, $base_class) {
+            $this->model->insertSpecialAbility($sheet_id, $template_name, $base_class);
         }
 
         public function removeLanguage($sheet_id, $language) {

@@ -11,8 +11,8 @@ if(!class_exists('Item')) {
         protected $weight;
         protected $quantity;
         
-        public function __construct($entries, $id = NULL) {
-            $this->setId($id);
+        public function __construct($entries, $item_id = NULL) {
+            $this->setId($item_id);
             $this->setName($entries['item_name']);
             $this->setWeight($entries['item_weight']);
             $this->setQuantity($entries['item_quantity']);
@@ -63,7 +63,7 @@ if(!class_exists('Item')) {
             if(!empty($quantity) && $quantity >= 0) {
                 $this->quantity = $quantity;
             } else {
-                $this->quantity = '';
+                $this->quantity = 0;
             }
 
         }
@@ -84,7 +84,7 @@ if(!class_exists('Item')) {
             if(!empty($weight) && $weight >=0) {
                 $this->weight = $weight;
             } else {
-                $this->weight = '';
+                $this->weight = 0.0;
             }
 
         }

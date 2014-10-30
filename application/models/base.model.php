@@ -161,7 +161,7 @@ if(!class_exists('Base_Model')) {
             $db = $this->connect();
             $input = '%' . $input . '%';
 
-            $query = "SELECT template_name, common_name FROM special_ability_templates WHERE common_name LIKE ? ORDER BY common_name";
+            $query = "SELECT base_class, template_name, common_name FROM special_ability_templates WHERE common_name LIKE ? ORDER BY common_name";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -173,10 +173,14 @@ if(!class_exists('Base_Model')) {
             } else {
                 $stmt->bind_param('s', $input);
                 $stmt->execute();
-                $stmt->bind_result($template_name, $common_name);
+                $stmt->bind_result($base_class, $template_name, $common_name);
                 $stmt->store_result();
                 while($stmt->fetch()) {
-                    $templates[$template_name] = $common_name;
+                    $templates[] = array(
+                        'base_class' => $base_class,
+                        'template_name' => $template_name,
+                        'common_name' => $common_name
+                    );
                 }
 
                 $stmt->close();

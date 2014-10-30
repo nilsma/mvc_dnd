@@ -38,12 +38,12 @@ if(isset($_POST['update_armor_class'])) {
 
 if(isset($_POST['update_attribute'])) {
     $segments = json_decode($_POST['update_attribute'], true);
-    $ctrl->updateAttribute($_SESSION['current_sheet'], $segments, strtolower($_POST['update_attribute_label']));
+    $ctrl->updateAttribute($_SESSION['current_sheet'], $segments);
 }
 
 if(isset($_POST['update_saving_throw'])) {
     $segments = json_decode($_POST['update_saving_throw'], true);
-    $ctrl->updateSavingThrow($_SESSION['current_sheet'], $segments, strtolower($_POST['update_saving_throw_label']));
+    $ctrl->updateSavingThrow($_SESSION['current_sheet'], $segments);
 }
 
 if(isset($_POST['update_attacks'])) {
@@ -59,6 +59,51 @@ if(isset($_POST['update_attack'])) {
 if(isset($_POST['update_grapple'])) {
     $segments = json_decode($_POST['update_grapple'], true);
     $ctrl->updateGrapple($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_armor'])) {
+    $segments = json_decode($_POST['update_armor'], true);
+    $ctrl->updateArmor($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_shield'])) {
+    $segments = json_decode($_POST['update_shield'], true);
+    $ctrl->updateShield($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_protective_item'])) {
+    $segments = json_decode($_POST['update_protective_item'], true);
+    $ctrl->updateProtectiveItem($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_skills'])) {
+    $segments = json_decode($_POST['update_skills'], true);
+    $ctrl->updateSkills($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_skill'])) {
+    $segments = json_decode($_POST['update_skill'], true);
+    $ctrl->updateSkill($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_languages'])) {
+    $segments = json_decode($_POST['update_languages'], true);
+    $ctrl->updateLanguages($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_currency'])) {
+    $segments = json_decode($_POST['update_currency'], true);
+    $ctrl->updateCurrency($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_item'])) {
+    $segments = json_decode($_POST['update_item'], true);
+    $ctrl->updateItem($_SESSION['current_sheet'], $segments);
+}
+
+if(isset($_POST['update_inventory'])) {
+    $segments = json_decode($_POST['update_inventory'], true);
+    $ctrl->updateInventory($_SESSION['current_sheet'], $segments);
 }
 
 if(isset($_POST['add_language'])) {
@@ -86,8 +131,14 @@ if(isset($_POST['add_attack'])) {
 }
 
 if(isset($_POST['add_special_ability'])) {
-    if(!empty($_POST['special_ability_search_template']) && !empty($_POST['special_ability_search_input'])) {
-        $ctrl->addSpecialAbility($_SESSION['current_sheet'], $_POST['special_ability_search_template']);
+    if(!empty($_POST['special_ability_search_template']) &&
+        !empty($_POST['special_ability_search_input']) &&
+        !empty($_POST['special_ability_search_base_class'])
+    ) {
+        $ctrl->addSpecialAbility($_SESSION['current_sheet'],
+            $_POST['special_ability_search_template'],
+            $_POST['special_ability_search_base_class']
+        );
     }
     header('Location: character-sheet.php');
     exit();
@@ -154,6 +205,10 @@ if(isset($_POST['special_ability_info'])) {
     $view->getSpecialAbilityInfo($_POST['special_ability_info']);
 }
 
+if(isset($_POST['skill_info'])) {
+    $view->getSkillInfo($_POST['skill_info']);
+}
+
 $character_sheet = $ctrl->getCharacterSheet($_SESSION['current_sheet']);
 
 if(!isset($_POST['add_attack']) &&
@@ -175,9 +230,19 @@ if(!isset($_POST['add_attack']) &&
     !isset($_POST['update_attacks']) &&
     !isset($_POST['update_attack']) &&
     !isset($_POST['update_grapple']) &&
+    !isset($_POST['update_armor']) &&
+    !isset($_POST['update_shield']) &&
+    !isset($_POST['update_protective_item']) &&
+    !isset($_POST['update_skills']) &&
+    !isset($_POST['update_skill']) &&
+    !isset($_POST['update_languages']) &&
+    !isset($_POST['update_currency']) &&
+    !isset($_POST['update_item']) &&
+    !isset($_POST['update_inventory']) &&
     !isset($_POST['feat_info']) &&
     !isset($_POST['get_feat_suggestions']) &&
     !isset($_POST['special_ability_info']) &&
+    !isset($_POST['skill_info']) &&
     !isset($_POST['get_special_abilities_suggestions'])) {
     $view->render($character_sheet);
 }

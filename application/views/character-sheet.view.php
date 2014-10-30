@@ -320,10 +320,12 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<div id="skills">' ."\n";
             $html .= '<h2>Skills</h2>' . "\n";
             $html .= '<label for="skills_max_ranks_class">Max Ranks Class: </label>';
-            $html .= '<input id="skills_max_ranks_class" name="skill_max_ranks_class" type="number" value="' . $skills->getMaxRanksClass() . '">' . "\n";
+            $html .= '<input class="skills_input" id="skills_max_ranks_class" name="skill_max_ranks_class" type="number" value="' . $skills->getMaxRanksClass() . '">' . "\n";
             $html .= '<label for="skills_max_ranks_cross_class">Max Ranks Cross Class: </label>';
-            $html .= '<input id="skills_max_ranks_cross_class" name="skill_max_ranks_cross_class" type="number" value="' . $skills->getMaxRanksCrossClass() . '">' . "\n";
+            $html .= '<input class="skills_input" id="skills_max_ranks_cross_class" name="skill_max_ranks_cross_class" type="number" value="' . $skills->getMaxRanksCrossClass() . '">' . "\n";
             $html .= $this->buildSkill($skills->getSkillArray());
+            $html .= '<div id="skill_template_info">' . "\n";
+            $html .= '</div> <!-- end #skill_template_info -->' . "\n";
             $html .= '</div> <!-- end #skills -->' . "\n";
 
             return $html;
@@ -336,7 +338,12 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<table>' . "\n";
             $html .= '<thead>' . "\n";
             $html .= '<tr>' . "\n";
-            $html .= '<td>Skill</td><td>Key Ability</td></td><td>Skill Mod</td><td>Ability Mod</td><td>Ranks</td><td>Misc Mod</td>' . "\n";
+            $html .= '<td>Skill</td>' . "\n";
+            $html .= '<td>Key Ability</td>' . "\n";
+            $html .= '<td>Skill Mod</td>' . "\n";
+            $html .= '<td>Ability Mod</td>' . "\n";
+            $html .= '<td>Ranks</td>' . "\n";
+            $html .= '<td>Misc Mod</td>' . "\n";
             $html .= '</tr>' . "\n";
             $html .= '</thead>' . "\n";
             $html .= '<tbody>' . "\n";
@@ -347,12 +354,12 @@ if(!class_exists('Character_Sheet_View')) {
                 $key_ability = $this->model->getSkillKeyAbility($template_name);
 
                 $html .= '<tr>' . "\n";
-                $html .= '<td>' . $common_name . '</td>';
-                $html .= '<td>' . strtoupper($key_ability) . '</td>';
-                $html .= '<td><input class="skill_skill_mod" type="number" value="' . $skill->getSkillMod() . '"></td>' . "\n";
-                $html .= '<td><input class="skill_ability_mod" type="number" value="' . $skill->getAbilityMod() . '"></td>' . "\n";
-                $html .= '<td><input class="skill_ranks" type="number" value="' . $skill->getRanks() . '"></td>' . "\n";
-                $html .= '<td><input class="skill_misc_mod" type="number" value="' . $skill->getMiscMod() . '"></td>' . "\n";
+                $html .= '<td><span><a class="gui skill_template_info" href="javascript:void()">' . $common_name . '</a></span><input name="skill_template_name" type="text" value="' . $template_name . '" hidden></td>' . "\n";
+                $html .= '<td>' . strtoupper($key_ability) . '</td>' . "\n";
+                $html .= '<td><input class="skill_input skill_skill_mod" type="number" value="' . $skill->getSkillMod() . '"></td>' . "\n";
+                $html .= '<td><input class="skill_input skill_ability_mod" type="number" value="' . $skill->getAbilityMod() . '"></td>' . "\n";
+                $html .= '<td><input class="skill_input skill_ranks" type="number" value="' . $skill->getRanks() . '"></td>' . "\n";
+                $html .= '<td><input class="skill_input skill_misc_mod" type="number" value="' . $skill->getMiscMod() . '"></td>' . "\n";
                 $html .= '</tr>' . "\n";
             }
 
@@ -382,23 +389,23 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<div id="armor">' . "\n";
             $html .= '<h3>Armor</h3>' . "\n";
             $html .= '<label for="armor_name">Armor: </label>';
-            $html .= '<input id="armor_name" name="armor_name" type="text" maxlength="50" value="' . $armor->getName() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_name" name="armor_name" type="text" maxlength="50" value="' . $armor->getName() . '">' . "\n";
             $html .= '<label for="armor_type">Type: </label>';
-            $html .= '<input id="armor_type" name="armor_type" type="text" maxlength="50" value="' . $armor->getType() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_type" name="armor_type" type="text" maxlength="50" value="' . $armor->getType() . '">' . "\n";
             $html .= '<label for="armor_ac_bonus">AC Bonus: </label>';
-            $html .= '<input id="armor_ac_bonus" name="armor_ac_bonus" type="number" value="' . $armor->getAcBonus() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_ac_bonus" name="armor_ac_bonus" type="number" value="' . $armor->getAcBonus() . '">' . "\n";
             $html .= '<label for="armor_max_dex">Max Dex: </label>';
-            $html .= '<input id="armor_max_dex" name="armor_max_dex" type="number" value="' . $armor->getMaxDex() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_max_dex" name="armor_max_dex" type="number" value="' . $armor->getMaxDex() . '">' . "\n";
             $html .= '<label for="armor_check_penalty">Check Penalty: </label>';
-            $html .= '<input id="armor_check_penalty" name="armor_check_penalty" type="number" value="' . $armor->getCheckPenalty() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_check_penalty" name="armor_check_penalty" type="number" value="' . $armor->getCheckPenalty() . '">' . "\n";
             $html .= '<label for="armor_spell_failure">Spell Failure: </label>';
-            $html .= '<input id="armor_spell_failure" name="armor_spell_failure" type="number" value="' . $armor->getSpellFailure() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_spell_failure" name="armor_spell_failure" type="number" value="' . $armor->getSpellFailure() . '">' . "\n";
             $html .= '<label for="armor_speed">Speed: </label>';
-            $html .= '<input id="armor_speed" name="armor_speed" type="number" value="' . $armor->getSpeed() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_speed" name="armor_speed" type="number" value="' . $armor->getSpeed() . '">' . "\n";
             $html .= '<label for="armor_weight">Weight: </label>';
-            $html .= '<input id="armor_weight" name="armor_weight" type="number" value="' . $armor->getWeight() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_weight" name="armor_weight" type="number" value="' . $armor->getWeight() . '">' . "\n";
             $html .= '<label for="armor_special_properties">Special Properties: </label>';
-            $html .= '<input id="armor_special_properties" name="armor_special_properties" type="text" maxlength="200" value="' . $armor->getSpecialProperties() . '">' . "\n";
+            $html .= '<input class="armor_input" id="armor_special_properties" name="armor_special_properties" type="text" maxlength="200" value="' . $armor->getSpecialProperties() . '">' . "\n";
             $html .= '</div> <!-- end #armor -->' . "\n";
 
             return $html;
@@ -411,17 +418,17 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<h3>Shield</h3>' . "\n";
 
             $html .= '<label for="shield_name">Shield: </label>';
-            $html .= '<input id="shield_name" name="shield_name" type="text" maxlength="50" value="' . $shield->getName() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_name" name="shield_name" type="text" maxlength="50" value="' . $shield->getName() . '">' . "\n";
             $html .= '<label for="shield_ac_bonus">AC Bonus: </label>';
-            $html .= '<input id="shield_ac_bonus" name="shield_ac_bonus" type="number" value="' . $shield->getAcBonus() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_ac_bonus" name="shield_ac_bonus" type="number" value="' . $shield->getAcBonus() . '">' . "\n";
             $html .= '<label for="shield_check_penalty">Check Penalty: </label>';
-            $html .= '<input id="shield_check_penalty" name="shield_check_penalty" type="number" value="' . $shield->getCheckPenalty() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_check_penalty" name="shield_check_penalty" type="number" value="' . $shield->getCheckPenalty() . '">' . "\n";
             $html .= '<label for="shield_spell_failure">Spell Failure: </label>';
-            $html .= '<input id="shield_spell_failure" name="shield_spell_failure" type="number" value="' . $shield->getSpellFailure() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_spell_failure" name="shield_spell_failure" type="number" value="' . $shield->getSpellFailure() . '">' . "\n";
             $html .= '<label for="shield_weight">Weight: </label>';
-            $html .= '<input id="shield_weight" name="shield_weight" type="number" value="' . $shield->getWeight() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_weight" name="shield_weight" type="number" value="' . $shield->getWeight() . '">' . "\n";
             $html .= '<label for="shield_special_properties">Special Properties: </label>';
-            $html .= '<input id="shield_special_properties" name="shield_special_properties" type="text" maxlength="200" value="' . $shield->getSpecialProperties() . '">' . "\n";
+            $html .= '<input class="shield_input" id="shield_special_properties" name="shield_special_properties" type="text" maxlength="200" value="' . $shield->getSpecialProperties() . '">' . "\n";
 
             $html .= '</div> <!-- end #shield -->' . "\n";
 
@@ -449,15 +456,15 @@ if(!class_exists('Character_Sheet_View')) {
             $html = '';
 
             $html .= '<div class="protective_item">' . "\n";
-            $html .= '<input name="protective_item_id" type="number" value="' . $protective_item->getId() . '" hidden>' . "\n";
+            $html .= '<input class="protective_item_input" name="protective_item_id" type="number" value="' . $protective_item->getId() . '" hidden>' . "\n";
             $html .= '<label>Name: </label>';
-            $html .= '<input name="protective_item_name" type="text" maxlength="50" value="' . $protective_item->getName() . '">' . "\n";
+            $html .= '<input class="protective_item_input" name="protective_item_name" type="text" maxlength="50" value="' . $protective_item->getName() . '">' . "\n";
             $html .= '<label for="protective_item_ac_bonus">AC Bonus: </label>';
-            $html .= '<input id="protective_item_ac_bonus" name="protective_item_ac_bonus" type="number" value="' . $protective_item->getAcBonus() . '">' . "\n";
+            $html .= '<input class="protective_item_input" id="protective_item_ac_bonus" name="protective_item_ac_bonus" type="number" value="' . $protective_item->getAcBonus() . '">' . "\n";
             $html .= '<label for="protective_item_weight">Weight: </label>';
-            $html .= '<input id="protective_item_weight" name="protective_item_weight" type="number" value="' . $protective_item->getWeight() . '">' . "\n";
+            $html .= '<input class="protective_item_input" id="protective_item_weight" name="protective_item_weight" type="number" value="' . $protective_item->getWeight() . '">' . "\n";
             $html .= '<label for="protective_item_special_properties">Special Properties: </label>';
-            $html .= '<input id="protective_item_special_properties" name="protective_item_special_properties" type="text" maxlength="200" value="' . $protective_item->getSpecialProperties() . '">' . "\n";
+            $html .= '<input class="protective_item_input" id="protective_item_special_properties" name="protective_item_special_properties" type="text" maxlength="200" value="' . $protective_item->getSpecialProperties() . '">' . "\n";
             $html .= '<p class="gui"><a class="remove_protective_item" href="javascript:void()">remove</a></p>' . "\n";
 
             $html .= '</div> <!-- end .protective_item -->' . "\n";
@@ -474,7 +481,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<ul>' . "\n";
             foreach($feats as $feat) {
                 $common_name = $this->model->getFeatCommonName($feat->getTemplateName());
-                $html .= '<li class="feat_name"><span id="' . $feat->getTemplateName() . '">' . $common_name . '</span> <a class="gui feat_template_info" href="javascript:void()">info</a> <a class="gui remove_feat" href="javascript:void()">remove</a></li>' . "\n";
+                $html .= '<li class="feat_name" id="' . $feat->getTemplateName() . '"><a class="gui feat_template_info" href="javascript:void()">' . $common_name . '</a> <a class="gui remove_feat" href="javascript:void()">remove</a></li>' . "\n";
             }
             $html .= '</ul>' . "\n";
 
@@ -506,7 +513,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<ul>' . "\n";
             foreach($special_abilities as $special_ability) {
                 $common_name = $this->model->getSpecialAbilityCommonName($special_ability->getTemplateName());
-                $html .= '<li class="special_ability_name"><span span id="' . $special_ability->getTemplateName() . '">' . $common_name . '</span> <a class="gui special_ability_template_info" href="javascript:void()">info</a> <a class="gui remove_special_ability" href="javascript:void()">remove</a></li>' . "\n";
+                $html .= '<li id="' . $special_ability->getTemplateName() . '"><a class="gui special_ability_template_info" href="javascript:void()">' . $common_name . '</a> <a class="gui remove_special_ability" href="javascript:void()">remove</a></li>' . "\n";
             }
             $html .= '</ul>' . "\n";
 
@@ -517,6 +524,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<label for="special_ability_search_input">Add Special Ability: </label>' . "\n";
             $html .= '<input class="special_ability_search_input" id="special_ability_search_input" name="special_ability_search_input" type="text" value="">' . "\n";
             $html .= '<input class="special_ability_search_template" id="special_ability_search_template" name="special_ability_search_template" type="text" value="" hidden>' . "\n";
+            $html .= '<input class="special_ability_search_base_class" id="special_ability_search_base_class" name="special_ability_search_base_class" type="text" value="" hidden>' . "\n";
             $html .= '<input name="add_special_ability" type="submit" value="Add">' . "\n";
 
             $html .= '</div> <!-- end #special_ability_search -->' . "\n";
@@ -537,7 +545,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<div id="languages">' . "\n";
             $html .= '<h2>Languages</h2>' . "\n";
             $html .= '<label for="max_number_of_languages">Max Number Of Languages: </label>';
-            $html .= '<input id="max_number_of_languages" name="max_number_of_languages" type="number" value="' . $languages->getMaxNumberOfLanguages() . '">' . "\n";
+            $html .= '<input class="languages_input" id="max_number_of_languages" name="max_number_of_languages" type="number" value="' . $languages->getMaxNumberOfLanguages() . '">' . "\n";
 
             $html .= '<ul>' . "\n";
 
@@ -571,17 +579,20 @@ if(!class_exists('Character_Sheet_View')) {
                 $html .= '<table>' . "\n";
                 $html .= '<thead>' . "\n";
                 $html .= '<tr>' . "\n";
-                $html .= '<td>Item</td><td>Quantity</td><td>Weight Per Unit</td><td></td>';
+                $html .= '<td>Item</td>' . "\n";
+                $html .= '<td>Quantity</td>' . "\n";
+                $html .= '<td>Weight Per Unit</td>' . "\n";
+                $html .= '<td></td>' . "\n";
                 $html .= '</tr>' . "\n";
                 $html .= '</thead>' . "\n";
                 $html .= '<tbody>' . "\n";
 
                 foreach($items as $item) {
                     $html .= '<tr>' . "\n";
-                    $html .= '<td><input class="item_id" type="number" value="' . $item->getId() . '" hidden>' . "\n";
-                    $html .= '<input class="item_name" type="text" maxlength="50" value="' . $item->getName() . '"></td>' . "\n";
-                    $html .= '<td><input class="item_quantity" type="number" value="' . $item->getQuantity() . '"></td>' . "\n";
-                    $html .= '<td><input class="item_weight" type="number" step="0.01" value="' . $item->getWeight() . '"></td>' . "\n";
+                    $html .= '<td><input class="item_id" type="number" value="' . $item->getId() . '" hidden>';
+                    $html .= '<input class="item_name item_input" type="text" maxlength="50" value="' . $item->getName() . '"></td>' . "\n";
+                    $html .= '<td><input class="item_quantity item_input" type="number" value="' . $item->getQuantity() . '"></td>' . "\n";
+                    $html .= '<td><input class="item_weight item_input" type="number" step="0.01" value="' . $item->getWeight() . '"></td>' . "\n";
                     $html .= '<td><a class="gui remove_item" href="javascript:void()">remove</a></td>' . "\n";
                     $html .= '</tr>' . "\n";
                 }
@@ -598,17 +609,17 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<div>' . "\n";
 
             $html .= '<label for="inventory_light_load">Light Load: </label>';
-            $html .= '<input id="inventory_light_load" name="inventory_light_load" type="number" value="' . $inventory->getLightLoad() . '">' . "\n";
+            $html .= '<input id="inventory_light_load" class="inventory_input" name="inventory_light_load" type="number" value="' . $inventory->getLightLoad() . '">' . "\n";
             $html .= '<label for="inventory_medium_load">Medium Load: </label>';
-            $html .= '<input id="inventory_medium_load" name="inventory_medium_load" type="number" value="' . $inventory->getMediumLoad() . '">' . "\n";
+            $html .= '<input id="inventory_medium_load" class="inventory_input" name="inventory_medium_load" type="number" value="' . $inventory->getMediumLoad() . '">' . "\n";
             $html .= '<label for="inventory_heavy_load">Heavy Load: </label>';
-            $html .= '<input id="inventory_heavy_load" name="inventory_heavy_load" type="number" value="' . $inventory->getHeavyLoad() . '">' . "\n";
+            $html .= '<input id="inventory_heavy_load" class="inventory_input" name="inventory_heavy_load" type="number" value="' . $inventory->getHeavyLoad() . '">' . "\n";
             $html .= '<label for="inventory_lift_over_head">Lift Over Head: </label>';
-            $html .= '<input id="inventory_lift_over_head" name="inventory_lift_over_head" type="number" value="' . $inventory->getLiftOverHead() . '">' . "\n";
+            $html .= '<input id="inventory_lift_over_head" class="inventory_input" name="inventory_lift_over_head" type="number" value="' . $inventory->getLiftOverHead() . '">' . "\n";
             $html .= '<label for="inventory_lift_off_ground">Lift Off Ground: </label>';
-            $html .= '<input id="inventory_lift_off_ground" name="inventory_lift_off_ground" type="number" value="' . $inventory->getLiftOffGround() . '">' . "\n";
+            $html .= '<input id="inventory_lift_off_ground" class="inventory_input" name="inventory_lift_off_ground" type="number" value="' . $inventory->getLiftOffGround() . '">' . "\n";
             $html .= '<label for="inventory_push_or_drag">Push Or Drag: </label>';
-            $html .= '<input id="inventory_push_or_drag" name="inventory_push_or_drag" type="number" value="' . $inventory->getPushOrDrag() . '">' . "\n";
+            $html .= '<input id="inventory_push_or_drag" class="inventory_input" name="inventory_push_or_drag" type="number" value="' . $inventory->getPushOrDrag() . '">' . "\n";
 
             $html .= '</div>' . "\n";
 
@@ -630,15 +641,16 @@ if(!class_exists('Character_Sheet_View')) {
                 $html .= '<table>' . "\n";
                 $html .= '<thead>' . "\n";
                 $html .= '<tr>' . "\n";
-                $html .= '<td>Currency</td><td>Amount</td>';
+                $html .= '<td>Currency</td>' . "\n";
+                $html .= '<td>Amount</td>' . "\n";
                 $html .= '</tr>' . "\n";
                 $html .= '</thead>' . "\n";
                 $html .= '<tbody>' . "\n";
 
                 foreach($currencies as $currency) {
                     $html .= '<tr>' . "\n";
-                    $html .= '<td>' . ucwords($currency->getName()) . '</td>';
-                    $html .= '<td><input name="' . $currency->getLabel() . '" type="number" value="' . $currency->getAmount() . '">';
+                    $html .= '<td>' . ucwords($currency->getName()) . '</td>' . "\n";
+                    $html .= '<td><input class="currency_input" name="' . $currency->getLabel() . '" type="number" value="' . $currency->getAmount() . '">';
                     $html .= ' <a class="gui remove_currency" href="javascript:void()">remove</a></td>' . "\n";
                     $html .= '</tr>' . "\n";
                 }

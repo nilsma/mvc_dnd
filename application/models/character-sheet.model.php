@@ -238,6 +238,236 @@ if(!class_exists('Character_Sheet_Model')) {
             $db->close();
         }
 
+        public function writeArmor($sheet_id, Armor $armor) {
+            $name = $armor->getName();
+            $type = $armor->getType();
+            $ac_bonus = $armor->getAcBonus();
+            $max_dex = $armor->getMaxDex();
+            $check_penalty = $armor->getCheckPenalty();
+            $spell_failure = $armor->getSpellFailure();
+            $speed = $armor->getSpeed();
+            $weight = $armor->getWeight();
+            $special_properties = $armor->getSpecialProperties();
+
+            $db = $this->connect();
+
+            $query = "UPDATE armor as a, armors as aa, sheets as s SET a.name=?, a.type=?, a.ac_bonus=?, a.max_dex=?, a.check_penalty=?, a.spell_failure=?, a.speed=?, a.weight=?, a.special_properties=? WHERE s.id=? AND s.armors=aa.id AND aa.id=a.owner";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('ssiiiiiisi', $name, $type, $ac_bonus, $max_dex, $check_penalty, $spell_failure, $speed, $weight, $special_properties, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeShield($sheet_id, Shield $shield) {
+            $name = $shield->getName();
+            $ac_bonus = $shield->getAcBonus();
+            $weight = $shield->getWeight();
+            $check_penalty = $shield->getCheckPenalty();
+            $spell_failure = $shield->getSpellFailure();
+            $special_properties = $shield->getSpecialProperties();
+
+            $db = $this->connect();
+
+            $query = "UPDATE shield as a, armors as aa, sheets as s SET a.name=?, a.ac_bonus=?, a.weight=?, a.check_penalty=?, a.spell_failure=?, a.special_properties=? WHERE s.id=? AND s.armors=aa.id AND aa.id=a.owner";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('siiiisi', $name, $ac_bonus, $weight, $check_penalty, $spell_failure, $special_properties, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeProtectiveItem($sheet_id, Protective_Item $protective_item) {
+            $protective_item_id = $protective_item->getId();
+            $name = $protective_item->getName();
+            $ac_bonus = $protective_item->getAcBonus();
+            $weight = $protective_item->getWeight();
+            $special_properties = $protective_item->getSpecialProperties();
+
+            $db = $this->connect();
+
+            $query = "UPDATE protective_item as p, armors as a, sheets as s SET p.name=?, p.ac_bonus=?, p.weight=?, p.special_properties=? WHERE p.id=? AND p.owner=a.id AND s.armors=a.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('siisii', $name, $ac_bonus, $weight, $special_properties, $protective_item_id, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeSkills($sheet_id, Array $segments) {
+            $max_ranks_class = $segments['max_ranks_class'];
+            $max_ranks_cross_class = $segments['max_ranks_cross_class'];
+
+            $db = $this->connect();
+
+            $query = "UPDATE skills as sk, sheets as sh SET sk.max_ranks_class=?, sk.max_ranks_cross_class=? WHERE sh.id=? AND sh.skills=sk.id";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('iii', $max_ranks_class, $max_ranks_cross_class, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeSkill($sheet_id, Skill $skill) {
+            $skills_id = $this->getSkillsId($sheet_id);
+            $template_name = $skill->getTemplateName();
+            $skill_mod = $skill->getSkillMod();
+            $ability_mod = $skill->getAbilityMod();
+            $ranks = $skill->getRanks();
+            $misc_mod = $skill->getMiscMod();
+
+            $db = $this->connect();
+
+            $query = "UPDATE skill as sk, sheets as sh SET sk.skill_mod=?, sk.ability_mod=?, sk.ranks=?, sk.misc_mod=? WHERE sk.template_name=? AND sk.owner=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('iiiisi', $skill_mod, $ability_mod, $ranks, $misc_mod, $template_name, $skills_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeLanguages($sheet_id, Array $segments) {
+            $max_number_of_languages = $segments['max_number_of_languages'];
+
+            $db = $this->connect();
+
+            $query = "UPDATE languages as l, sheets as s SET l.max_number_of_languages=? WHERE s.id=? AND s.languages=l.id";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('ii', $max_number_of_languages, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeCurrency($sheet_id, Currency $currency) {
+            $label = $currency->getLabel();
+            $amount = $currency->getAmount();
+
+            $db = $this->connect();
+
+            $query = "UPDATE currency as c, sheets as s SET c.amount=? WHERE c.label=? AND c.owner=s.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('isi', $amount, $label, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeItem($sheet_id, Item $item) {
+            $item_id = $item->getId();
+            $name = $item->getName();
+            $quantity = $item->getQuantity();
+            $weight = $item->getWeight();
+
+            $db = $this->connect();
+
+            $query = "UPDATE items as it, inventory as inv, sheets as s SET it.name=?, it.quantity=?, it.weight_per_unit=? WHERE it.id=? AND it.owner=inv.id AND s.inventory=inv.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('sidii', $name, $quantity, $weight, $item_id, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function writeInventory($sheet_id, Array $segments) {
+            $light_load = $segments['light_load'];
+            $medium_load = $segments['medium_load'];
+            $heavy_load = $segments['heavy_load'];
+            $lift_over_head = $segments['lift_over_head'];
+            $lift_off_ground = $segments['lift_off_ground'];
+            $push_or_drag = $segments['push_or_drag'];
+
+            $db = $this->connect();
+
+            $query = "UPDATE inventory as i, sheets as s SET i.light_load=?, i.medium_load=?, i.heavy_load=?, i.lift_over_head=?, i.lift_off_ground=?, i.push_or_drag=? WHERE s.inventory=i.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('iiiiiii', $light_load, $medium_load, $heavy_load, $lift_over_head, $lift_off_ground, $push_or_drag, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
         public function insertItem($sheet_id, Item $item) {
             $name = $item->getName();
             $quantity = $item->getQuantity();
@@ -262,10 +492,10 @@ if(!class_exists('Character_Sheet_Model')) {
             $db->close();
         }
 
-        public function insertSpecialAbility($sheet_id, $template_name) {
+        public function insertSpecialAbility($sheet_id, $template_name, $base_class) {
             $db = $this->connect();
 
-            $query = "INSERT INTO special_ability VALUES(?, ?)";
+            $query = "INSERT INTO special_ability VALUES(?, ?, ?)";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -273,7 +503,7 @@ if(!class_exists('Character_Sheet_Model')) {
             if(!$stmt->prepare($query)) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
-                $stmt->bind_param('is', $sheet_id, $template_name);
+                $stmt->bind_param('iss', $sheet_id, $template_name, $base_class);
                 $stmt->execute();
 
                 $stmt->close();
@@ -291,6 +521,36 @@ if(!class_exists('Character_Sheet_Model')) {
             $db = $this->connect();
 
             $query = "SELECT description FROM special_ability_templates WHERE template_name=?";
+            $query = $db->real_escape_string($query);
+
+            $description = '';
+
+            $stmt = $db->stmt_init();
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('s', $template_name);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                while($stmt->fetch()) {
+                    $description = $result;
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $description;
+        }
+
+        /**
+         * a function to get a special ability templates description based on its common_name
+         * @param $template_name - the common_name of the template for which to get the description
+         * @return string
+         */
+        public function getSkillInfo($template_name) {
+            $db = $this->connect();
+
+            $query = "SELECT description FROM skill_templates WHERE template_name=?";
             $query = $db->real_escape_string($query);
 
             $description = '';
@@ -605,6 +865,8 @@ if(!class_exists('Character_Sheet_Model')) {
         public function insertProtectiveItem($sheet_id, $protective_item) {
             $db = $this->connect();
 
+            $armors_id = $this->getArmorsId($sheet_id);
+
             $name = $protective_item->getName();
             $ac_bonus = $protective_item->getAcBonus();
             $weight = $protective_item->getWeight();
@@ -618,7 +880,7 @@ if(!class_exists('Character_Sheet_Model')) {
             if(!$stmt->prepare($query)) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
-                $stmt->bind_param('isiis', $sheet_id, $name, $ac_bonus, $weight, $special_properties);
+                $stmt->bind_param('isiis', $armors_id, $name, $ac_bonus, $weight, $special_properties);
                 $stmt->execute();
 
                 $stmt->close();
@@ -687,6 +949,62 @@ if(!class_exists('Character_Sheet_Model')) {
 
             $db->close();
             return $attacks_id;
+        }
+
+        public function getArmorsId($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT a.id FROM armors as a, sheets as s WHERE s.attacks=a.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $armors_id = NULL;
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $armors_id = $result;
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $armors_id;
+        }
+
+        public function getSkillsId($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT sk.id FROM skills as sk, sheets as s WHERE s.skills=sk.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $skills_id = NULL;
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $skills_id = $result;
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $skills_id;
         }
 
         public function getPersonalia($sheet_id) {

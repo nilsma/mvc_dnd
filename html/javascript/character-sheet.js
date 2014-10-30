@@ -1,195 +1,180 @@
+//GLOBAL VARIABLES
 var special_ability_template_name;
 var feat_template_name;
 
+/**
+ * A function to add HTML as innerHTML to a given element
+ * @param element the element to add HTML to
+ * @param html the HTML to add to the element
+ */
+function addHTMLtoElement(element, html) {
+    element.innerHTML=html;
+}
+
+/**
+ * A function to check for confirmation on a given choice.
+ * @param str the last part of the sentence to ask the user to confirm
+ * @returns boolean true if the user accepts, false otherwise
+ */
 function confirmChoice(str) {
     return confirm('Are you sure you want to '.concat(str).concat(' ?'));
 }
 
+/**
+ * A function to remove a given item from the database.
+ * The function gets the item's SQL id from the HTML and removes the item from the database by sending
+ * the id with the POST action to the governing PHP-file through the runQuery function
+ */
 function removeItem() {
+    var post_action = "remove_item=";
     var item = this.parentNode.parentNode.childNodes[1].childNodes[0].value;
     if(confirmChoice('remove item')) {
-        removeItemQuery(item, function() {
+        runQuery(post_action, item, function() {
             location.reload();
         });
     }
 }
 
-function removeItemQuery(item, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_item=".concat(item);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to remove a given currency from the database.
+ * The function gets the currency's SQL label from the HTML and removes the currency from the database by
+ * sending the label with the POST action to the governing PHP-file through the runQuery function
+ */
 function removeCurrency() {
+    var post_action = "remove_currency=";
     var currency = this.parentNode.parentNode.childNodes[1].innerHTML;
     if(confirmChoice('remove currency')) {
-        removeCurrencyQuery(currency, function() {
+        runQuery(post_action, currency, function() {
             location.reload();
         });
     }
 }
 
-function removeCurrencyQuery(currency, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_currency=".concat(currency);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to remove a given language from the database.
+ * The function gets the language's SQL language value (the SQL column identifying the language is called
+ * "language") from the HTML and removes the currency from the database by sending the label with the POST action
+ * to the governing PHP-file through the runQuery function
+ * Finally reloads the page to update the character sheet
+ */
 function removeLanguage() {
+    var post_action = "remove_language=";
     var language = this.parentNode.childNodes[0].innerHTML;
     if(confirmChoice('remove language')) {
-        removeLanguageQuery(language, function() {
+        runQuery(post_action, language, function() {
             location.reload();
         });
     }
 }
 
-function removeLanguageQuery(language, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+/**
+ * A function to remove a given special ability from the database.
+ * The function gets the special ability's SQL template name from the HTML and removes the currency from
+ * the database by sending the template name with the POST action to the governing PHP-file
+ * through the runQuery function.
+ * Finally reloads the page to update the character sheet
+ */
+function removeSpecialAbility() {
+    var post_action = "remove_special_ability=";
+    if(confirmChoice('remove special ability')) {
+        var template_name = this.parentNode.id;
+        runQuery(post_action, template_name, function() {
+            location.reload();
+        });
     }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_language=".concat(language);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
 }
 
 /**
- * a function to get the special ability name from the database and subsequently
- * get that special ability's description from the database as a string representation
- * of html and set that info to the special ability info box
+ * A function to remove a given feat from the database.
+ * The function gets the feat's SQL template name from the HTML and removes the feat from
+ * the database by sending the template name with the POST action to the governing PHP-file
+ * through the runQuery function.
+ * Finally reloads the page to update the character sheet
+ */
+function removeFeat() {
+    var post_action = "remove_feat=";
+    if(confirmChoice('remove feat')) {
+        var template_name = this.parentNode.id;
+        runQuery(post_action, template_name, function() {
+            location.reload();
+        });
+    }
+}
+
+/**
+ * A function to remove a given protective item from the database.
+ * The function gets the protective item's SQL id from the HTML and removes the protective item from
+ * the database by sending the id with the POST action to the governing PHP-file
+ * through the runQuery function.
+ * Finally reloads the page to update the character sheet
+ */
+function removeProtectiveItem() {
+    var post_action = "remove_protective_item=";
+    if(confirmChoice('remove protective item')) {
+        var protective_item_id = this.parentNode.parentNode.childNodes[1].value;
+        runQuery(post_action, protective_item_id, function() {
+            location.reload();
+        });
+    }
+}
+
+/**
+ * A function to remove a given attack from the database.
+ * The function gets the attack's SQL id from the HTML and removes the attack from
+ * the database by sending the id with the POST action to the governing PHP-file
+ * through the runQuery function.
+ * Finally reloads the page to update the character sheet
+ */
+function removeAttack() {
+    var post_action = "remove_attack=";
+    if(confirmChoice('remove attack')) {
+        var attack_id = this.parentNode.parentNode.childNodes[1].value;
+        runQuery(post_action, attack_id, function() {
+            location.reload();
+        });
+    }
+}
+
+/**
+ * A function to get a special ability's description and add it to the special ability description div.
  */
 function showSpecialAbilityInfo() {
-    getSpecialAbilityName(this, function(template_name) {
-        getSpecialAbilityInfo(template_name, function(info) {
-            addResultToSpecialAbilityInfoBox(info);
-        });
+    var post_action = "special_ability_info=";
+    var element = document.getElementById('special_ability_template_info');
+    var template_name = this.parentNode.id;
+    runQuery(post_action, template_name, true, function(info) {
+        addHTMLtoElement(element, info);
     });
 }
 
 /**
- * a function to get the special ability name from the Info-link
- * @param node - the corresponding node to the Info-link that has been clicked
- * @param callback
+ * A function to get a skill's description and add it to the skill description div.
  */
-function getSpecialAbilityName(node, callback) {
-    var result = node.parentNode.childNodes[0].id;
-    callback(result);
+function showSkillInfo() {
+    var post_action = "skill_info=";
+    var element = document.getElementById('skill_template_info');
+    var template_name = this.parentNode.parentNode.childNodes[1].value;
+    runQuery(post_action, template_name, false, function(info) {
+        addHTMLtoElement(element, info);
+    });
 }
 
 /**
- * a function to get the template's description based on its common_name
- * @param template_name - the common_name of the template to get the description of
- * @param callback
+ * A function to get a feat's description and add it to the feat description div.
  */
-function getSpecialAbilityInfo(template_name, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback(result);
-        }
-    }
-
-    var params = "special_ability_info=".concat(template_name);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-/**
- * a function to add a string representation of HTML to the special abillity template info box
- * @param description
- */
-function addResultToSpecialAbilityInfoBox(description) {
-    var el = document.getElementById('special_ability_template_info');
-    el.innerHTML=description;
-}
-
 function showFeatInfo() {
-    getFeatName(this, function(common_name) {
-        getFeatInfo(common_name, function(info) {
-            addResultToFeatInfoBox(info);
-        });
+    var post_action = "feat_info=";
+    var common_name = this.parentNode.id;
+    var element = document.getElementById('feat_template_info')
+    runQuery(post_action, common_name, false, function(info) {
+        addHTMLtoElement(element, info);
     });
 }
 
-function getFeatName(node, callback) {
-    var result = node.parentNode.childNodes[0].id;
-    callback(result);
-}
 
-function getFeatInfo(common_name, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback(result);
-        }
-    }
-
-    var params = "feat_info=".concat(common_name);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
+function closeSkillInfo() {
+    var el = document.getElementById('skill_template_info');
+    el.innerHTML='';
 }
 
 function closeSpecialAbilityInfo() {
@@ -202,146 +187,50 @@ function closeFeatInfo() {
     el.innerHTML='';
 }
 
-function addResultToFeatInfoBox(description) {
-    var el = document.getElementById('feat_template_info');
-    el.innerHTML=description;
-}
-
 /**
  * A function to find special ability temlates suggestions for the user
- * when the user is adding special abilities
+ * as the user adds text to search input field
  */
 function findSpecialAbilitySuggestions() {
+    var post_action = "get_special_abilities_suggestions=";
+    var element = document.getElementById('special_abilities_suggestions_box');
     var input = this.value;
-
-    findSpecialAbilityTemplatesQuery(input, function(suggestions) {
-        addResultToSpecialAbilitySuggestionsBox(suggestions);
+    runQuery(post_action, input, true, function(suggestions) {
+        addHTMLtoElement(element, suggestions);
     });
 }
 
 /**
- * a function that queries the database through the special-ability-suggestions.php
- * for the special ability templates to suggest to the user - queries the database for
- * special ability templates which has common_name that starts with the string argument
- * @param str - what the special ability template should start with
- * @param callback - sends the results back to the calling function as a JSON object
- */
-function findSpecialAbilityTemplatesQuery(str, callback) {
-    var result;
-    var suggestions;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            suggestions = JSON.parse(result);
-            callback(suggestions);
-        }
-    }
-
-    var params = "get_special_abilities_suggestions=".concat(str);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-/**
- * a function to add the suggestions to the special ability suggestions box in the DOM
- * @param suggestions - an array of suggestions
- */
-function addResultToSpecialAbilitySuggestionsBox(suggestions) {
-    var suggestions_box = document.getElementById('special_abilities_suggestions_box');
-    suggestions_box.innerHTML = suggestions;
-}
-
-/**
- * a function to find the feat templates suggestions and add them to the HTML
- * feat suggestions box
+ * A function to find feat temlates suggestions for the user
+ * as the user adds text to search input field
  */
 function findFeatsSuggestions() {
+    var post_action = "get_feat_suggestions=";
+    var element = document.getElementById('feats_suggestions_box');
     var input = this.value;
-
-    findFeatTemplatesQuery(input, function(suggestions) {
-        addResultToFeatSuggestionsBox(suggestions);
+    runQuery(post_action, input, true, function(suggestions) {
+        addHTMLtoElement(element, suggestions);
     });
 }
 
-/**
- * a function to add the suggestions to the feat suggestions box in the DOM
- * @param suggestions - an array of suggestions
- */
-function addResultToFeatSuggestionsBox(suggestions) {
-    var suggestions_box = document.getElementById('feats_suggestions_box');
-    suggestions_box.innerHTML = suggestions;
-}
-
-/**
- * a function that queries the database on feat common_name for feat templates to suggest to the user
- * based on the given input from the user
- * @param str - what the feat template's common_name string should contain
- * * @param callback - sends the results back to the calling function as a JSON objects
- */
-function findFeatTemplatesQuery(str, callback) {
-    var result;
-    var suggestions;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            suggestions = JSON.parse(result);
-            callback(suggestions);
-        }
-    }
-
-    var params = "get_feat_suggestions=".concat(str);
-    xmlhttp.open("POST", "create-character.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-/**
- * a function that is called when clicking a special ability template name in the application,
- * sets the clicked template name to the sepcial ability search input field and adds an empty
- * array to the suggestions box, ie clears the list of suggestions
- * @param template_name - the template_name of the special ability
- * @param common_name - the common_name of the special ability
- */
-function chooseTemplate(template_name, common_name) {
+function chooseTemplate(base_class, template_name, common_name) {
+    var element = document.getElementById('feats_suggestions_box');
     var displayed_node = document.getElementById('special_ability_search_input');
     var hidden_node = document.getElementById('special_ability_search_template');
-    setSuggestionToInput(template_name, common_name, displayed_node, hidden_node, function() {
+    var input_base_class = document.getElementById('special_ability_search_base_class');
+    setSpecialAbilitySuggestionToInput(base_class, template_name, common_name, displayed_node, hidden_node, input_base_class, function() {
         var emptyArray = new Array();
-        addResultToSpecialAbilitySuggestionsBox(emptyArray);
+        addHTMLtoElement(element, emptyArray);
     });
 }
 
-/**
- * adds a suggestion common_name to the search input field and sets the special_ability_template_name to
- * the template_name as referenced in the database
- * @param template_name - the template_name of the special ability
- * @param common_name - the common_name of the special ability
- * @param displayed_node - the node holding the special ability common_name in the search input
- * @param hidden_node -the node holding the special ability template_name in a hidden input field
- * @param callback
- */
-function setSuggestionToInput(template_name, common_name, displayed_node, hidden_node, callback) {
+function setSpecialAbilitySuggestionToInput(base_class, template_name, common_name, displayed_node, hidden_node, input_base_class, callback) {
     displayed_node.value=common_name;
     hidden_node.value=template_name;
+    input_base_class.value=base_class;
     special_ability_template_name = template_name;
     callback();
 }
-
 
 function chooseFeatTemplate(template_name, common_name) {
     var displayed_node = document.getElementById('feats_search_input');
@@ -359,148 +248,19 @@ function setFeatSuggestionToInput(template_name, common_name, displayed_node, hi
     callback();
 }
 
-function removeSpecialAbility() {
-    if(confirmChoice('remove special ability')) {
-        getSpecialAbilityToRemove(this, function(result) {
-            deleteSpecialAbilityQuery(result, function() {
-                location.reload();
-            });
-        });
-    }
-}
-
-function removeFeat() {
-    if(confirmChoice('remove feat')) {
-        getFeatToRemove(this, function(result) {
-            deleteFeatQuery(result, function() {
-                location.reload();
-            });
-        });
-    }
-}
-
-function deleteFeatQuery(template_name, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_feat=".concat(template_name);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-function deleteSpecialAbilityQuery(template_name, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_special_ability=".concat(template_name);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-function getFeatToRemove(el, callback) {
-    var template_name = el.parentNode.childNodes[0].id;
-    callback(template_name);
-}
-
-function getSpecialAbilityToRemove(el, callback) {
-    var template_name = el.parentNode.childNodes[0].id;
-    callback(template_name);
-}
-
-function removeProtectiveItem() {
-    if(confirmChoice('remove protective item')) {
-        var protective_item_id = this.parentNode.parentNode.childNodes[1].value;
-        removeProtectiveItemQuery(protective_item_id, function() {
-            location.reload();
-        });
-    }
-}
-
-function removeProtectiveItemQuery(protective_item_id, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_protective_item=".concat(protective_item_id);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
-function removeAttack() {
-    if(confirmChoice('remove attack')) {
-        var attack_id = this.parentNode.parentNode.childNodes[1].value;
-        removeAttackQuery(attack_id, function() {
-            location.reload();
-        });
-    }
-}
-
-function removeAttackQuery(attack_id, callback) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-            callback();
-        }
-    }
-
-    var params = "remove_attack=".concat(attack_id);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the personalia fields' values to the database.
+ */
 function updatePersonalia() {
-    getPersonaliaSegments(function(result) {
-        updatePersonaliaQuery(result);
+    getPersonaliaSegments(function(segments) {
+        runQuery("update_personalia=", segments);
     });
 }
 
+/**
+ * A function to get the personalia fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getPersonaliaSegments(callback) {
     var segments = new Object();
 
@@ -526,33 +286,19 @@ function getPersonaliaSegments(callback) {
     callback(jsonString);
 }
 
-function updatePersonaliaQuery(segments) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var params = "update_personalia=".concat(segments);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the stats fields' values to the database.
+ */
 function updateStats() {
-    getStatsSegments(function(result) {
-        updateStatsQuery(result);
+    getStatsSegments(function(segments) {
+        runQuery("update_stats=", segments);
     });
 }
 
+/**
+* A function to get the stats fields' values, in JSON-format (variable:value)
+* @param callback
+*/
 function getStatsSegments(callback) {
     var segments = new Object();
 
@@ -569,33 +315,19 @@ function getStatsSegments(callback) {
     callback(jsonString);
 }
 
-function updateStatsQuery(segments) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var params = "update_stats=".concat(segments);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the armor class fields' values to the database.
+ */
 function updateArmorClass() {
-    getArmorClassSegments(function(result) {
-        updateArmorClassQuery(result);
+    getArmorClassSegments(function(segments) {
+        runQuery("update_armor_class=", segments);
     });
 }
 
+/**
+ * A function to get the armor class fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getArmorClassSegments(callback) {
     var segments = new Object();
 
@@ -614,40 +346,20 @@ function getArmorClassSegments(callback) {
     callback(jsonString);
 }
 
-function updateArmorClassQuery(segments) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var params = "update_armor_class=".concat(segments);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the attribute's fields' values to the database.
+ */
 function updateAttribute() {
-    getAttributeLabel(this, function(label) {
-        getAttributeSegments(label, function(segments) {
-            updateAttributeQuery(segments, label);
-        });
+    var label = this.parentNode.parentNode.childNodes[1].innerHTML;
+    getAttributeSegments(label, function(segments) {
+        runQuery("update_attribute=", segments);
     });
 }
 
-function getAttributeLabel(element, callback) {
-    var label = element.parentNode.parentNode.childNodes[1].innerHTML;
-    callback(label);
-}
-
+/**
+ * A function to get the current attribute's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getAttributeSegments(label, callback) {
     var segments = new Object();
     var name = label.toLowerCase();
@@ -667,42 +379,20 @@ function getAttributeSegments(label, callback) {
     callback(jsonString);
 }
 
-function updateAttributeQuery(segments, label) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var param1 = "update_attribute=".concat(segments);
-    var param2 = "&update_attribute_label=".concat(label);
-    var params = param1.concat(param2);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the current saving throw's fields' values to the database.
+ */
 function updateSavingThrow() {
-    getSavingThrowLabel(this, function(label) {
-        getSavingThrowSegments(label, function(segments) {
-            updateSavingThrowQuery(segments, label);
-        });
+    var label = this.parentNode.parentNode.childNodes[1].innerHTML;
+    getSavingThrowSegments(label, function(segments) {
+        runQuery("update_saving_throw=", segments, false);
     });
 }
 
-function getSavingThrowLabel(element, callback) {
-    var label = element.parentNode.parentNode.childNodes[1].innerHTML;
-    callback(label);
-}
-
+/**
+ * A function to get the saving throw's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getSavingThrowSegments(label, callback) {
     var segments = new Object();
     var name = label.toLowerCase();
@@ -726,35 +416,19 @@ function getSavingThrowSegments(label, callback) {
     callback(jsonString);
 }
 
-function updateSavingThrowQuery(segments, label) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var param1 = "update_saving_throw=".concat(segments);
-    var param2 = "&update_saving_throw_label=".concat(label);
-    var params = param1.concat(param2);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the attacks' fields' values to the database.
+ */
 function updateAttacks() {
     getAttacksSegments(function(segments) {
-        updateAttacksQuery(segments);
+        runQuery("update_attacks=", segments);
     });
 }
 
+/**
+ * A function to get the current attacks' fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getAttacksSegments(callback) {
     var segments = new Object();
 
@@ -766,40 +440,20 @@ function getAttacksSegments(callback) {
     callback(jsonString);
 }
 
-function updateAttacksQuery(segments) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var params = "update_attacks=".concat(segments);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the attack's fields' values to the database.
+ */
 function updateAttack() {
-    getAttackLabel(this, function(element) {
-        getAttackSegments(element, function(segments) {
-            updateAttackQuery(segments);
-        });
+    var element = this.parentNode;
+    getAttackSegments(element, function(segments) {
+        runQuery("update_attack=", segments);
     });
 }
 
-function getAttackLabel(element, callback) {
-    var element = element.parentNode;
-    callback(element);
-}
-
+/**
+ * A function to get the current attack's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getAttackSegments(element, callback) {
     var segments = new Object();
     var nodes = element.childNodes;
@@ -831,33 +485,19 @@ function getAttackSegments(element, callback) {
     callback(jsonString);
 }
 
-function updateAttackQuery(segments) {
-    var result;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-    }
-
-    var params = "update_attack=".concat(segments);
-    xmlhttp.open("POST", "character-sheet.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
-}
-
+/**
+ * A function to write all of the grapple's fields' values to the database.
+ */
 function updateGrapple() {
     getGrappleSegments(function(segments) {
-        updateGrappleQuery(segments);
+        runQuery("update_grapple=", segments);
     });
 }
 
+/**
+ * A function to get the grapple fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
 function getGrappleSegments(callback) {
     var segments = new Object();
 
@@ -879,7 +519,263 @@ function getGrappleSegments(callback) {
     callback(jsonString);
 }
 
-function updateGrappleQuery(segments) {
+/**
+ * A function to write all of the armor's fields' values to the database.
+ */
+function updateArmor() {
+    getArmorSegments(function(segments) {
+        runQuery("update_armor=", segments);
+    });
+}
+
+/**
+ * A function to get the armor fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getArmorSegments(callback) {
+    var segments = new Object();
+
+    var label = 'armor';
+
+    segments.armor_name = document.getElementById(label.concat('_name')).value;
+    segments.armor_type = document.getElementById(label.concat('_type')).value;
+    segments.armor_ac_bonus = document.getElementById(label.concat('_ac_bonus')).value;
+    segments.armor_max_dex = document.getElementById(label.concat('_max_dex')).value;
+    segments.armor_check_penalty = document.getElementById(label.concat('_check_penalty')).value;
+    segments.armor_spell_failure = document.getElementById(label.concat('_spell_failure')).value;
+    segments.armor_speed = document.getElementById(label.concat('_speed')).value;
+    segments.armor_weight = document.getElementById(label.concat('_weight')).value;
+    segments.armor_special_properties = document.getElementById(label.concat('_special_properties')).value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the shields' fields' values to the database.
+ */
+function updateShield() {
+    getShieldSegments(function(segments) {
+        runQuery("update_shield=", segments);
+    });
+}
+
+/**
+ * A function to get the shield fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getShieldSegments(callback) {
+    var segments = new Object();
+
+    var label = 'shield_';
+
+    segments.shield_name = document.getElementById(label.concat('name')).value;
+    segments.shield_ac_bonus = document.getElementById(label.concat('ac_bonus')).value;
+    segments.shield_check_penalty = document.getElementById(label.concat('check_penalty')).value;
+    segments.shield_spell_failure = document.getElementById(label.concat('spell_failure')).value;
+    segments.shield_weight = document.getElementById(label.concat('weight')).value;
+    segments.shield_special_properties = document.getElementById(label.concat('special_properties')).value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the protective item's fields' values to the database.
+ */
+function updateProtectiveItem() {
+    var element = this.parentNode;
+    getProtectiveItemSegments(element, function(segments) {
+        runQuery("update_protective_item=", segments);
+    });
+}
+
+/**
+ * A function to get the protective item fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getProtectiveItemSegments(element, callback) {
+    var segments = new Object();
+    var nodes = element.childNodes;
+
+    segments.protective_item_id = nodes[1].value;
+    segments.protective_item_name = nodes[4].value;
+    segments.protective_item_ac_bonus = nodes[7].value;
+    segments.protective_item_weight = nodes[10].value;
+    segments.protective_item_special_properties = nodes[13].value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the skills' fields' values to the database.
+ */
+function updateSkills() {
+    getSkillsSegments(function(segments) {
+        runQuery("update_skills=", segments);
+    });
+}
+
+/**
+ * A function to get the skills fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getSkillsSegments(callback) {
+    var segments = new Object();
+
+    var label = 'skills_';
+
+    segments.max_ranks_class = document.getElementById(label.concat('max_ranks_class')).value;
+    segments.max_ranks_cross_class = document.getElementById(label.concat('max_ranks_cross_class')).value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the skill's fields' values to the database.
+ */
+function updateSkill() {
+    var skill_element = element.parentNode.parentNode;
+    getSkillSegments(skill_element, function(segments) {
+        runQuery("update_skill=", segments);
+    });
+}
+
+/**
+ * A function to get the current skill fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getSkillSegments(element, callback) {
+    var segments = new Object();
+
+    segments.template_name = element.childNodes[1].childNodes[1].value;
+    segments.skill_mod = element.childNodes[5].childNodes[0].value;
+    segments.ability_mod = element.childNodes[7].childNodes[0].value;
+    segments.ranks = element.childNodes[9].childNodes[0].value;
+    segments.misc_mod = element.childNodes[11].childNodes[0].value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the language's fields' values to the database.
+ */
+function updateLanguages() {
+    getLanguagesSegments(function(segments) {
+        runQuery("update_languages=", segments);
+    });
+}
+
+/**
+ * A function to get the current languages fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getLanguagesSegments(callback) {
+    var segments = new Object();
+    segments.max_number_of_languages = document.getElementById('max_number_of_languages').value;
+    var jsonString = JSON.stringify(segments);
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the item's fields' values to the database.
+ */
+function updateItem() {
+    var item_element = this.parentNode.parentNode;
+    getItemSegments(item_element, function(segments) {
+        runQuery("update_item=", segments);
+    });
+}
+
+/**
+ * A function to get the current item's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getItemSegments(element, callback) {
+    var segments = new Object();
+
+    segments.item_id = element.childNodes[1].childNodes[0].value;
+    segments.item_name = element.childNodes[1].childNodes[1].value;
+    segments.item_quantity = element.childNodes[3].childNodes[0].value;
+    segments.item_weight = element.childNodes[5].childNodes[0].value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the inventory's fields' values to the database.
+ */
+function updateInventory() {
+    getInventorySegments(function(segments) {
+        runQuery("update_inventory=", segments);
+    });
+}
+
+/**
+ * A function to get the inventory's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getInventorySegments(callback) {
+    var segments = new Object();
+
+    segments.light_load = document.getElementById('inventory_light_load').value;
+    segments.medium_load = document.getElementById('inventory_medium_load').value;
+    segments.heavy_load = document.getElementById('inventory_heavy_load').value;
+    segments.lift_over_head = document.getElementById('inventory_lift_over_head').value;
+    segments.lift_off_ground = document.getElementById('inventory_lift_off_ground').value;
+    segments.push_or_drag = document.getElementById('inventory_push_or_drag').value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to write all of the currency's fields' values to the database.
+ */
+function updateCurrency() {
+    var currency_element = this.parentNode.parentNode;
+    getCurrencySegments(currency_element, function(segments) {
+        var action = "update_currency=";
+            runQuery(action, segments);
+    });
+}
+
+/**
+ * A function to get the current currency's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getCurrencySegments(element, callback) {
+    var segments = new Object();
+
+    segments.label = element.childNodes[1].innerHTML;
+    segments.name = element.childNodes[3].childNodes[0].name;
+    segments.amount = element.childNodes[3].childNodes[0].value;
+
+    var jsonString = JSON.stringify(segments);
+
+    callback(jsonString);
+}
+
+/**
+ * A function to send an action to the character-sheet.php through POST, where the action will be picked up and
+ * routed accordingly with the segments parameter.
+ * @param post_action the action to send with the POST request
+ * @param segments the values to be added to the database via the POST action
+ * @param json boolean value which stats whether the return value should be parsed as JSON
+ * @param callback optional callback function
+ */
+function runQuery(post_action, segments, json, callback) {
     var result;
 
     if (window.XMLHttpRequest) {
@@ -891,10 +787,20 @@ function updateGrappleQuery(segments) {
     xmlhttp.onreadystatechange=function() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
             result = xmlhttp.responseText;
+            if(callback) {
+                if(json) {
+                    var return_value = JSON.parse(result);
+                    callback(return_value);
+                } else {
+                    callback(result);
+                }
+            } else {
+                callback();
+            }
         }
     }
 
-    var params = "update_grapple=".concat(segments);
+    var params = post_action.concat(segments);
     xmlhttp.open("POST", "character-sheet.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send(params);
@@ -902,96 +808,65 @@ function updateGrappleQuery(segments) {
 
 /**
  * A function to add eventlisteners to the stated elements
- * @param els array - an array of elements of which to add listeners to
- * @param fnc function - the function name of which to trigger when the element is clicked
+ * @param ix_array array - an array of arrays of which to add eventlisteners
  */
-function addListeners(els, type, fnc) {
-    for(var i = 0; i < els.length; i++) {
-        els[i].addEventListener(type, fnc, false);
+function addListeners(ix_array) {
+    //for each array in array
+    for(var i = 0; i < ix_array.length; i++) {
+        var elements = ix_array[i][0];
+
+        //check if elements is an array
+        //if not; make elements a new array and push single object
+        if(!elements.length > 0) {
+            elements = new Array();
+            elements.push(ix_array[i][0]);
+        }
+
+        //for each array in elements
+        for(var x = 0; x < elements.length; x++) {
+            elements[x].addEventListener(ix_array[i][1], ix_array[i][2], false);
+        }
+
     }
 }
 
 /**
- * a function to initialize functions on load
+ * a function to initialize functions on window load
  */
 function init() {
-    var els = new Array();
-    els = document.getElementsByClassName('grapple_input');
-    addListeners(els, 'blur', updateGrapple);
+    var ix_elements = [
+        [document.getElementsByClassName('inventory_input'), 'blur', updateInventory],
+        [document.getElementsByClassName('item_input'), 'blur', updateItem],
+        [document.getElementsByClassName('currency_input'), 'blur', updateCurrency],
+        [document.getElementsByClassName('languages_input'), 'blur', updateLanguages],
+        [document.getElementsByClassName('skill_input'), 'blur', updateSkill],
+        [document.getElementsByClassName('skills_input'), 'blur', updateSkills],
+        [document.getElementsByClassName('protective_item_input'), 'blur', updateProtectiveItem],
+        [document.getElementsByClassName('shield_input'), 'blur', updateShield],
+        [document.getElementsByClassName('armor_input'), 'blur', updateArmor],
+        [document.getElementsByClassName('grapple_input'), 'blur', updateGrapple],
+        [document.getElementsByClassName('attack_input'), 'blur', updateAttack],
+        [document.getElementsByClassName('attacks_input'), 'blur', updateAttacks],
+        [document.getElementsByClassName('saving_throw_input'), 'blur', updateSavingThrow],
+        [document.getElementsByClassName('attribute_input'), 'blur', updateAttribute],
+        [document.getElementsByClassName('armor_class_input'), 'blur', updateArmorClass],
+        [document.getElementsByClassName('stats_input'), 'blur', updateStats],
+        [document.getElementsByClassName('personalia_input'), 'blur', updatePersonalia],
+        [document.getElementById('feats_search_input'), 'input', findFeatsSuggestions],
+        [document.getElementById('special_ability_search_input'), 'input', findSpecialAbilitySuggestions],
+        [document.getElementsByClassName('feat_template_info'), 'click', showFeatInfo],
+        [document.getElementsByClassName('special_ability_template_info'), 'click', showSpecialAbilityInfo],
+        [document.getElementsByClassName('skill_template_info'), 'click', showSkillInfo],
+        [document.getElementsByClassName('remove_special_ability'), 'click', removeSpecialAbility],
+        [document.getElementsByClassName('remove_feat'), 'click', removeFeat],
+        [document.getElementsByClassName('remove_item'), 'click', removeItem],
+        [document.getElementsByClassName('remove_attack'), 'click', removeAttack],
+        [document.getElementsByClassName('remove_protective_item'), 'click', removeProtectiveItem],
+        [document.getElementsByClassName('remove_currency'), 'click', removeCurrency],
+        [document.getElementsByClassName('remove_language'), 'click', removeLanguage]
+    ];
 
-    var els = new Array();
-    els = document.getElementsByClassName('attack_input');
-    addListeners(els, 'blur', updateAttack);
-
-    var els = new Array();
-    els = document.getElementsByClassName('attacks_input');
-    addListeners(els, 'blur', updateAttacks);
-
-    var els = new Array();
-    els = document.getElementsByClassName('saving_throw_input');
-    addListeners(els, 'blur', updateSavingThrow);
-
-    var els = new Array();
-    els = document.getElementsByClassName('attribute_input');
-    addListeners(els, 'blur', updateAttribute);
-
-    var els = new Array();
-    els = document.getElementsByClassName('armor_class_input');
-    addListeners(els, 'blur', updateArmorClass);
-
-    var els = new Array();
-    els = document.getElementsByClassName('stats_input');
-    addListeners(els, 'blur', updateStats);
-
-    var els = new Array();
-    els = document.getElementsByClassName('personalia_input');
-    addListeners(els, 'blur', updatePersonalia);
-
-    var els = new Array();
-    els = document.getElementsByClassName('remove_special_ability');
-    addListeners(els, 'click', removeSpecialAbility);
-
-    var els = new Array();
-    els = document.getElementsByClassName('remove_feat');
-    addListeners(els, 'click', removeFeat);
-
-    var els = new Array();
-    els = document.getElementsByClassName('remove_item');
-    addListeners(els, 'click', removeItem);
-
-    var els = new Array();
-    els = document.getElementsByClassName('remove_attack');
-    addListeners(els, 'click', removeAttack);
-
-    var els = new Array();
-    els = document.getElementsByClassName('remove_protective_item');
-    addListeners(els, 'click', removeProtectiveItem);
-
-    var els = new Array();
-    var el = document.getElementById('feats_search_input');
-    els.push(el);
-    addListeners(els, 'input', findFeatsSuggestions);
-
-    var els = new Array();
-    var el = document.getElementById('special_ability_search_input');
-    els.push(el);
-    addListeners(els, 'input', findSpecialAbilitySuggestions);
-
-    var els = new Array();
-    var els = document.getElementsByClassName('feat_template_info');
-    addListeners(els, 'click', showFeatInfo);
-
-    var els = new Array();
-    var els = document.getElementsByClassName('special_ability_template_info')
-    addListeners(els, 'click', showSpecialAbilityInfo);
-
-    var els = new Array();
-    var els = document.getElementsByClassName('remove_language');
-    addListeners(els, 'click', removeLanguage);
-
-    var els = new Array();
-    var els = document.getElementsByClassName('remove_currency');
-    addListeners(els, 'click', removeCurrency);
+    addListeners(ix_elements);
 }
 
 /**
