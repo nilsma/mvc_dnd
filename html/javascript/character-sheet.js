@@ -142,7 +142,7 @@ function showSpecialAbilityInfo() {
     var post_action = "special_ability_info=";
     var element = document.getElementById('special_ability_template_info');
     var template_name = this.parentNode.id;
-    runQuery(post_action, template_name, true, function(info) {
+    runQuery(post_action, template_name, false, function(info) {
         addHTMLtoElement(element, info);
     });
 }
