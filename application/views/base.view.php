@@ -91,11 +91,11 @@ if(!class_exists('Base_View')) {
             return $html;
         }
 
-        public function getFeatSuggestionsHTML($suggestions_array) {
+        public function getFeatSuggestionsHTML($suggestions_array, $input) {
             $data = '';
             $data .= '<ul id="feat_sugggestions_list">' . "\n";
 
-            if(count($suggestions_array) < 1) {
+            if(count($suggestions_array) == 0 && strlen($input) > 0) {
                 $data .= '<li>No suggestions!</li>' . "\n";
             } else {
                 foreach($suggestions_array as $key => $val) {
@@ -110,19 +110,49 @@ if(!class_exists('Base_View')) {
 
         }
 
+        public function getSpellSuggestionsHTML($suggestions_array, $input) {
+            $data = '';
+
+            if(count($suggestions_array) == 0 && strlen($input) > 0) {
+                $data .= '<p>No suggestions!</p>' . "\n";
+            } else {
+                $data .= '<table id="spell_sugggestions_table">' . "\n";
+                $data .= '<thead>' . "\n";
+                $data .= '<tr>' . "\n";
+                $data .= '<td>Spell Name</td>'. "\n";
+                $data .= '<td>Class</td>' . "\n";
+                $data .= '<td>Level</td>' . "\n";
+                $data .= '</tr>' . "\n";
+                $data .= '</thead>' . "\n";
+
+                foreach($suggestions_array as $suggestion) {
+                    $data .= '<tr>' . "\n";
+                    $data .= '<td class="gui offered_suggestion" onClick="chooseSpellTemplate(\'' . $suggestion['template_name'] . '\', \'' . $suggestion['class'] . '\', \'' . ucwords($suggestion['common_name']) .'\');"><a href="javascript:void()">' . ucwords($suggestion['common_name']) . '</a></td>' . "\n";
+                    $data .= '<td>' . ucwords($suggestion['class']) . '</td>' . "\n";
+                    $data .= '<td>' . $suggestion['level'] . '</td>' . "\n";
+                    $data .= '</tr>' . "\n";
+                }
+
+                $data .= '</table>' . "\n";
+            }
+
+            header('Content-type: application/json');
+            echo json_encode($data, JSON_FORCE_OBJECT);
+        }
+
         /**
          * a function to get the description of the special ability template and echo it as a
          * string representation of HTML
          * @param $template_name
          */
-        public function getSkillInfo($template_name) {
-            $info = $this->model->getSkillInfo($template_name);
+        public function getSkillDescription($template_name) {
+            $info = $this->model->getSkillDescription($template_name);
 
             $data = '';
             $data .= '<div>' . "\n";
             $data .= '<p>' . $info . '</p>' . "\n";
             $data .= '</div>' . "\n";
-            $data .= '<p><a class="gui close_skill_info" href="javascript:void()" onClick="closeSkillInfo();">Close</a></p>' . "\n";
+            $data .= '<p><a class="gui close_skill_info" href="javascript:void()" onClick="closeSkillDescription();">Close</a></p>' . "\n";
 
             echo $data;
         }
@@ -130,33 +160,43 @@ if(!class_exists('Base_View')) {
         /**
          * a function to get the description of the special ability template and echo it as a
          * string representation of HTML
-         * @param $common_name
+         * @param $template_name
          */
-        public function getSpecialAbilityInfo($common_name) {
-            $info = $this->model->getSpecialAbilityInfo($common_name);
+        public function getSpecialAbilityDescription($template_name) {
+            $info = $this->model->getSpecialAbilityDescription($template_name);
 
             $data = '';
             $data .= '<p>' . $info . '</p>' . "\n";
-            $data .= '<p><a class="gui close_special_ability_info" href="javascript:void()" onClick="closeSpecialAbilityInfo();">Close</a></p>' . "\n";
+            $data .= '<p><a class="gui close_special_ability_description" href="javascript:void()" onClick="closeSpecialAbilityDescription();">Close</a></p>' . "\n";
 
             echo $data;
         }
 
-        public function getFeatInfo($common_name) {
-            $info = $this->model->getFeatInfo($common_name);
+        public function getFeatDescription($common_name) {
+            $info = $this->model->getFeatDescription($common_name);
 
             $data = '';
             $data .= '<p>' . $info . '</p>' . "\n";
-            $data .= '<p><a class="gui close_feat_info" href="javascript:void()" onClick="closeFeatInfo();">Close</a></p>' . "\n";
+            $data .= '<p><a class="gui close_feat_description" href="javascript:void()" onClick="closeFeatDescription();">Close</a></p>' . "\n";
 
             echo $data;
         }
 
-        public function getSpecialAbilitySuggestionsHTML($suggestions_array) {
+        public function getSpellDescription($common_name) {
+            $info = $this->model->getSpellDescription($common_name);
+
+            $data = '';
+            $data .= '<p>' . $info . '</p>' . "\n";
+            $data .= '<p><a class="gui close_spell_description" href="javascript:void()" onClick="closeSpellDescription();">Close</a></p>' . "\n";
+
+            echo $data;
+        }
+
+        public function getSpecialAbilitySuggestionsHTML($suggestions_array, $input) {
             $data = '';
             $data .= '<ul id="suggestions_list">' . "\n";
 
-            if(count($suggestions_array) < 1) {
+            if(count($suggestions_array) == 0 && strlen($input) > 0) {
                 $data .= '<li>No suggestions!</li>' . "\n";
             } else {
                 foreach($suggestions_array as $suggestion) {

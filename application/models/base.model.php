@@ -161,7 +161,7 @@ if(!class_exists('Base_Model')) {
             $db = $this->connect();
             $input = '%' . $input . '%';
 
-            $query = "SELECT base_class, template_name, common_name FROM special_ability_templates WHERE common_name LIKE ? ORDER BY common_name";
+            $query = "SELECT base_class, template_name, common_name FROM special_ability_templates WHERE common_name LIKE ? ORDER BY common_name LIMIT 7";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -200,7 +200,7 @@ if(!class_exists('Base_Model')) {
             $db = $this->connect();
             $input = '%' . $input . '%';
 
-            $query = "SELECT template_name, common_name FROM feat_templates WHERE common_name LIKE ? ORDER BY common_name";
+            $query = "SELECT template_name, common_name FROM feat_templates WHERE common_name LIKE ? ORDER BY common_name LIMIT 7";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -225,5 +225,78 @@ if(!class_exists('Base_Model')) {
             return $templates;
         }
 
+        public function getSpellTemplatesClassOnly($input, $class) {
+            $db = $this->connect();
+            $input = '%' . $input . '%';
+
+            $query = "SELECT st.template_name, st.common_name, sr.base_class, sr.level FROM spell_templates as st, spell_requirements as sr WHERE st.template_name=sr.template_name AND sr.base_class=? AND st.common_name LIKE ? ORDER BY st.common_name LIMIT 7";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $templates = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('ss', $class, $input);
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name, $base_class, $level);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $template = array(
+                        'template_name' => $template_name,
+                        'common_name' => $common_name,
+                        'class' => $base_class,
+                        'level' => $level
+                    );
+
+                    array_push($templates, $template);
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $templates;
+        }
+
+        public function getSpellTemplatesClassAndLevel($input, $base_class, $level) {
+            $db = $this->connect();
+            $input = '%' . $input . '%';
+
+            $query = "SELECT st.template_name, st.common_name, sr.base_class, sr.level FROM spell_templates as st, spell_requirements as sr WHERE st.template_name=sr.template_name AND sr.base_class=? AND sr.level=? AND st.common_name LIKE ? ORDER BY st.common_name LIMIT 7";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $templates = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('sis', $base_class, $level, $input);
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name, $base_class, $level);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $template = array(
+                        'template_name' => $template_name,
+                        'common_name' => $common_name,
+                        'class' => $base_class,
+                        'level' => $level
+                    );
+
+                    array_push($templates, $template);
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $templates;
+        }
+
     }
+
 }

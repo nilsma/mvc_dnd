@@ -132,16 +132,16 @@ if(isset($_POST['get_feat_suggestions'])) {
 }
 
 if(isset($_POST['get_special_abilities_suggestions'])) {
-    $suggestions_array = $ctrl->getSpecialAbilitiesSuggestions($_POST['get_special_abilities_suggestions']);
+    $suggestions_array = $ctrl->getSpecialAbilitySuggestions($_POST['get_special_abilities_suggestions']);
     $view->getSpecialAbilitySuggestionsHTML($suggestions_array);
 }
 
 if(isset($_POST['special_ability_info'])) {
-    $view->getSpecialAbilityInfo($_POST['special_ability_info']);
+    $view->getSpecialAbilityDescription($_POST['special_ability_info']);
 }
 
 if(isset($_POST['feat_info'])) {
-    $view->getFeatInfo($_POST['feat_info']);
+    $view->getFeatDescription($_POST['feat_info']);
 }
 
 if(isset($_POST['load_special_ability']) && !empty($_POST['load_special_ability'])) {

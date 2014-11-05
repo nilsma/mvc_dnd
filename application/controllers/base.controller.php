@@ -21,15 +21,15 @@ if(!class_exists('Base_Controller')) {
          * @param $input - the user's input
          * @return array - and associative array of special abilities
          */
-        public function getSpecialAbilitiesSuggestions($input) {
-            $suggestions_array = array();
+        public function getSpecialAbilitySuggestions($input) {
             $input = ltrim(strtolower($input));
 
             if(strlen($input) > 0) {
                 $suggestions_array = $this->model->getSpecialAbilityTemplates($input);
 
                 asort($suggestions_array);
-
+            } else {
+                $suggestions_array = array();
             }
 
             return $suggestions_array;
@@ -43,7 +43,30 @@ if(!class_exists('Base_Controller')) {
                 $suggestions_array = $this->model->getFeatTemplates($input);
 
                 asort($suggestions_array);
+            }
 
+            return $suggestions_array;
+        }
+
+        public function getSpellSuggestions($input, $class, $level) {
+            $suggestions_array = array();
+            $input = strtolower($input);
+
+            /*
+            if(strlen($input) > 0 && ($class == "any" && $level == 10)) {
+                $suggestions_array = $this->model->getSpellTemplatesBasic($input);
+            */
+
+            if(strlen($input) > 0 && $class != "any" && $level == 10) {
+                $suggestions_array = $this->model->getSpellTemplatesClassOnly($input, $class);
+
+            /*
+            } elseif(strlen($input) > 0 && $class == "any" && $level != 10) {
+                $suggestions_array = $this->model->getSpellTemplatesLevel($input, $level);
+            */
+
+            } elseif(strlen($input) > 0 && $class != "any" && $level != 10) {
+                $suggestions_array = $this->model->getSpellTemplatesClassAndLevel($input, $class, $level);
             }
 
             return $suggestions_array;

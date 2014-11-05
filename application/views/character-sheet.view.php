@@ -2,6 +2,7 @@
 /**
  * A view class file for the create-character page
  */
+
 if(!class_exists('Character_Sheet_View')) {
 
     class Character_Sheet_view extends Base_View {
@@ -49,6 +50,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= $this->buildLanguages($character_sheet->getLanguages());
             $html .= $this->buildCurrencies($character_sheet->getCurrencies());
             $html .= $this->buildInventory($character_sheet->getInventory());
+            $html .= $this->buildSpells();
 
             return $html;
         }
@@ -324,8 +326,8 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<label for="skills_max_ranks_cross_class">Max Ranks Cross Class: </label>';
             $html .= '<input class="skills_input" id="skills_max_ranks_cross_class" name="skill_max_ranks_cross_class" type="number" value="' . $skills->getMaxRanksCrossClass() . '">' . "\n";
             $html .= $this->buildSkill($skills->getSkillArray());
-            $html .= '<div id="skill_template_info">' . "\n";
-            $html .= '</div> <!-- end #skill_template_info -->' . "\n";
+            $html .= '<div id="skill_template_description">' . "\n";
+            $html .= '</div> <!-- end #skill_template_description -->' . "\n";
             $html .= '</div> <!-- end #skills -->' . "\n";
 
             return $html;
@@ -481,14 +483,14 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<ul>' . "\n";
             foreach($feats as $feat) {
                 $common_name = $this->model->getFeatCommonName($feat->getTemplateName());
-                $html .= '<li class="feat_name" id="' . $feat->getTemplateName() . '"><a class="gui feat_template_info" href="javascript:void()">' . $common_name . '</a> <a class="gui remove_feat" href="javascript:void()">remove</a></li>' . "\n";
+                $html .= '<li class="feat_name" id="' . $feat->getTemplateName() . '"><a class="gui feat_template_description" href="javascript:void()">' . $common_name . '</a> <a class="gui remove_feat" href="javascript:void()">remove</a></li>' . "\n";
             }
             $html .= '</ul>' . "\n";
 
-            $html .= '<div id="feat_template_info">' . "\n";
-            $html .= '</div> <!-- end #feat_template_info -->' . "\n";
+            $html .= '<div id="feat_template_description">' . "\n";
+            $html .= '</div> <!-- end #feat_template_description -->' . "\n";
 
-            $html .= '<div id="feats_search">' . "\n";
+            $html .= '<div id="feat_suggestions">' . "\n";
             $html .= '<label>Add Feat: </label>' . "\n";
             $html .= '<input id="feats_search_input" name="feats_search_input" type="text" value="">' . "\n";
             $html .= '<input id="feats_search_template" name="feats_search_template" type="text" value="" hidden>' . "\n";
@@ -496,8 +498,8 @@ if(!class_exists('Character_Sheet_View')) {
 
             $html .= '</div> <!-- end #feats_search -->' . "\n";
 
-            $html .= '<div id="feats_suggestions_box">' . "\n";
-            $html .= '</div> <!-- end #feats_suggestions_box -->' . "\n";
+            $html .= '<div id="feat_suggestions_box">' . "\n";
+            $html .= '</div> <!-- end #feat_suggestions_box -->' . "\n";
 
             $html .= '</div> <!-- end #feats -->' . "\n";
 
@@ -507,7 +509,7 @@ if(!class_exists('Character_Sheet_View')) {
         public function buildSpecialAbilities($special_abilities) {
             $html = '';
 
-            $html .= '<div id="special_abilities">' . "\n";
+            $html .= '<div id="special_ability_suggestions">' . "\n";
             $html .= '<h2>Special Abilities</h2>' . "\n";
 
             $html .= '<ul>' . "\n";
@@ -517,10 +519,10 @@ if(!class_exists('Character_Sheet_View')) {
             }
             $html .= '</ul>' . "\n";
 
-            $html .= '<div id="special_ability_template_info">' . "\n";
-            $html .= '</div> <!-- end #special_ability_template_info -->' . "\n";
+            $html .= '<div id="special_ability_template_description">' . "\n";
+            $html .= '</div> <!-- end #special_ability_template_description -->' . "\n";
 
-            $html .= '<div id="special_ability_search">' . "\n";
+            $html .= '<div id="special_ability_suggestions">' . "\n";
             $html .= '<label for="special_ability_search_input">Add Special Ability: </label>' . "\n";
             $html .= '<input class="special_ability_search_input" id="special_ability_search_input" name="special_ability_search_input" type="text" value="">' . "\n";
             $html .= '<input class="special_ability_search_template" id="special_ability_search_template" name="special_ability_search_template" type="text" value="" hidden>' . "\n";
@@ -529,8 +531,8 @@ if(!class_exists('Character_Sheet_View')) {
 
             $html .= '</div> <!-- end #special_ability_search -->' . "\n";
 
-            $html .= '<div id="special_abilities_suggestions_box">' . "\n";
-            $html .= '</div> <!-- end #special_abilities_suggestions_box -->' . "\n";
+            $html .= '<div id="special_ability_suggestions_box">' . "\n";
+            $html .= '</div> <!-- end #special_ability_suggestions_box -->' . "\n";
 
             $html .= '</div> <!-- end #special_abilities -->' . "\n";
 
@@ -664,6 +666,107 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<input name="add_currency" type="submit" value="Add Currency">' . "\n";
 
             $html .= '</div> <!-- end #currencies -->' . "\n";
+
+            return $html;
+        }
+
+        public function buildSpells() {
+            $picked_spells = $this->model->getPickedSpells($_SESSION['current_sheet']);
+
+            $html = '';
+
+            $html .= '<div id="spells">' . "\n";
+            $html .= '<h2>Spells</h2>' . "\n";
+            $html .= $this->buildSpellList($picked_spells);
+            $html .= $this->buildSpellSearch();
+
+            return $html;
+        }
+
+        public function buildSpellList($picked_spells) {
+            $html = '';
+
+            $html .= '<div id="spell_list">' . "\n";
+            $html .= '<h3>Spell List</h3>' . "\n";
+
+            if(count($picked_spells) < 1) {
+                $html .= '<p>You haven\'t added any spells to your spell list yet.' . "\n";
+            } else {
+                $html .= '<table>' . "\n";
+                $html .= '<thead>' . "\n";
+                $html .= '<tr>' . "\n";
+                $html .= '<td>Spell name (Class / Level)</td>' . "\n";
+                $html .= '<td>Charges</td>' . "\n";
+                $html .= '<td></td>' . "\n";
+                $html .= '</tr>' . "\n";
+                $html .= '</thead>' . "\n";
+                $html .= '<tbody>' . "\n";
+
+
+                foreach($picked_spells as $spell) {
+                    $html .= '<tr>' . "\n";
+                    $html .= '<td class="spell_name" id="' . $spell['template_name']  . '"><a class="gui spell_template_description" href="javascript:void()">' . ucwords($spell['common_name']) . '</a> (' . ucwords($spell['base_class']) . ' / ' . $spell['level'] . ')</td>';
+                    $html .= '<td><input class="spell_charges" type="number" value="' . $spell['charges'] . '"></td>' . "\n";
+                    $html .= '<td><a class="gui remove_spell" href="javascript:void()">remove</a></td>' . "\n";
+                    $html .= '</tr>' . "\n";
+                }
+
+
+                $html .= '</tbody>' . "\n";
+                $html .= '</table>' . "\n";
+            }
+
+            $html .= '</div>' . "\n";
+            $html .= '<div id="spell_template_description">' . "\n";
+            $html .= '</div> <!-- end #spell_template_description -->' . "\n";
+
+            return $html;
+        }
+
+        public function buildSpellSearch() {
+            $classes = array("barbarian", "bard", "cleric", "druid", "fighter", "monk", "paladin", "ranger", "rogue", "sorcerer", "wizard");
+            $levels = array("0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "any");
+
+            $html = '';
+
+            $html .= '<div id="spell_suggestions">' . "\n";
+            $html .= '<h3>Spell Search</h3>' . "\n";
+            $html .= '<label for="spell_base_class">Class: </label>' . "\n";
+            $html .= '<select name="spell_search_class">' . "\n";
+
+            foreach($classes as $class) {
+                if($class == $_SESSION['spell_search_class']) {
+                    $html .= '<option value="' . $class . '" selected="selected">' . ucfirst($class) . '</option>' . "\n";
+                } else {
+                    $html .= '<option value="' . $class . '">' . ucfirst($class) . '</option>' . "\n";
+                }
+            }
+
+            $html .= '</select>' . "\n";
+            $html .= '<label for="spell_level">Level: </label>' . "\n";
+            $html .= '<select name="spell_search_level">' . "\n";
+
+            $count = 0;
+            foreach($levels as $level) {
+                if($count == $_SESSION['spell_search_level']) {
+                    $html .= '<option value="' . $count . '" selected="selected">' . ucfirst($level) . '</option>' . "\n";
+                } else {
+                    $html .= '<option value="' . $count . '">' . ucfirst($level) . '</option>' . "\n";
+                }
+
+                $count++;
+            }
+
+            $html .= '</select>' . "\n";
+            $html .= '<label for="spell_name">Spell Name: </label>' . "\n";
+            $html .= '<input id="spell_search_input" name="spell_search_input" type="text" value="">' . "\n";
+            $html .= '<input id="spell_search_template" name="spell_search_template" type="text" value="" hidden>' . "\n";
+            $html .= '<input id="spell_search_base_class" name="spell_search_base_class" type="text" value="" hidden>' . "\n";
+            $html .= '<input id="add_spell" name="add_spell" type="submit" value="Add">' . "\n";
+            $html .= '</div>' . "\n";
+
+            $html .= '<div id="spell_suggestions_box">' . "\n";
+            $html .= '</div> <!-- end #spell_suggestions_box -->' . "\n";
 
             return $html;
         }

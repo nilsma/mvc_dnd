@@ -512,12 +512,48 @@ if(!class_exists('Character_Sheet_Model')) {
             $db->close();
         }
 
+        public function getPickedSpells($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT st.template_name, st.common_name, sl.base_class, sl.charges, sr.level FROM spell_templates AS st, spell_list AS sl, sheets AS s, spell_requirements AS sr WHERE sl.owner=s.id AND s.id=? AND sl.template_name=st.template_name AND st.template_name=sr.template_name AND sl.base_class=sr.base_class ORDER BY sr.level, st.template_name";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $spell_list = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($template_name, $common_name, $base_class, $charges, $level);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $spell = array(
+                        'template_name' => $template_name,
+                        'common_name' => $common_name,
+                        'base_class' => $base_class,
+                        'charges' => $charges,
+                        'level' => $level
+                    );
+
+                    array_push($spell_list, $spell);
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $spell_list;
+        }
+
         /**
          * a function to get a special ability templates description based on its common_name
          * @param $template_name - the common_name of the template for which to get the description
          * @return string
          */
-        public function getSpecialAbilityInfo($template_name) {
+        public function getSpecialAbilityDescription($template_name) {
             $db = $this->connect();
 
             $query = "SELECT description FROM special_ability_templates WHERE template_name=?";
@@ -577,10 +613,40 @@ if(!class_exists('Character_Sheet_Model')) {
          * @param $template_name - the common_name of the template for which to get the description
          * @return string
          */
-        public function getFeatInfo($template_name) {
+        public function getFeatDescription($template_name) {
             $db = $this->connect();
 
             $query = "SELECT description FROM feat_templates WHERE template_name=?";
+            $query = $db->real_escape_string($query);
+
+            $description = '';
+
+            $stmt = $db->stmt_init();
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('s', $template_name);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                while($stmt->fetch()) {
+                    $description = $result;
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $description;
+        }
+
+        /**
+         * a function to get a feat templates description based on its common_name
+         * @param $template_name - the common_name of the template for which to get the description
+         * @return string
+         */
+        public function getSpellDescription($template_name) {
+            $db = $this->connect();
+
+            $query = "SELECT description FROM spell_templates WHERE template_name=?";
             $query = $db->real_escape_string($query);
 
             $description = '';
@@ -606,6 +672,26 @@ if(!class_exists('Character_Sheet_Model')) {
             $db = $this->connect();
 
             $query = "DELETE special_ability FROM special_ability, sheets WHERE sheets.id=? AND special_ability.owner=sheets.id AND special_ability.template_name=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('is', $sheet_id, $template_name);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function deleteSpell($sheet_id, $template_name) {
+            $db = $this->connect();
+
+            $query = "DELETE spell_list FROM spell_list, sheets WHERE sheets.id=? AND spell_list.owner=sheets.id AND spell_list.template_name=?";
             $query = $db->real_escape_string($query);
 
             $stmt = $db->stmt_init();
@@ -674,6 +760,26 @@ if(!class_exists('Character_Sheet_Model')) {
                 print("Failed to prepare query: " . $query . "\n");
             } else {
                 $stmt->bind_param('is', $sheet_id, $template_name);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
+        public function insertSpell($sheet_id, $template_name, $base_class, $charges) {
+            $db = $this->connect();
+
+            $query = "INSERT INTO spell_list VALUES(?, ?, ?, ?)";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('issi', $sheet_id, $template_name, $base_class, $charges);
                 $stmt->execute();
 
                 $stmt->close();

@@ -11,111 +11,219 @@ if(!class_exists('Character_Sheet_Controller')) {
             $this->model = $model;
             parent::__construct($model);
         }
-        
-        public function updatePersonalia($sheet_id, $segments) {
-            $personalia = new Personalia($segments);
-            $this->model->writePersonalia($sheet_id, $personalia);
+
+        public function parseAction($view, $sheet_id, $array) {
+            $action = $array['action'];
+            $segment = $array['segment'];
+            $data = null;
+
+            if(isset($array['decode']) && $array['decode'] == TRUE) {
+                $data = json_decode($array['data'], true);
+            } else {
+                $data = $array['data'];
+            }
+
+            switch($action) {
+                case "update":
+                    $this->handleUpdateAction($sheet_id, $segment, $data);
+                    break;
+
+                case "remove":
+                    $this->handleRemoveAction($sheet_id, $segment, $data);
+                    break;
+
+                case "select":
+                    $this->handleSelectAction($view, $sheet_id, $segment, $data);
+                    break;
+
+                case "set":
+                    $this->handleSetAction($segment, $data);
+                    break;
+
+            }
         }
 
-        public function updateStats($sheet_id, $segments) {
-            $stats = new Stats($segments);
-            $this->model->writeStats($sheet_id, $stats);
+        public function handleSetAction($segment, $data) {
+            $selected = "set_" . $segment;
+
+            switch($selected) {
+                case "set_spell_search_level":
+                    $_SESSION['spell_search_level'] = $data['selected'];
+                    break;
+
+                case "set_spell_search_class":
+                    $_SESSION['spell_search_class'] = $data['selected'];
+                    break;
+
+            }
         }
 
-        public function updateArmorClass($sheet_id, $segments) {
-            $armor_class = new Armor_Class($segments);
-            $this->model->writeArmorClass($sheet_id, $armor_class);
+        public function handleUpdateAction($sheet_id, $segment, $data) {
+            $action = "update_" . $segment;
+
+            switch($action) {
+                case "update_personalia":
+                    $this->model->writePersonalia($sheet_id, new Personalia($data));
+                    break;
+
+                case "update_stats":
+                    $this->model->writeStats($sheet_id, new Stats($data));
+                    break;
+
+                case "update_armor_class":
+                    $this->model->writeArmorClass($sheet_id, new Armor_Class($data));
+                    break;
+
+                case "update_attribute":
+                    $this->model->writeAttribute($sheet_id, new Attribute($data), $data['name']);
+                    break;
+
+                case "update_saving_throw":
+                    $this->model->writeSavingThrow($sheet_id, new Saving_Throw($data), $data['name']);
+                    break;
+
+                case "update_attacks":
+                    $this->model->writeAttacks($sheet_id, $data);
+                    break;
+
+                case "update_attack":
+                    $this->model->writeAttack($sheet_id, new Attack($data, $data['id']));
+                    break;
+
+                case "update_grapple":
+                    $this->model->writeGrapple($sheet_id, new Grapple($data));
+                    break;
+
+                case "update_armor":
+                    $this->model->writeArmor($sheet_id, new Armor($data));
+                    break;
+
+                case "update_shield":
+                    $this->model->writeShield($sheet_id, new Shield($data));
+                    break;
+
+                case "update_protective_item":
+                    $this->model->writeProtectiveItem($sheet_id, new Protective_Item($data, $data['protective_item_id']));
+                    break;
+
+                case "update_skills":
+                    $this->model->writeSkills($sheet_id, $data);
+                    break;
+
+                case "update_skill":
+                    $this->model->writeSkill($sheet_id, new Skill($data));
+                    break;
+
+                case "update_languages":
+                    $this->model->writeLanguages($sheet_id, $data);
+                    break;
+
+                case "update_item":
+                    $this->model->writeItem($sheet_id, new Item($data, $data['item_id']));
+                    break;
+
+                case "update_inventory":
+                    $this->model->writeInventory($sheet_id, $data);
+                    break;
+
+                case "update_currency":
+                    $this->model->writeCurrency($sheet_id, new Currency($data));
+                    break;
+            }
         }
 
-        public function updateAttribute($sheet_id, $segments) {
-            $attribute = new Attribute($segments);
-            $this->model->writeAttribute($sheet_id, $attribute, $segments['name']);
+        public function handleRemoveAction($sheet_id, $segment, $data) {
+            $action = "remove_" . $segment;
+
+            switch($action) {
+                case "remove_protective_item":
+                    $this->model->deleteProtectiveItem($sheet_id, $data['protective_item_id']);
+                    break;
+
+                case "remove_item";
+                    $this->model->deleteItem($sheet_id, $data['item_id']);
+                    break;
+
+                case "remove_attack":
+                    $this->model->deleteAttack($sheet_id, $data['attack_id']);
+                    break;
+
+                case "remove_feat":
+                    $this->model->deleteFeat($sheet_id, $data['template_name']);
+                    break;
+
+                case "remove_spell":
+                    $this->model->deleteSpell($sheet_id, $data['template_name']);
+                    break;
+
+                case "remove_special_ability":
+                    $this->model->deleteSpecialAbility($sheet_id, $data['template_name']);
+                    break;
+
+                case "remove_language":
+                    $this->model->deleteLanguage($sheet_id, strtolower($data['language']));
+                    break;
+
+                case "remove_currency":
+                    $this->model->deleteCurrency($sheet_id, $data['currency']);
+                    break;
+            }
         }
 
-        public function updateSavingThrow($sheet_id, $segments) {
-            $saving_throw = new Saving_Throw($segments);
-            $this->model->writeSavingThrow($sheet_id, $saving_throw, strtolower($segments['name']));
-        }
+        public function handleSelectAction($view, $sheet_id, $segment, $data) {
+            $action = "select_" . $segment;
 
-        public function updateAttacks($sheet_id, $segments) {
-            $this->model->writeAttacks($sheet_id, $segments);
-        }
+            switch($action) {
 
-        public function updateAttack($sheet_id, $segments) {
-            $attack = new Attack($segments, $segments['id']);
-            $this->model->writeAttack($sheet_id, $attack);
-        }
+                case "select_feat_suggestions":
+                    $suggestions = $this->getFeatSuggestions($data['input']);
+                    $view->getFeatSuggestionsHTML($suggestions, $data['input']);
+                    break;
 
-        public function updateGrapple($sheet_id, $segments) {
-            $grapple = new Grapple($segments);
-            $this->model->writeGrapple($sheet_id, $grapple);
-        }
+                case "select_special_ability_suggestions":
+                    $suggestions = $this->getSpecialAbilitySuggestions($data['input']);
+                    $view->getSpecialAbilitySuggestionsHTML($suggestions, $data['input']);
+                    break;
 
-        public function updateArmor($sheet_id, $segments) {
-            $armor = new Armor($segments);
-            $this->model->writeArmor($sheet_id, $armor);
-        }
+                case "select_spell_suggestions":
+                    $suggestions = $this->getSpellSuggestions(
+                        $data['input'],
+                        $_SESSION['spell_search_class'],
+                        $_SESSION['spell_search_level']
+                    );
+                    $view->getSpellSuggestionsHTML($suggestions, $data['input']);
+                    break;
 
-        public function updateShield($sheet_id, $segments) {
-            $shield = new Shield($segments);
-            $this->model->writeShield($sheet_id, $shield);
-        }
+                case "select_special_ability_description":
+                    $view->getSpecialAbilityDescription($data['template_name']);
+                    break;
 
-        public function updateProtectiveItem($sheet_id, $segments) {
-            $protective_item = new Protective_Item($segments, $segments['protective_item_id']);
-            $this->model->writeProtectiveItem($sheet_id, $protective_item);
-        }
+                case "select_feat_description":
+                    $view->getFeatDescription($data['template_name']);
+                    break;
 
-        public function updateSkills($sheet_id, $segments) {
-            $this->model->writeSkills($sheet_id, $segments);
-        }
+                case "select_spell_description":
+                    $view->getSpellDescription($data['template_name']);
+                    break;
 
-        public function updateSkill($sheet_id, $segments) {
-            $skill = new Skill($segments);
-            $this->model->writeSkill($sheet_id, $skill);
-        }
+                case "select_skill_description":
+                    $view->getSkillDescription($data['template_name']);
+                    break;
+            }
 
-        public function updateLanguages($sheet_id, $segments) {
-            $this->model->writeLanguages($sheet_id, $segments);
-        }
-
-        public function updateCurrency($sheet_id, $segments) {
-            $currency = new Currency($segments);
-            $this->model->writeCurrency($sheet_id, $currency);
-        }
-
-        public function updateItem($sheet_id, $segments) {
-            $item = new Item($segments, $segments['item_id']);
-            $this->model->writeItem($sheet_id, $item);
-        }
-
-        public function updateInventory($sheet_id, $segments) {
-            $this->model->writeInventory($sheet_id, $segments);
         }
 
         public function addSpecialAbility($sheet_id, $template_name, $base_class) {
             $this->model->insertSpecialAbility($sheet_id, $template_name, $base_class);
         }
 
-        public function removeLanguage($sheet_id, $language) {
-            $this->model->deleteLanguage($sheet_id, $language);
-        }
-
-        public function removeItem($sheet_id, $item) {
-            $this->model->deleteItem($sheet_id, $item);
-        }
-
-        public function removeSpecialAbility($sheet_id, $template_name) {
-            $this->model->deleteSpecialAbility($sheet_id, $template_name);
-        }
-
         public function addFeat($sheet_id, $template_name) {
             $this->model->insertFeat($sheet_id, $template_name);
-            //$_SESSION['character_variables'] = $_POST; //todo
         }
 
-        public function removeFeat($sheet_id, $template_name) {
-            $this->model->deleteFeat($sheet_id, $template_name);
+        public function addSpell($sheet_id, $template_name, $base_class) {
+            $charges = 0;
+            $this->model->insertSpell($sheet_id, $template_name, $base_class, $charges);
         }
 
         public function addProtectiveItem($sheet_id) {
@@ -129,10 +237,6 @@ if(!class_exists('Character_Sheet_Controller')) {
             $protective_item = new Protective_Item($protective_item_entries);
             $this->model->insertProtectiveItem($sheet_id, $protective_item);
             //$_SESSION['character_variables'] = $_POST; //todo
-        }
-
-        public function removeProtectiveItem($sheet_id, $protective_item_id) {
-            $this->model->deleteProtectiveItem($sheet_id, $protective_item_id);
         }
 
         public function addLanguage($sheet_id, $language) {
@@ -162,10 +266,6 @@ if(!class_exists('Character_Sheet_Controller')) {
             //$_SESSION['character_variables'] = $_POST; //todo
         }
 
-        public function removeCurrency($sheet_id, $currency_name) {
-            $this->model->deleteCurrency($sheet_id, $currency_name);
-        }
-
         public function addAttack($sheet_id) {
             $attack_entries = array('attack_name' => 'Attack Name', 'attack_bonus' => 'Attack Bonus',
                 'attack_damage' => 'Attack Damage', 'critical_floor' => 'Critical Floor',
@@ -176,10 +276,6 @@ if(!class_exists('Character_Sheet_Controller')) {
             $attack = new Attack($attack_entries);
             $this->model->insertAttack($sheet_id, $attack);
             //$_SESSION['character_variables'] = $_POST;
-        }
-
-        public function removeAttack($sheet_id, $attack_id) {
-            $this->model->deleteAttack($sheet_id, $attack_id);
         }
 
         public function getCharacterSheet($sheet_id) {
