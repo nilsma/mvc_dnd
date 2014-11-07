@@ -886,10 +886,10 @@ function init() {
         [document.getElementsByClassName('remove_special_ability'), 'click', removeSpecialAbility],
         [document.getElementsByClassName('remove_feat'), 'click', removeFeat],
         [document.getElementsByClassName('remove_spell'), 'click', removeSpell],
-        [document.getElementsByClassName('remove_item'), 'click', removeItem],
         [document.getElementsByClassName('remove_attack'), 'click', removeAttack],
         [document.getElementsByClassName('remove_protective_item'), 'click', removeProtectiveItem],
         [document.getElementsByClassName('remove_currency'), 'click', removeCurrency],
+        [document.getElementsByClassName('remove_item'), 'click', removeItem],
         [document.getElementsByClassName('remove_language'), 'click', removeLanguage]
     ];
 
