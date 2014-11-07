@@ -882,7 +882,7 @@ function init() {
         [document.getElementsByClassName('feat_template_description'), 'click', showFeatDescription],
         [document.getElementsByClassName('special_ability_template_info'), 'click', showSpecialAbilityDescription],
         [document.getElementsByClassName('spell_template_description'), 'click', showSpellDescription],
-        //[document.getElementsByClassName('skill_template_info'), 'click', showSkillDescription],
+        [document.getElementsByClassName('skill_template_info'), 'click', showSkillDescription],
         [document.getElementsByClassName('remove_special_ability'), 'click', removeSpecialAbility],
         [document.getElementsByClassName('remove_feat'), 'click', removeFeat],
         [document.getElementsByClassName('remove_spell'), 'click', removeSpell],

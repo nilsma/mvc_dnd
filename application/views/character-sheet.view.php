@@ -356,7 +356,7 @@ if(!class_exists('Character_Sheet_View')) {
                 $key_ability = $this->model->getSkillKeyAbility($template_name);
 
                 $html .= '<tr>' . "\n";
-                $html .= '<td><span><a class="gui skill_template_info" href="javascript:showSkillDescription();">' . $common_name . '</a></span><input name="skill_template_name" type="text" value="' . $template_name . '" hidden></td>' . "\n";
+                $html .= '<td><span><a class="gui skill_template_info" href="javascript:void()">' . $common_name . '</a></span><input name="skill_template_name" type="text" value="' . $template_name . '" hidden></td>' . "\n";
                 $html .= '<td>' . strtoupper($key_ability) . '</td>' . "\n";
                 $html .= '<td><input class="skill_input skill_skill_mod" type="number" value="' . $skill->getSkillMod() . '"></td>' . "\n";
                 $html .= '<td><input class="skill_input skill_ability_mod" type="number" value="' . $skill->getAbilityMod() . '"></td>' . "\n";
