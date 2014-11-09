@@ -154,7 +154,7 @@ if(!class_exists('Character_Sheet_View')) {
         public function buildAttributes(Array $attributes) {
             $html = '';
 
-            $html .= '<div id="attributes">' . "\n";
+            $html .= '<div ng-controller="AttributeCtrl" id="attributes">' . "\n";
             $html .= '<h2>Attributes</h2>' . "\n";
             $html .= '<table>' . "\n";
             $html .= '<thead>' . "\n";
@@ -180,10 +180,10 @@ if(!class_exists('Character_Sheet_View')) {
 
                 $html .= '<tr>' . "\n";
                 $html .= '<td>' . $name. '</td>' . "\n";
-                $html .= '<td><input class="attribute_input" id="' . $label . '_ability_score" type="number" value="' . $ability_score . '"></td>' . "\n";
-                $html .= '<td><input class="attribute_input" id="' . $label . '_ability_mod" type="number" value="' . $ability_mod . '"></td>' . "\n";
-                $html .= '<td><input class="attribute_input" id="' . $label . '_temp_score" type="number" value="' . $temp_score . '"></td>' . "\n";
-                $html .= '<td><input class="attribute_input" id="' . $label . '_temp_mod" type="number" value="' . $temp_mod . '"></td>' . "\n";
+                $html .= '<td><input class="attribute_input" id="' . $label . '_ability_score" type="number" ng-model="' . $label . '_ability_score" ng-init="' . $label . '_ability_score=' . $ability_score . '"></td>' . "\n";
+                $html .= '<td><input class="attribute_input" id="' . $label . '_ability_mod" type="number" value="{{ getAbilityModifier(' . $label . '_ability_score) }}" disabled></td>' . "\n";
+                $html .= '<td><input class="attribute_input" id="' . $label . '_temp_score" type="number" ng-model="' . $label . '_temp_score" ng-init="' . $label . '_temp_score=' . $temp_score . '"></td>' . "\n";
+                $html .= '<td><input class="attribute_input" id="' . $label . '_temp_mod" type="number" value="{{ getAbilityModifier(' . $label . '_temp_score) }}" disabled></td>' . "\n";
                 $html .= '</tr>' . "\n";
             }
 

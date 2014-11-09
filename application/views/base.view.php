@@ -23,18 +23,19 @@ if(!class_exists('Base_View')) {
         public function buildHeader($page_id) {
             $html = '';
             $html .= '<meta name="viewport" content="width=device-width, user-scalable=yes">' . "\n";
-            //$html .= '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>' . "\n";
+            $html .= '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>' . "\n";
             //$html .= '<link rel="stylesheet" href="../../public/css/main.css">' . "\n";
             //$html .= '<link rel="stylesheet" href="../../public/css/navigation.css">' . "\n";
             //$html .= '<link rel="stylesheet" href="../../public/css/' . $page_id . '.css">' . "\n";
 
             if(isset($_SESSION['auth'])) {
+                $html .= '<script src="javascript/' . $page_id . '-angular-controllers.js"></script>' . "\n";
                 $html .= '<script src="javascript/' . $page_id . '.js"></script>' . "\n";
             }
 
             $html .= '<title>DNDHelper</title>' . "\n";
             $html .= '</head>' . "\n";
-            $html .= '<body id="' . $page_id . '">' . "\n";
+            $html .= '<body ng-app="myApp" id="' . $page_id . '">' . "\n";
             $html .= '<div id="main_container">' . "\n";
             $html .= '<header>' . "\n";
 

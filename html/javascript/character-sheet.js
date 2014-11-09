@@ -384,6 +384,7 @@ function getArmorClassData(callback) {
 function updateAttribute() {
     var label = this.parentNode.parentNode.childNodes[1].innerHTML;
     getAttributeData(label, function(data) {
+        alert(data);
         runQuery("update", "attribute", data, false, true);
     });
 }
@@ -859,23 +860,23 @@ function addListeners(ix_array) {
 function init() {
     var ix_elements = [
         [document.getElementsByTagName('option'), 'click', setSelected],
-        [document.getElementsByClassName('inventory_input'), 'blur', updateInventory],
-        [document.getElementsByClassName('item_input'), 'blur', updateItem],
-        [document.getElementsByClassName('currency_input'), 'blur', updateCurrency],
-        [document.getElementsByClassName('languages_input'), 'blur', updateLanguages],
-        [document.getElementsByClassName('skill_input'), 'blur', updateSkill],
-        [document.getElementsByClassName('skills_input'), 'blur', updateSkills],
-        [document.getElementsByClassName('protective_item_input'), 'blur', updateProtectiveItem],
-        [document.getElementsByClassName('shield_input'), 'blur', updateShield],
-        [document.getElementsByClassName('armor_input'), 'blur', updateArmor],
-        [document.getElementsByClassName('grapple_input'), 'blur', updateGrapple],
-        [document.getElementsByClassName('attack_input'), 'blur', updateAttack],
-        [document.getElementsByClassName('attacks_input'), 'blur', updateAttacks],
-        [document.getElementsByClassName('saving_throw_input'), 'blur', updateSavingThrow],
-        [document.getElementsByClassName('attribute_input'), 'blur', updateAttribute],
-        [document.getElementsByClassName('armor_class_input'), 'blur', updateArmorClass],
-        [document.getElementsByClassName('stats_input'), 'blur', updateStats],
-        [document.getElementsByClassName('personalia_input'), 'blur', updatePersonalia],
+        [document.getElementsByClassName('inventory_input'), 'change', updateInventory],
+        [document.getElementsByClassName('item_input'), 'change', updateItem],
+        [document.getElementsByClassName('currency_input'), 'change', updateCurrency],
+        [document.getElementsByClassName('languages_input'), 'change', updateLanguages],
+        [document.getElementsByClassName('skill_input'), 'change', updateSkill],
+        [document.getElementsByClassName('skills_input'), 'change', updateSkills],
+        [document.getElementsByClassName('protective_item_input'), 'change', updateProtectiveItem],
+        [document.getElementsByClassName('shield_input'), 'change', updateShield],
+        [document.getElementsByClassName('armor_input'), 'change', updateArmor],
+        [document.getElementsByClassName('grapple_input'), 'change', updateGrapple],
+        [document.getElementsByClassName('attack_input'), 'change', updateAttack],
+        [document.getElementsByClassName('attacks_input'), 'change', updateAttacks],
+        [document.getElementsByClassName('saving_throw_input'), 'change', updateSavingThrow],
+        [document.getElementsByClassName('attribute_input'), 'change', updateAttribute],
+        [document.getElementsByClassName('armor_class_input'), 'change', updateArmorClass],
+        [document.getElementsByClassName('stats_input'), 'change', updateStats],
+        [document.getElementsByClassName('personalia_input'), 'change', updatePersonalia],
         [document.getElementById('feats_search_input'), 'input', findSuggestions],
         [document.getElementById('special_ability_search_input'), 'input', findSuggestions],
         [document.getElementById('spell_search_input'), 'input', findSuggestions],
