@@ -33,21 +33,60 @@ if(isset($_POST['action'])) {
     $ctrl->parseAction($view, $_SESSION['current_sheet'], $_POST);
 }
 
+$receive_data = file_get_contents("php://input");
+$request = json_decode($receive_data, true);
+
+if(isset($request['action']) && !empty($request['action'])) {
+    $action = $request['action'];
+    $segment = $request['segment'];
+    $decode = $request['decode'];
+    $data = $request['data'];
+
+    $post_data = array(
+        'action' => $action,
+        'segment' => $segment,
+        'decode' => $decode,
+        'data' => $data
+    );
+
+    $ctrl->parseAngularAction($view, $_SESSION['current_sheet'], $post_data);
+}
+
+/*
+if(isset($_POST['angular_action'])) {
+    $receive_data = file_get_contents("php://input");
+    $request = json_decode($receive_data);
+    $action = $request->action;
+    $segment = $request->segment;
+    $decode = $request->decode;
+    $data = $request->data;
+
+    $post_data = array(
+        'action' => $action,
+        'segment' => $segment,
+        'decode' => $decode,
+        'data' => $data
+    );
+
+    $ctrl->parseAngularAction($view, $_SESSION['current_sheet'], $post_data);
+}
+*/
+
 if(isset($_POST['add_language'])) {
     $ctrl->addLanguage($_SESSION['current_sheet'], $_POST['new_language']);
-    header('Location: character-sheet.php');
+    header('Location: character-sheet.php#languages');
     exit();
 }
 
 if(isset($_POST['add_currency'])) {
     $ctrl->addCurrency($_SESSION['current_sheet'], $_POST['new_currency']);
-    header('Location: character-sheet.php');
+    header('Location: character-sheet.php#currencies');
     exit();
 }
 
 if(isset($_POST['add_item'])) {
     $ctrl->addItem($_SESSION['current_sheet']);
-    header('Location: character-sheet.php');
+    header('Location: character-sheet.php#inventory');
     exit();
 }
 
@@ -83,7 +122,7 @@ if(isset($_POST['add_spell'])) {
     if(!empty($_POST['spell_search_template']) && !empty($_POST['spell_search_base_class']) && !empty($_POST['spell_search_input'])) {
         $ctrl->addSpell($_SESSION['current_sheet'], $_POST['spell_search_template'], $_POST['spell_search_base_class']);
     }
-    header('Location: character-sheet.php');
+    header('Location: character-sheet.php#spells');
     exit();
 }
 
@@ -102,6 +141,7 @@ if(!isset($_POST['add_attack']) &&
     !isset($_POST['add_language']) &&
     !isset($_POST['add_feat']) &&
     !isset($_POST['add_spell']) &&
+    !isset($request['action']) &&
     !isset($_POST['add_currency'])) {
     $view->render($character_sheet);
 }

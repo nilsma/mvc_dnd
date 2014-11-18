@@ -416,6 +416,29 @@ if(!class_exists('Character_Sheet_Model')) {
             $db->close();
         }
 
+        public function writeSpell($sheet_id, Array $data) {
+            $label = $data['label'];
+            $charges = $data['charges'];
+
+            $db = $this->connect();
+
+            $query = "UPDATE spell_list as sl, sheets as sh SET sl.charges=? WHERE sl.template_name=? AND sl.owner=sh.id AND sh.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('isi', $charges, $label, $sheet_id);
+                $stmt->execute();
+
+                $stmt->close();
+            }
+
+            $db->close();
+        }
+
         public function writeItem($sheet_id, Item $item) {
             $item_id = $item->getId();
             $name = $item->getName();
@@ -1373,6 +1396,45 @@ if(!class_exists('Character_Sheet_Model')) {
 
         }
 
+        public function getSkillArrayAngular($skills_id) {
+            $db = $this->connect();
+
+            $query = "SELECT st.common_name, st.key_ability, s.template_name, s.skill_mod, s.ability_mod, s.ranks, s.misc_mod FROM skill_templates as st, skill as s, skills as ss WHERE st.template_name=s.template_name and s.owner=ss.id AND ss.id=?;";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $skill_array = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $skills_id);
+                $stmt->execute();
+                $stmt->bind_result($common_name, $key_ability, $template_name, $skill_mod, $ability_mod, $ranks, $misc_mod);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $skill = array(
+                        'template_name' => $template_name,
+                        'common_name' => $common_name,
+                        'key_ability' => $key_ability,
+                        'skill_mod' => $skill_mod,
+                        'ability_mod' => $ability_mod,
+                        'ranks' => $ranks,
+                        'misc_mod' => $misc_mod
+                    );
+
+                    //$skill_array[$template_name] = $skill;
+                    array_push($skill_array, $skill);
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $skill_array;
+
+        }
+
         public function getSkillArray($skills_id) {
             $db = $this->connect();
 
@@ -1409,6 +1471,33 @@ if(!class_exists('Character_Sheet_Model')) {
 
         }
 
+        public function getInventoryId($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT i.id FROM inventory as i, sheets as s WHERE i.id=s.inventory AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $inventory_id = NULL;
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $inventory_id = $result;
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $inventory_id;
+        }
+
         public function getInventory($sheet_id) {
             $db = $this->connect();
 
@@ -1442,6 +1531,33 @@ if(!class_exists('Character_Sheet_Model')) {
 
             $db->close();
             return $inventory;
+        }
+
+        public function getCharacterWeight($sheet_id, $armors_id) {
+            $db = $this->connect();
+
+            $query = "select ((select sum(weight) from protective_item where owner=?) + arm.weight + s.weight) as total from armors as arms, armor as arm, shield as s, sheets as sh where arm.owner=arms.id and s.owner=arms.id and arms.id=? and arms.id=sh.armors and sh.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $weight = NULL;
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('iii', $armors_id, $armors_id, $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($result);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $weight = $result;
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $weight;
         }
 
         public function getItemsArray($inventory_id) {
@@ -1669,6 +1785,41 @@ if(!class_exists('Character_Sheet_Model')) {
             return $protective_items_array;
         }
 
+        public function getAttributesAngular($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT a.name, a.ability_score, a.ability_mod, a.temp_score, a.temp_mod FROM attribute as a, sheets as s WHERE a.owner=s.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $attributes_array = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($name, $ability_score, $ability_mod, $temp_score, $temp_mod);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $attribute = array(
+                        'ability_score' => $ability_score,
+                        'ability_mod' => $ability_mod,
+                        'temp_score' => $temp_score,
+                        'temp_mod' => $temp_mod
+                    );
+
+                    $attributes_array[$name] = $attribute;
+                }
+
+                $stmt->close();
+            }
+
+            $db->close();
+            return $attributes_array;
+        }
+
         public function getAttributes($sheet_id) {
             $db = $this->connect();
 
@@ -1702,6 +1853,44 @@ if(!class_exists('Character_Sheet_Model')) {
 
             $db->close();
             return $attributes_array;
+        }
+
+        public function getSavingThrowsAngular($sheet_id) {
+            $db = $this->connect();
+
+            $query = "SELECT st.name, st.key_ability, st.total, st.base_save, st.ability_mod, st.magic_mod, st.misc_mod, st.temp_mod FROM saving_throw as st, sheets as s WHERE st.owner=s.id AND s.id=?";
+            $query = $db->real_escape_string($query);
+
+            $stmt = $db->stmt_init();
+
+            $saving_throws_array = array();
+
+            if(!$stmt->prepare($query)) {
+                print("Failed to prepare query: " . $query . "\n");
+            } else {
+                $stmt->bind_param('i', $sheet_id);
+                $stmt->execute();
+                $stmt->bind_result($name, $key_ability, $total, $base_save, $ability_mod, $magic_mod, $misc_mod, $temp_mod);
+                $stmt->store_result();
+                while($stmt->fetch()) {
+                    $saving_throw = array(
+                        'key_ability' => $key_ability,
+                        'total' => $total,
+                        'base_save' => $base_save,
+                        'ability_mod' => $ability_mod,
+                        'magic_mod' => $magic_mod,
+                        'misc_mod' => $misc_mod,
+                        'temp_mod' => $temp_mod
+                    );
+
+                    $saving_throws_array[$name] = $saving_throw;
+                    //array_push($saving_throws_array, $saving_throw);
+                }
+                $stmt->close();
+            }
+
+            $db->close();
+            return $saving_throws_array;
         }
 
         public function getSavingThrows($sheet_id) {

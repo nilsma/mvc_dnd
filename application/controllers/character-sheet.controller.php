@@ -12,6 +12,65 @@ if(!class_exists('Character_Sheet_Controller')) {
             parent::__construct($model);
         }
 
+        public function parseAngularAction($view, $sheet_id, $post_data) {
+            $action = $post_data['action'];
+            $segment = $post_data['segment'];
+            $decode = $post_data['decode'];
+            $data = $post_data['data'];
+
+            switch($action) {
+                case "select":
+                    $this->handleAngularSelectAction($sheet_id, $segment);
+                    break;
+            }
+        }
+
+        public function handleAngularSelectAction($sheet_id, $segment) {
+            $action = 'select_' . $segment;
+
+            switch ($action) {
+                case "select_attributes":
+                    $attributes = $this->model->getAttributesAngular($sheet_id);
+                    $attributes_return_values = json_encode($attributes);
+                    echo $attributes_return_values;
+                    break;
+
+                case "select_saving_throws":
+                    $saving_throws = $this->model->getSavingThrowsAngular($sheet_id);
+                    $saving_throws_return_values = json_encode($saving_throws);
+                    echo $saving_throws_return_values;
+                    break;
+
+                case "select_skills":
+                    $skills_id = $this->model->getSkillsId($sheet_id);
+                    $skills = $this->model->getSkillArrayAngular($skills_id);
+                    $skills_return_values = json_encode($skills);
+                    echo $skills_return_values;
+                    break;
+
+                case "select_items":
+                    $inventory_id = $this->model->getInventoryId($sheet_id);
+                    $items_array = $this->model->getItemsArray($inventory_id);
+                    $items_return_values = json_encode($items_array);
+                    echo $items_return_values;
+                    break;
+
+                case "select_armor":
+                    $armors_id = $this->model->getarmorsId($sheet_id);
+                    $armor = $this->model->getArmor($armors_id);
+                    $armor_return_value = json_encode($armor);
+                    echo $armor_return_value;
+                    break;
+
+                case "select_shield":
+                    $armors_id = $this->model->getArmorsId($sheet_id);
+                    $shield = $this->model->getShield($armors_id);
+                    $shield_return_value = json_encode($shield);
+                    echo $shield_return_value;
+                    break;
+            }
+        }
+
         public function parseAction($view, $sheet_id, $array) {
             $action = $array['action'];
             $segment = $array['segment'];
@@ -64,6 +123,10 @@ if(!class_exists('Character_Sheet_Controller')) {
             switch($action) {
                 case "update_personalia":
                     $this->model->writePersonalia($sheet_id, new Personalia($data));
+                    break;
+
+                case "update_spell":
+                    $this->model->writeSpell($sheet_id, $data);
                     break;
 
                 case "update_stats":
@@ -208,6 +271,10 @@ if(!class_exists('Character_Sheet_Controller')) {
 
                 case "select_skill_description":
                     $view->getSkillDescription($data['template_name']);
+                    break;
+
+                case "select_attributes":
+                    return $this->model->getAttributes($sheet_id);
                     break;
             }
 

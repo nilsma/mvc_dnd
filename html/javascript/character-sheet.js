@@ -28,10 +28,10 @@ function confirmChoice(str) {
  * through the runQuery function.
  * Finally reloads the page to update the character sheet
  */
-function removeProtectiveItem() {
+function removeProtectiveItem(in_element) {
     if(confirmChoice('remove protective item')) {
         var data = new Object();
-        data.protective_item_id = this.parentNode.parentNode.childNodes[1].value;
+        data.protective_item_id = in_element.parentNode.parentNode.childNodes[1].value;
         runQuery("remove", "protective_item", JSON.stringify(data), false, true, function() {
             location.reload();
         });
@@ -43,10 +43,10 @@ function removeProtectiveItem() {
  * The function gets the item's SQL id from the HTML and removes the item from the database by sending
  * the id with the POST action to the governing PHP-file through the runQuery function
  */
-function removeItem() {
+function removeItem(in_element) {
     if(confirmChoice('remove item')) {
         var data = new Object();
-        data.item_id = this.parentNode.parentNode.childNodes[1].childNodes[0].value;
+        data.item_id = in_element.parentNode.parentNode.childNodes[1].childNodes[0].value;
         runQuery("remove", "item", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -60,10 +60,10 @@ function removeItem() {
  * through the runQuery function.
  * Finally reloads the page to update the character sheet
  */
-function removeAttack() {
+function removeAttack(in_element) {
     if(confirmChoice('remove attack')) {
         var data = new Object();
-        data.attack_id = this.parentNode.parentNode.childNodes[1].value;
+        data.attack_id = in_element.parentNode.parentNode.childNodes[1].value;
         runQuery("remove", "attack", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -77,10 +77,10 @@ function removeAttack() {
  * through the runQuery function.
  * Finally reloads the page to update the character sheet
  */
-function removeFeat() {
+function removeFeat(in_element) {
     if(confirmChoice('remove feat')) {
         var data = new Object();
-        data.template_name = this.parentNode.id;
+        data.template_name = in_element.parentNode.id;
         runQuery("remove", "feat", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -94,10 +94,10 @@ function removeFeat() {
  * through the runQuery function.
  * Finally reloads the page to update the character sheet
  */
-function removeSpell() {
+function removeSpell(in_element) {
     if(confirmChoice('remove spell')) {
         var data = new Object();
-        data.template_name = this.parentNode.parentNode.childNodes[1].id;
+        data.template_name = in_element.parentNode.parentNode.childNodes[1].id;
         runQuery("remove", "spell", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -111,10 +111,10 @@ function removeSpell() {
  * through the runQuery function.
  * Finally reloads the page to update the character sheet
  */
-function removeSpecialAbility() {
+function removeSpecialAbility(in_element) {
     if(confirmChoice('remove special ability')) {
         var data = new Object();
-        data.template_name = this.parentNode.id;
+        data.template_name = in_element.parentNode.id;
         runQuery("remove", "special_ability", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -128,10 +128,10 @@ function removeSpecialAbility() {
  * to the governing PHP-file through the runQuery function
  * Finally reloads the page to update the character sheet
  */
-function removeLanguage() {
+function removeLanguage(in_element) {
     if(confirmChoice('remove language')) {
         var data = new Object();
-        data.language = this.parentNode.childNodes[0].innerHTML;
+        data.language = in_element.parentNode.childNodes[0].innerHTML;
         runQuery("remove", "language", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -143,10 +143,10 @@ function removeLanguage() {
  * The function gets the currency's SQL label from the HTML and removes the currency from the database by
  * sending the label with the POST action to the governing PHP-file through the runQuery function
  */
-function removeCurrency() {
+function removeCurrency(in_element) {
     if(confirmChoice('remove currency')) {
         var data = new Object();
-        data.currency = this.parentNode.parentNode.childNodes[1].innerHTML;
+        data.currency = in_element.parentNode.parentNode.childNodes[1].innerHTML;
         runQuery("remove", "currency", JSON.stringify(data), false, false, function() {
             location.reload();
         });
@@ -157,11 +157,11 @@ function removeCurrency() {
  * A function to find temlates suggestions for the user
  * as the user adds text to search input field
  */
-function findSuggestions() {
-    var template_type = this.parentNode.id;
+function findSuggestions(in_element) {
+    var template_type = in_element.parentNode.id;
     var element = document.getElementById(template_type.concat('_box'));
     var data = new Object();
-    data.input = this.value;
+    data.input = in_element.value;
     runQuery("select", template_type, JSON.stringify(data), true, true, function(suggestions){
         addHTMLtoElement(element, suggestions);
     });
@@ -170,10 +170,10 @@ function findSuggestions() {
 /**
  * A function to get a special ability's description and add it to the special ability description div.
  */
-function showSpecialAbilityDescription() {
+function showSpecialAbilityDescription(in_element) {
     var element = document.getElementById('special_ability_template_description');
     var data = new Object();
-    data.template_name = this.parentNode.id;
+    data.template_name = in_element.parentNode.id;
     runQuery("select", "special_ability_description", JSON.stringify(data), false, true, function(description) {
         addHTMLtoElement(element, description);
     });
@@ -182,9 +182,9 @@ function showSpecialAbilityDescription() {
 /**
  * A function to get a feat's description and add it to the feat description div.
  */
-function showFeatDescription() {
+function showFeatDescription(in_element) {
     var data = new Object();
-    data.template_name = this.parentNode.id;
+    data.template_name = in_element.parentNode.id;
     var element = document.getElementById('feat_template_description');
     runQuery("select", "feat_description", JSON.stringify(data), false, true, function(description) {
         addHTMLtoElement(element, description);
@@ -194,10 +194,10 @@ function showFeatDescription() {
 /**
  * A function to get a skill's description and add it to the skill description div.
  */
-function showSkillDescription() {
+function showSkillDescription(in_element) {
     var element = document.getElementById('skill_template_description');
     var data = new Object();
-    data.template_name = this.parentNode.parentNode.childNodes[1].value;
+    data.template_name = in_element.parentNode.parentNode.childNodes[1].value;
     runQuery("select", "skill_description", JSON.stringify(data), false, true, function(description) {
         addHTMLtoElement(element, description);
     });
@@ -206,9 +206,9 @@ function showSkillDescription() {
 /**
  * A function to get a feat's description and add it to the feat description div.
  */
-function showSpellDescription() {
+function showSpellDescription(in_element) {
     var data = new Object();
-    data.template_name = this.parentNode.id;
+    data.template_name = in_element.parentNode.id;
     var element = document.getElementById('spell_template_description');
     runQuery("select", "spell_description", JSON.stringify(data), false, true, function(description) {
         addHTMLtoElement(element, description);
@@ -381,10 +381,9 @@ function getArmorClassData(callback) {
 /**
  * A function to write all of the attribute's fields' values to the database.
  */
-function updateAttribute() {
-    var label = this.parentNode.parentNode.childNodes[1].innerHTML;
+function updateAttribute(element) {
+    var label = element.parentNode.parentNode.childNodes[1].innerHTML;
     getAttributeData(label, function(data) {
-        alert(data);
         runQuery("update", "attribute", data, false, true);
     });
 }
@@ -413,8 +412,8 @@ function getAttributeData(label, callback) {
 /**
  * A function to write all of the current saving throw's fields' values to the database.
  */
-function updateSavingThrow() {
-    var label = this.parentNode.parentNode.childNodes[1].innerHTML;
+function updateSavingThrow(element) {
+    var label = element.parentNode.parentNode.childNodes[1].innerHTML;
     getSavingThrowData(label, function(data) {
         runQuery("update", "saving_throw", data, false, true);
     });
@@ -469,8 +468,8 @@ function getAttacksData(callback) {
 /**
  * A function to write all of the attack's fields' values to the database.
  */
-function updateAttack() {
-    var element = this.parentNode;
+function updateAttack(element) {
+    var element = element.parentNode;
     getAttackData(element, function(data) {
         runQuery("update", "attack", data, false, true);
     });
@@ -599,8 +598,8 @@ function getShieldData(callback) {
 /**
  * A function to write all of the protective item's fields' values to the database.
  */
-function updateProtectiveItem() {
-    var element = this.parentNode;
+function updateProtectiveItem(in_element) {
+    var element = in_element.parentNode;
     getProtectiveItemData(element, function(data) {
         runQuery("update", "protective_item", data, false, true);
     });
@@ -649,8 +648,8 @@ function getSkillsData(callback) {
 /**
  * A function to write all of the skill's fields' values to the database.
  */
-function updateSkill() {
-    var skill_element = this.parentNode.parentNode;
+function updateSkill(element) {
+    var skill_element = element.parentNode.parentNode;
     getSkillData(skill_element, function(data) {
         runQuery("update", "skill", data, false, true);
     });
@@ -664,10 +663,10 @@ function getSkillData(element, callback) {
     var data = new Object();
 
     data.template_name = element.childNodes[1].childNodes[1].value;
-    data.skill_mod = element.childNodes[5].childNodes[0].value;
-    data.ability_mod = element.childNodes[7].childNodes[0].value;
-    data.ranks = element.childNodes[9].childNodes[0].value;
-    data.misc_mod = element.childNodes[11].childNodes[0].value;
+    data.ability_mod = element.childNodes[5].childNodes[0].value;
+    data.ranks = element.childNodes[7].childNodes[0].value;
+    data.misc_mod = element.childNodes[9].childNodes[0].value;
+    data.skill_mod = element.childNodes[11].childNodes[0].value;
 
     callback(JSON.stringify(data));
 }
@@ -696,8 +695,8 @@ function getLanguagesData(callback) {
 /**
  * A function to write all of the item's fields' values to the database.
  */
-function updateItem() {
-    var item_element = this.parentNode.parentNode;
+function updateItem(element) {
+    var item_element = element.parentNode.parentNode;
     getItemData(item_element, function(data) {
         runQuery("update", "item", data, false, true);
     });
@@ -751,8 +750,8 @@ function getInventoryData(callback) {
 /**
  * A function to write all of the currency's fields' values to the database.
  */
-function updateCurrency() {
-    var currency_element = this.parentNode.parentNode;
+function updateCurrency(in_element) {
+    var currency_element = in_element.parentNode.parentNode;
     getCurrencyData(currency_element, function(data) {
         runQuery("update", "currency", data, false, true);
     });
@@ -773,13 +772,35 @@ function getCurrencyData(element, callback) {
 }
 
 /**
+ * A function to write all of the currency's fields' values to the database.
+ */
+function updateSpell(in_element) {
+    var spell_element = in_element.parentNode.parentNode;
+    getSpellData(spell_element, function(data) {
+        runQuery("update", "spell", data, false, true);
+    });
+}
+
+/**
+ * A function to get the current currency's fields' values, in JSON-format (variable:value)
+ * @param callback
+ */
+function getSpellData(element, callback) {
+    var data = new Object();
+    data.label = element.childNodes[1].id;
+    data.charges = element.childNodes[2].childNodes[0].value;
+
+    callback(JSON.stringify(data));
+}
+
+/**
  * A function to set the selected segment in the spell search, ie. which class and level the search is for.
  */
-function setSelected() {
+function setSelected(in_element) {
     var data = new Object();
-    data.selected = this.value;
+    data.selected = in_element.value;
 
-    var segment = this.parentNode.name;
+    var segment = in_element.parentNode.name;
     runQuery("set", segment, JSON.stringify(data), false, true, function() {
         location.reload();
     });
@@ -842,7 +863,7 @@ function addListeners(ix_array) {
         //check if elements is an array
         //if not; make elements a new array and push single object
         if(!elements.length > 0) {
-            elements = new Array();
+            elements = [];
             elements.push(ix_array[i][0]);
         }
 
@@ -850,7 +871,6 @@ function addListeners(ix_array) {
         for(var x = 0; x < elements.length; x++) {
             elements[x].addEventListener(ix_array[i][1], ix_array[i][2], false);
         }
-
     }
 }
 
@@ -859,12 +879,12 @@ function addListeners(ix_array) {
  */
 function init() {
     var ix_elements = [
+        /*
         [document.getElementsByTagName('option'), 'click', setSelected],
         [document.getElementsByClassName('inventory_input'), 'change', updateInventory],
-        [document.getElementsByClassName('item_input'), 'change', updateItem],
         [document.getElementsByClassName('currency_input'), 'change', updateCurrency],
         [document.getElementsByClassName('languages_input'), 'change', updateLanguages],
-        [document.getElementsByClassName('skill_input'), 'change', updateSkill],
+        //[document.getElementsByClassName('skill_input'), 'change', updateSkill],
         [document.getElementsByClassName('skills_input'), 'change', updateSkills],
         [document.getElementsByClassName('protective_item_input'), 'change', updateProtectiveItem],
         [document.getElementsByClassName('shield_input'), 'change', updateShield],
@@ -872,8 +892,8 @@ function init() {
         [document.getElementsByClassName('grapple_input'), 'change', updateGrapple],
         [document.getElementsByClassName('attack_input'), 'change', updateAttack],
         [document.getElementsByClassName('attacks_input'), 'change', updateAttacks],
-        [document.getElementsByClassName('saving_throw_input'), 'change', updateSavingThrow],
-        [document.getElementsByClassName('attribute_input'), 'change', updateAttribute],
+        //[document.getElementsByClassName('saving_throw_input'), 'change', updateSavingThrow],
+        //[document.getElementsByClassName('attribute_input'), 'change', updateAttribute],
         [document.getElementsByClassName('armor_class_input'), 'change', updateArmorClass],
         [document.getElementsByClassName('stats_input'), 'change', updateStats],
         [document.getElementsByClassName('personalia_input'), 'change', updatePersonalia],
@@ -884,14 +904,16 @@ function init() {
         [document.getElementsByClassName('special_ability_template_info'), 'click', showSpecialAbilityDescription],
         [document.getElementsByClassName('spell_template_description'), 'click', showSpellDescription],
         [document.getElementsByClassName('skill_template_info'), 'click', showSkillDescription],
+
+        [document.getElementsByClassName('remove_spell'), 'click', removeSpell],
+        [document.getElementsByClassName('remove_item'), 'click', removeItem],
+        [document.getElementsByClassName('remove_currency'), 'click', removeCurrency],
+        [document.getElementsByClassName('remove_language'), 'click', removeLanguage],
         [document.getElementsByClassName('remove_special_ability'), 'click', removeSpecialAbility],
         [document.getElementsByClassName('remove_feat'), 'click', removeFeat],
-        [document.getElementsByClassName('remove_spell'), 'click', removeSpell],
         [document.getElementsByClassName('remove_attack'), 'click', removeAttack],
-        [document.getElementsByClassName('remove_protective_item'), 'click', removeProtectiveItem],
-        [document.getElementsByClassName('remove_currency'), 'click', removeCurrency],
-        [document.getElementsByClassName('remove_item'), 'click', removeItem],
-        [document.getElementsByClassName('remove_language'), 'click', removeLanguage]
+        [document.getElementsByClassName('remove_protective_item'), 'click', removeProtectiveItem]
+        */
     ];
 
     addListeners(ix_elements);

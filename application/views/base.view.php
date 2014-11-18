@@ -35,7 +35,7 @@ if(!class_exists('Base_View')) {
 
             $html .= '<title>DNDHelper</title>' . "\n";
             $html .= '</head>' . "\n";
-            $html .= '<body ng-app="myApp" id="' . $page_id . '">' . "\n";
+            $html .= '<body ng-app="myApp" ng-controller="MainCtrl" id="' . $page_id . '">' . "\n";
             $html .= '<div id="main_container">' . "\n";
             $html .= '<header>' . "\n";
 
