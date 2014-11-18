@@ -4,6 +4,10 @@
  */
 session_start();
 
+if(!isset($_SESSION['auth'])) {
+    header('Location: index.php');
+}
+
 require_once '../application/libs/config.php';
 
 $model = new Character_Sheet_Model();
