@@ -30,7 +30,7 @@ if(!class_exists('About_View')) {
             $html .= '<p>So you would probably not want to rely on DNDHelper as a permanent storage of ';
             $html .= 'your characters - not yet anyway</p>' . "\n";
             $html .= '<p>Any feedback about the application is most welcome at <a id="email" href="mailto:dnd%40nima-design%2enet?subject=DNDHelper" title="Send me an email">dnd@nima-design.net</a></p>';
-            $html .= '<p><a href="register.php">Register</a> or <a href="login.php">login</a> to start using Lister.</p>' . "\n";
+            $html .= '<p><a href="register.php">Register</a> or <a href="login.php">login</a> to start using DNDHelper.</p>' . "\n";
             $html .= '</div>' . "\n";
 
             echo $html;
