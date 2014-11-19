@@ -29,6 +29,25 @@ if(!class_exists('Character_Sheet_Controller')) {
             $action = 'select_' . $segment;
 
             switch ($action) {
+                case "select_stats":
+                    $stats = $this->model->getStats($sheet_id);
+                    $stats_return_values = json_encode($stats);
+                    echo $stats_return_values;
+                    break;
+
+                case "select_protective_items":
+                    $armors_id = $this->model->getArmorsId($sheet_id);
+                    $protective_items = $this->model->getProtectiveItems($armors_id);
+                    $protective_items_return_values = json_encode($protective_items);
+                    echo $protective_items_return_values;
+                    break;
+
+                case "select_armor_class":
+                    $armor_class = $this->model->getArmorClass($sheet_id);
+                    $armor_class_return_values = json_encode($armor_class);
+                    echo $armor_class_return_values;
+                    break;
+
                 case "select_attributes":
                     $attributes = $this->model->getAttributesAngular($sheet_id);
                     $attributes_return_values = json_encode($attributes);

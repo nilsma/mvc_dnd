@@ -102,10 +102,12 @@ if(!class_exists('Character_Sheet_View')) {
 
             $html .= '<div id="stats">' . "\n";
             $html .= '<h2>Stats</h2>' . "\n";
-            $html .= '<label for="stats_hp">HP: </label>';
-            $html .= '<input onchange="updateStats();" class="stats_input" id="stats_hp" name="stats_hp" type="number" value="' . $stats->getHp() . '">' . "\n";
             $html .= '<label for="stats_wounds">Wounds: </label>';
-            $html .= '<input onchange="updateStats();" class="stats_input" id="stats_wounds" name="stats_wounds" type="number" value="' . $stats->getWounds() . '">' . "\n";
+            $html .= '<input onchange="updateStats();" class="stats_input" id="stats_wounds" name="stats_wounds" type="number" ng-model="stats_wounds">' . "\n";
+            $html .= '<label for="stats_hp">HP: </label>';
+            $html .= '<input onchange="updateStats();" class="stats_input" id="stats_hp" name="stats_hp" type="number" ng-model="stats_hp">' . "\n";
+            $html .= '<label for="stats_remaining_hp">Remaining HP: </label>';
+            $html .= '<input class="stats_input" id="stats_remaining_hp" name="stats_remaining_hp" type="number" value="{{ calculateRemainingHitpoints(stats_wounds, stats_hp) }}" disabled>' . "\n";
             $html .= '<label for="stats_non_lethal">Non Lethal: </label>';
             $html .= '<input onchange="updateStats();" class="stats_input" id="stats_non_lethal" name="stats_non_lethal" type="number" value="' . $stats->getNonLethal() . '">' . "\n";
             $html .= '<label for="stats_initiative_mod">Initiative Mod: </label>';
@@ -127,25 +129,32 @@ if(!class_exists('Character_Sheet_View')) {
             $html = '';
             
             $html .= '<div id="armor_class">' . "\n";
+            $html .= '<div>' . "\n";
             $html .= '<h3>Armor Class</h3>' . "\n";
-            $html .= '<label for="armor_class_total">Armor Class: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_total" name="armor_class_total" type="number" value="' . $armor_class->getAcTotal() . '">' . "\n";
             $html .= '<label for="armor_class_base">Base: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_base" name="armor_class_base" type="number" value="' . $armor_class->getAcBase() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_base" name="armor_class_base" type="number" value="{{ armor_class_base }}" disabled>' . "\n";
             $html .= '<label for="armor_class_armor_bonus">Armor Bonus: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_armor_bonus" name="armor_class_armor_bonus" type="number" value="' . $armor_class->getAcArmorBonus() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_armor_bonus" name="armor_class_armor_bonus" type="number" value="{{ armor_ac_bonus }}" disabled>' . "\n";
             $html .= '<label for="armor_class_shield_bonus">Shield Bonus: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_shield_bonus" name="armor_class_shield_bonus" type="number" value="' . $armor_class->getAcShieldBonus() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_shield_bonus" name="armor_class_shield_bonus" type="number" value="{{ shield_ac_bonus }}" disabled>' . "\n";
             $html .= '<label for="armor_class_dex_mod">Dex Mod: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_dex_mod" name="armor_class_dex_mod" type="number" value="' . $armor_class->getAcDexMod() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_dex_mod" name="armor_class_dex_mod" type="number" value="{{ getSkillAbilityModifier(\'DEX\') }}" disabled>' . "\n";
             $html .= '<label for="armor_class_size_mod">Size Mod: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_size_mod" name="armor_class_size_mod" type="number" value="' . $armor_class->getAcSizeMod() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_size_mod" name="armor_class_size_mod" type="number" ng-model="armor_class_size_mod">' . "\n";
             $html .= '<label for="armor_class_natural_armor">Natural Armor: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_natural_armor" name="armor_class_natural_armor" type="number" value="' . $armor_class->getAcNaturalArmor() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_natural_armor" name="armor_class_natural_armor" type="number" ng-model="armor_class_natural_armor">' . "\n";
+            $html .= '<label for="armor_class_protective_items">Protective Items AC: </label>';
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_protective_items" name="armor_class_protective_item" type="number" value="{{ sumProtectiveItems() }}" disabled>' . "\n";
+            $html .= '<label for="armor_class_total">Armor Class: </label>';
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_total" name="armor_class_total" type="number" value="{{ sumArmorClass(armor_class_base, armor_ac_bonus, shield_ac_bonus, getSkillAbilityModifier(\'DEX\'), armor_class_size_mod, armor_class_natural_armor) }}" disabled>' . "\n";
+            $html .= '</div>' . "\n";
+            $html .= '<div>' . "\n";
             $html .= '<label for="armor_class_touch_ac">Touch AC: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_touch_ac" name="armor_class_touch_ac" type="number" value="' . $armor_class->getAcTouchAc() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_touch_ac" name="armor_class_touch_ac" type="number" value="{{ sumTouchArmorClass(armor_class_base, getSkillAbilityModifier(\'DEX\'), armor_class_size_mod) }}" disabled>' . "\n";
             $html .= '<label for="armor_class_flat_footed_ac">Flat Footed AC: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_flat_footed_ac" name="armor_class_flat_footed_ac" type="number" value="' . $armor_class->getAcFlatFootedAc() . '">' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_flat_footed_ac" name="armor_class_flat_footed_ac" type="number" value="{{ sumFlatFootedArmorClass(armor_class_base, armor_class_armor_bonus, armor_class_shield_bonus, armor_class_size_mod, armor_class_natural_armor) }}" disabled>' . "\n";
+            $html .= '</div>' . "\n";
+
             $html .= '</div> <!-- end #armor_class -->' . "\n";
             
             return $html;
@@ -212,22 +221,16 @@ if(!class_exists('Character_Sheet_View')) {
 
             $html .= '<tbody>' . "\n";
 
-            foreach($saving_throws as $saving_throw) {
-                $name = ucwords($saving_throw->getName());
-                $label = strtolower($name);
-                $key_ability = $saving_throw->getKeyAbility();
-
-                $html .= '<tr>' . "\n";
-                $html .= '<td>' . $name . '</td>' . "\n";
-                $html .= '<td>(' . strtoupper(substr($key_ability, 0, 3)) . ')</td>' . "\n";
-                $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="' . $label . '_base_save" type="number" ng-model="' . $label . '_base_save"></td>' . "\n";
-                $html .= '<td><input class="saving_throw_input" id="' . $label . '_ability_mod" type="number" value="{{ getSavingThrowAbilityModifier(\'' . $label . '\') }}" disabled></td>' . "\n";
-                $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="' . $label . '_magic_mod" type="number" ng-model="' . $label . '_magic_mod"></td>' . "\n";
-                $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="' . $label . '_misc_mod" type="number" ng-model="' . $label . '_misc_mod"></td>' . "\n";
-                $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="' . $label . '_temp_mod" type="number" ng-model="' . $label . '_temp_mod"></td>' . "\n";
-                $html .= '<td><input class="saving_throw_input" id="' . $label . '_total" type="number" value="{{ sumSavingThrow(' . $label . '_base_save, getSavingThrowAbilityModifier(' . $label . '_ability_mod), ' . $label . '_magic_mod, ' . $label . '_misc_mod, ' . $label . '_temp_mod) }}" disabled></td>' . "\n";
-                $html .= '</tr>' . "\n";
-            }
+            $html .= '<tr ng-repeat="saving_throw in saving_throws_array">' . "\n";
+            $html .= '<td>{{ saving_throw[\'label\'] }}</td>' . "\n";
+            $html .= '<td>{{ saving_throw[\'key_ability\'] }}</td>' . "\n";
+            $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_base_save" type="number" ng-model="saving_throw[\'base_save\']"></td>' . "\n";
+            $html .= '<td><input class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_ability_mod" type="number" value="{{ getSavingThrowAbilityModifier(saving_throw[\'label\']) }}" disabled></td>' . "\n";
+            $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_magic_mod" type="number" ng-model="saving_throw[\'magic_mod\']"></td>' . "\n";
+            $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_misc_mod" type="number" ng-model="saving_throw[\'misc_mod\']"></td>' . "\n";
+            $html .= '<td><input onchange="updateSavingThrow(this);" class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_temp_mod" type="number" ng-model="saving_throw[\'temp_mod\']"></td>' . "\n";
+            $html .= '<td><input class="saving_throw_input" id="{{ saving_throw[\'label\'] }}_total" type="number" value="{{ sumSavingThrow(saving_throw[\'base_save\'], getSavingThrowAbilityModifier(saving_throw[\'label\']), saving_throw[\'magic_mod\'], saving_throw[\'misc_mod\'], saving_throw[\'temp_mod\']) }}" disabled></td>' . "\n";
+            $html .= '</tr>' . "\n";
 
             $html .= '</tbody>' . "\n";
             $html .= '</table>' . "\n";
@@ -380,7 +383,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<label for="armor_type">Type: </label>';
             $html .= '<input onchange="updateArmor();" class="armor_input" id="armor_type" name="armor_type" type="text" maxlength="50" value="' . $armor->getType() . '">' . "\n";
             $html .= '<label for="armor_ac_bonus">AC Bonus: </label>';
-            $html .= '<input onchange="updateArmor();" class="armor_input" id="armor_ac_bonus" name="armor_ac_bonus" type="number" value="' . $armor->getAcBonus() . '">' . "\n";
+            $html .= '<input onchange="updateArmor();" class="armor_input" id="armor_ac_bonus" name="armor_ac_bonus" type="number" ng-model="armor_ac_bonus">' . "\n";
             $html .= '<label for="armor_max_dex">Max Dex: </label>';
             $html .= '<input onchange="updateArmor();" class="armor_input" id="armor_max_dex" name="armor_max_dex" type="number" value="' . $armor->getMaxDex() . '">' . "\n";
             $html .= '<label for="armor_check_penalty">Check Penalty: </label>';
@@ -407,7 +410,7 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<label for="shield_name">Shield: </label>';
             $html .= '<input onchange="updateShield();" class="shield_input" id="shield_name" name="shield_name" type="text" maxlength="50" value="' . $shield->getName() . '">' . "\n";
             $html .= '<label for="shield_ac_bonus">AC Bonus: </label>';
-            $html .= '<input onchange="updateShield();" class="shield_input" id="shield_ac_bonus" name="shield_ac_bonus" type="number" value="' . $shield->getAcBonus() . '">' . "\n";
+            $html .= '<input onchange="updateShield();" class="shield_input" id="shield_ac_bonus" name="shield_ac_bonus" type="number" ng-model="shield_ac_bonus">' . "\n";
             $html .= '<label for="shield_check_penalty">Check Penalty: </label>';
             $html .= '<input onchange="updateShield();" class="shield_input" id="shield_check_penalty" name="shield_check_penalty" type="number" value="' . $shield->getCheckPenalty() . '">' . "\n";
             $html .= '<label for="shield_spell_failure">Spell Failure: </label>';
@@ -428,9 +431,18 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<div id="protective_items">' . "\n";
             $html .= '<h3>Protective Items</h3>' . "\n";
 
-            foreach($protective_items as $protective_item) {
-                $html .= $this->buildProtectiveItem($protective_item);
-            }
+            $html .= '<div ng-repeat="protective_item in protective_items_array" class="protective_item">' . "\n";
+            $html .= '<input class="protective_item_input" name="protective_item_id" type="number" value="{{ protective_item[\'protective_item_id\'] }}" hidden>' . "\n";
+            $html .= '<label>Name: </label>';
+            $html .= '<input onchange="updateProtectiveItem(this);" class="protective_item_input" name="protective_item_name" type="text" maxlength="50" ng-model="protective_item[\'protective_item_name\']">' . "\n";
+            $html .= '<label for="protective_item_ac_bonus">AC Bonus: </label>';
+            $html .= '<input onchange="updateProtectiveItem(this);" class="protective_item_input" id="protective_item_ac_bonus" name="protective_item_ac_bonus" type="number" ng-model="protective_item[\'protective_item_ac_bonus\']">' . "\n";
+            $html .= '<label for="protective_item_weight">Weight: </label>';
+            $html .= '<input onchange="updateProtectiveItem(this);" class="protective_item_input" id="protective_item_weight" name="protective_item_weight" type="number" ng-model="protective_item[\'protective_item_weight\']">' . "\n";
+            $html .= '<label for="protective_item_special_properties">Special Properties: </label>';
+            $html .= '<input onchange="updateProtectiveItem(this);" class="protective_item_input" id="protective_item_special_properties" name="protective_item_special_properties" type="text" maxlength="200" ng-model="protective_item[\'protective_item_special_properties\']">' . "\n";
+            $html .= '<p class="gui"><a class="remove_protective_item" onclick="removeProtectiveItem(this);" href="javascript:void()">remove</a></p>' . "\n";
+            $html .= '</div> <!-- end .protective_item -->' . "\n";
 
             $html .= '<input name="add_protective_item" type="submit" value="Add New Protective Item">' . "\n";
 

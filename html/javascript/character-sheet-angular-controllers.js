@@ -1,5 +1,44 @@
 var myApp = angular.module('myApp', []);
 
+myApp.factory('statsGetter', function($http) {
+    return {
+        getStatsData: function() {
+            return $http.post('../character-sheet.php', {
+                action: 'select',
+                segment: 'stats',
+                decode: false,
+                data: null
+            });
+        }
+    };
+});
+
+myApp.factory('protectiveItemsGetter', function($http) {
+    return {
+        getProtectiveItemsData: function() {
+            return $http.post('../character-sheet.php', {
+                action: 'select',
+                segment: 'protective_items',
+                decode: false,
+                data: null
+            });
+        }
+    };
+});
+
+myApp.factory('armorClassGetter', function($http) {
+    return {
+        getArmorClassData: function() {
+            return $http.post('../character-sheet.php', {
+                action: 'select',
+                segment: 'armor_class',
+                decode: false,
+                data: null
+            });
+        }
+    };
+});
+
 myApp.factory('itemGetter', function($http) {
     return {
         getItemData: function() {
@@ -78,7 +117,7 @@ myApp.factory('attributeGetter', function($http) {
     };
 });
 
-myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 'skillGetter', 'itemGetter', 'armorGetter', 'shieldGetter', function($scope, attributeGetter, savingThrowGetter, skillGetter, itemGetter, armorGetter, shieldGetter) {
+myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 'skillGetter', 'itemGetter', 'armorGetter', 'shieldGetter', 'armorClassGetter', 'statsGetter', 'protectiveItemsGetter', function($scope, attributeGetter, savingThrowGetter, skillGetter, itemGetter, armorGetter, shieldGetter, armorClassGetter, statsGetter, protectiveItemsGetter) {
     var handleAttributeSuccess = function(data) {
         $scope.strength_base = data['strength']['ability_score'];
         //$scope.strength_ability_mod = $scope.getAbilityModifier($scope.strength_base);
@@ -110,6 +149,9 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
     };
 
     var handleSavingThrowSuccess = function(data) {
+        $scope.saving_throws_array = data;
+
+        /*
         $scope.fortitude_base_save = data['fortitude']['base_save'];
         //$scope.fortitude_ability_mod = $scope.constitution_ability_mod;
         //$scope.fortitude_ability_mod = $scope.getAbilityModifier($scope.constitution_base);
@@ -128,6 +170,7 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
         $scope.will_magic_mod = data['will']['magic_mod'];
         $scope.will_misc_mod = data['will']['misc_mod'];
         $scope.will_temp_mod = data['will']['temp_mod'];
+        */
     };
 
     var handleSavingThrowError = function() {
@@ -154,6 +197,7 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
     };
 
     var handleArmorSuccess = function(data) {
+        $scope.armor_ac_bonus = data['armor_ac_bonus'];
         $scope.armor_weight = data['armor_weight'];
     };
 
@@ -162,11 +206,42 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
     };
 
     var handleShieldSuccess = function(data) {
+        $scope.shield_ac_bonus = data['shield_ac_bonus'];
         $scope.shield_weight = data['shield_weight'];
     };
 
     var handleShieldError = function() {
         alert('get shield error');
+    };
+
+    var handleArmorClassSuccess = function(data) {
+        $scope.armor_class_base = 10;
+        $scope.armor_class_armor_bonus = data['ac_armor_bonus'];
+        $scope.armor_class_shield_bonus = data['ac_shield_bonus'];
+        $scope.armor_class_dex_mod = $scope.getAbilityModifier($scope.dexterity_base);
+        $scope.armor_class_size_mod = data['ac_size_mod'];
+        $scope.armor_class_natural_armor = data['ac_natural_armor'];
+    };
+
+    var handleArmorClassError = function() {
+        alert('get armor class error');
+    };
+
+    var handleStatsSuccess = function(data) {
+        $scope.stats_hp = data['stats_hp'];
+        $scope.stats_wounds = data['stats_wounds'];
+    };
+
+    var handleStatsError = function() {
+        alert('get stats error');
+    };
+
+    var handleProtectiveItemsSuccess = function(data) {
+        $scope.protective_items_array = data;
+    };
+
+    var handleProtectiveItemsError = function() {
+        alert('get protective items error');
     };
 
     attributeGetter.getAttributeData().success(handleAttributeSuccess).error(handleAttributeError);
@@ -175,6 +250,9 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
     itemGetter.getItemData().success(handleItemSuccess).error(handleItemError);
     armorGetter.getArmorData().success(handleArmorSuccess).error(handleArmorError);
     shieldGetter.getShieldData().success(handleShieldSuccess).error(handleShieldError);
+    armorClassGetter.getArmorClassData().success(handleArmorClassSuccess).error(handleArmorClassError);
+    statsGetter.getStatsData().success(handleStatsSuccess).error(handleStatsError);
+    protectiveItemsGetter.getProtectiveItemsData().success(handleProtectiveItemsSuccess).error(handleProtectiveItemsError);
 
     //calculate the saving throw ability modifier
     $scope.getSavingThrowAbilityModifier = function(key) {
@@ -224,14 +302,34 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
         return (ability_mod + ranks + misc_mod);
     };
 
-    //calculate the saving throw's sum
-    $scope.sumSavingThrow = function(base_save, ability_mod, magic_mod, misc_mod, temp_mod) {
-        return (base_save + ability_mod + magic_mod + misc_mod + temp_mod);
-    };
-
     //calculate item weight
     $scope.calculateItemWeight = function(quantity, weight) {
         return (quantity * weight);
+    };
+
+    //calculate the remaining hitpoints
+    $scope.calculateRemainingHitpoints = function(stats_wounds, stats_hp) {
+        return (stats_hp - stats_wounds);
+    };
+
+    //calculate the flat footed armor class sum
+    $scope.sumFlatFootedArmorClass = function(base, armor_bonus, shield_bonus, size_mod, natural_armor) {
+        return(base + armor_bonus + shield_bonus + size_mod + natural_armor);
+    };
+
+    //calculate the touch armor class sum
+    $scope.sumTouchArmorClass = function(base, dex_mod, size_mod) {
+        return(base + dex_mod + size_mod);
+    };
+
+    //calculate the armor class sum
+    $scope.sumArmorClass = function(base, armor_bonus, shield_bonus, dex_mod, size_mod, natural_armor) {
+        return (base + armor_bonus + shield_bonus + dex_mod + size_mod + natural_armor);
+    };
+
+    //calculate the saving throw's sum
+    $scope.sumSavingThrow = function(base_save, ability_mod, magic_mod, misc_mod, temp_mod) {
+        return (base_save + ability_mod + magic_mod + misc_mod + temp_mod);
     };
 
     //calculate character total weight
@@ -241,6 +339,16 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
         armor_weight = parseFloat($scope.armor_weight);
         shield_weight = parseFloat($scope.shield_weight);
         return $scope.itemsTotal+$scope.armor_weight+$scope.shield_weight;
+    };
+
+    //sum protective items AC
+    $scope.sumProtectiveItems = function() {
+        var protective_items_ac = 0;
+        for(var i = 0; i < $scope.protective_items_array.length; i++) {
+            protective_items_ac += $scope.protective_items_array[i]['protective_item_ac_bonus'];
+        }
+
+        return protective_items_ac;
     };
 
     //calculate items total weight
@@ -254,5 +362,5 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
 
         sumItemsTotal = sumItemsTotal.toFixed(2);
         return sumItemsTotal;
-    }
+    };
 }]);

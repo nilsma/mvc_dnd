@@ -1870,10 +1870,11 @@ if(!class_exists('Character_Sheet_Model')) {
             } else {
                 $stmt->bind_param('i', $sheet_id);
                 $stmt->execute();
-                $stmt->bind_result($name, $key_ability, $total, $base_save, $ability_mod, $magic_mod, $misc_mod, $temp_mod);
+                $stmt->bind_result($label, $key_ability, $total, $base_save, $ability_mod, $magic_mod, $misc_mod, $temp_mod);
                 $stmt->store_result();
                 while($stmt->fetch()) {
                     $saving_throw = array(
+                        'label' => $label,
                         'key_ability' => $key_ability,
                         'total' => $total,
                         'base_save' => $base_save,
@@ -1883,8 +1884,8 @@ if(!class_exists('Character_Sheet_Model')) {
                         'temp_mod' => $temp_mod
                     );
 
-                    $saving_throws_array[$name] = $saving_throw;
-                    //array_push($saving_throws_array, $saving_throw);
+                    //$saving_throws_array[$name] = $saving_throw;
+                    array_push($saving_throws_array, $saving_throw);
                 }
                 $stmt->close();
             }
