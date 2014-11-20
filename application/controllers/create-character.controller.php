@@ -214,7 +214,7 @@ if(!class_exists('Create_Character_Controller')) {
          * @return Personalia - a class representation of the Character_Sheet personalia segment
          */
         public function createPersonalia() {
-
+            /*
             $personalia_entries = array (
                 'name' => $_POST['personalia_name'],
                 'class' => $_POST['personalia_class'],
@@ -233,6 +233,26 @@ if(!class_exists('Create_Character_Controller')) {
                 'xp' => $_POST['personalia_xp'],
                 'next_level' => $_POST['personalia_next_level']
             );
+            */
+
+            $personalia_entries = array (
+                'name' => $_POST['personalia_name'],
+                'class' => 'Character Class',
+                'level' => 'Character Level',
+                'size' => 'Size',
+                'age' => 18,
+                'gender' => 'Male',
+                'height' => 180,
+                'weight' => 80,
+                'eyes' => 'Brown',
+                'hair' => 'Brown',
+                'skin' => 'Bronze',
+                'race' => 'Human',
+                'alignment' => 'True Neutral',
+                'deity' => 'Olidamarra',
+                'xp' => 1,
+                'next_level' => 1000
+            );
 
             $washed = Utils::washArray($personalia_entries);
             $personalia = new Personalia($washed);
@@ -250,6 +270,7 @@ if(!class_exists('Create_Character_Controller')) {
          */
         public function createStats() {
 
+            /*
             $stats_entries = array (
                 'stats_hp' => $_POST['stats_hp'],
                 'stats_wounds' => $_POST['stats_wounds'],
@@ -258,6 +279,17 @@ if(!class_exists('Create_Character_Controller')) {
                 'stats_spell_resistance' => $_POST['stats_spell_resistance'],
                 'stats_speed' => $_POST['stats_speed'],
                 'stats_damage_reduction' => $_POST['stats_damage_reduction']
+            );
+            */
+
+            $stats_entries = array (
+                'stats_hp' => 10,
+                'stats_wounds' => 0,
+                'stats_non_lethal' => 0,
+                'stats_initiative_mod' => 1,
+                'stats_spell_resistance' => 0,
+                'stats_speed' => 0,
+                'stats_damage_reduction' => 0
             );
 
             $washed = Utils::washArray($stats_entries);
@@ -272,7 +304,7 @@ if(!class_exists('Create_Character_Controller')) {
          * @return Armor_Class - a class representation of the Stats class' Armor_Class sub-segment.
          */
         public function createArmorClass() {
-            
+            /*
             $armor_class_entries = array (
                 'ac_total' => $_POST['ac_total'],
                 'ac_base' => $_POST['ac_base'],
@@ -283,6 +315,19 @@ if(!class_exists('Create_Character_Controller')) {
                 'ac_natural_armor' => $_POST['ac_natural_armor'],
                 'ac_touch_ac' => $_POST['ac_touch_ac'],
                 'ac_flat_footed_ac' => $_POST['ac_flat_footed_ac']
+            );
+            */
+
+            $armor_class_entries = array (
+                'ac_total' => 0,
+                'ac_base' => 0,
+                'ac_armor_bonus' => 0,
+                'ac_shield_bonus' => 0,
+                'ac_dex_mod' => 0,
+                'ac_size_mod' => 0,
+                'ac_natural_armor' => 0,
+                'ac_touch_ac' => 0,
+                'ac_flat_footed_ac' => 0
             );
 
             $washed = Utils::washArray($armor_class_entries);
@@ -297,12 +342,22 @@ if(!class_exists('Create_Character_Controller')) {
          * @return Grapple - a class representation of the Attacks class' Grapple sub-segment.
          */
         public function createGrapple() {
+            /*
             $grapple_entries = array (
                 'grapple_total' => $_POST['grapple_total'],
                 'grapple_bab' => $_POST['grapple_base_attack_bonus'],
                 'grapple_str_mod' => $_POST['grapple_str_mod'],
                 'grapple_size_mod' => $_POST['grapple_size_mod'],
                 'grapple_misc_mod' => $_POST['grapple_misc_mod']
+            );
+            */
+
+            $grapple_entries = array (
+                'grapple_total' => 0,
+                'grapple_bab' => 0,
+                'grapple_str_mod' => 0,
+                'grapple_size_mod' => 0,
+                'grapple_misc_mod' => 0
             );
 
             $washed = Utils::washArray($grapple_entries);
@@ -319,12 +374,19 @@ if(!class_exists('Create_Character_Controller')) {
          * @return Attacks - a class representation of the Character_Sheet Attacks segment
          */
         public function createAttacks() {
-            $grapple = $this->createGrapple();
+            //$grapple = $this->createGrapple();
             $attacks_array = $this->createAttacksArray();
 
+            /*
             $attacks_entries = array (
                 'base_attack_bonus' => $_POST['attacks_base_attack_bonus'],
                 'attacks_per_round' => $_POST['attacks_attacks_per_round']
+            );
+            */
+
+            $attacks_entries = array (
+                'base_attack_bonus' => 0,
+                'attacks_per_round' => 0
             );
 
             $washed = Utils::washArray($attacks_entries);
@@ -419,6 +481,8 @@ if(!class_exists('Create_Character_Controller')) {
 
             foreach($templates_array as $template) {
                 $template_name = $template['template_name'];
+
+                /*
                 $skill_entries = array(
                     'template_name' => $template_name,
                     'skill_mod' => $_POST['skill_' . $template_name . '_skill_mod'],
@@ -426,15 +490,31 @@ if(!class_exists('Create_Character_Controller')) {
                     'ranks' => $_POST['skill_' . $template_name . '_ranks'],
                     'misc_mod' => $_POST['skill_' . $template_name . '_misc_mod']
                 );
+                */
+
+                $skill_entries = array(
+                    'template_name' => $template_name,
+                    'skill_mod' => 0,
+                    'ability_mod' => 0,
+                    'ranks' => 0,
+                    'misc_mod' => 0
+                );
 
                 $washed_skill = Utils::washArray($skill_entries);
                 $skill = new Skill($washed_skill);
                 array_push($skill_array, $skill);
             }
 
+            /*
             $skills_entries = array (
                 'max_ranks_class' => $_POST['skills_max_ranks_class'],
                 'max_ranks_cross_class' => $_POST['skills_max_ranks_cross_class']
+            );
+            */
+
+            $skills_entries = array (
+                'max_ranks_class' => 0,
+                'max_ranks_cross_class' => 0
             );
 
             $washed_skills = Utils::washArray($skills_entries);
@@ -492,8 +572,14 @@ if(!class_exists('Create_Character_Controller')) {
         public function createLanguages() {
             $languages = $_SESSION['languages_array'];
 
+            /*
             $languages_entries = array(
                 'max_number_of_languages' => $_POST['max_number_of_languages']
+            );
+            */
+
+            $languages_entries = array(
+                'max_number_of_languages' => 0
             );
 
             $washed = Utils::washArray($languages_entries);
@@ -555,12 +641,21 @@ if(!class_exists('Create_Character_Controller')) {
         public function createInventory() {
             $items_array = array();
             $no_of_items = $_SESSION['no_of_inventory_items'];
+            //$no_of_items = 0;
             
             for($x = 1; $x <= $no_of_items; $x++) {
+                /*
                 $items_entries = array(
                     'item_name' => $_POST['item_name_' . $x],
                     'item_weight' => $_POST['item_weight_' . $x],
                     'item_quantity' => $_POST['item_quantity_' . $x]
+                );
+                */
+
+                $items_entries = array(
+                    'item_name' => 'Item Name',
+                    'item_weight' => 1,
+                    'item_quantity' => 1
                 );
 
                 $washed_items = Utils::washArray($items_entries);
@@ -569,6 +664,7 @@ if(!class_exists('Create_Character_Controller')) {
                 array_push($items_array, $item);
             }
 
+            /*
             $inventory_entries = array(
                 'light_load' => $_POST['inventory_light_load'],
                 'medium_load' => $_POST['inventory_medium_load'],
@@ -576,6 +672,16 @@ if(!class_exists('Create_Character_Controller')) {
                 'lift_over_head' => $_POST['inventory_lift_over_head'],
                 'lift_off_ground' => $_POST['inventory_lift_off_ground'],
                 'push_or_drag' => $_POST['inventory_push_or_drag']
+            );
+            */
+
+            $inventory_entries = array(
+                'light_load' => 0,
+                'medium_load' => 0,
+                'heavy_load' => 0,
+                'lift_over_head' => 0,
+                'lift_off_ground' => 0,
+                'push_or_drag' => 0
             );
 
             $washed_inventory = Utils::washArray($inventory_entries);
@@ -590,6 +696,7 @@ if(!class_exists('Create_Character_Controller')) {
             $categories = array('fortitude', 'reflex', 'will');
 
             foreach($categories as $category) {
+                /*
                 $saving_throw_entries = array(
                     'name' => $category,
                     'total' => $_POST['saving_throw_' . $category . '_total'],
@@ -598,6 +705,17 @@ if(!class_exists('Create_Character_Controller')) {
                     'magic_mod' => $_POST['saving_throw_' . $category . '_magic_mod'],
                     'misc_mod' => $_POST['saving_throw_' . $category . '_misc_mod'],
                     'temp_mod' => $_POST['saving_throw_' . $category . '_temp_mod'],
+                );
+                */
+
+                $saving_throw_entries = array(
+                    'name' => $category,
+                    'total' => 0,
+                    'base_save' => 0,
+                    'ability_mod' => 0,
+                    'magic_mod' => 0,
+                    'misc_mod' => 0,
+                    'temp_mod' => 0,
                 );
 
                 $washed = Utils::washArray($saving_throw_entries);
@@ -627,6 +745,7 @@ if(!class_exists('Create_Character_Controller')) {
 
         //TODO create comment
         public function createArmor() {
+            /*
             $armor_entries = array(
                 'armor_name' => $_POST['armor_name'],
                 'armor_type' => $_POST['armor_type'],
@@ -638,6 +757,19 @@ if(!class_exists('Create_Character_Controller')) {
                 'armor_weight' => $_POST['armor_weight'],
                 'armor_special_properties' => $_POST['armor_special_properties'],
             );
+            */
+
+            $armor_entries = array(
+                'armor_name' => 'Armor Name',
+                'armor_type' => 0,
+                'armor_ac_bonus' => 0,
+                'armor_max_dex' => 0,
+                'armor_check_penalty' => 0,
+                'armor_spell_failure' => 0,
+                'armor_speed' => 0,
+                'armor_weight' => 0,
+                'armor_special_properties' => 0
+            );
 
             $washed = Utils::washArray($armor_entries);
             $armor = new Armor($washed);
@@ -647,6 +779,7 @@ if(!class_exists('Create_Character_Controller')) {
 
         //TODO create comment
         public function createShield() {
+            /*
             $shield_entries = array(
                 'shield_name' => $_POST['shield_name'],
                 'shield_ac_bonus' => $_POST['shield_ac_bonus'],
@@ -654,6 +787,16 @@ if(!class_exists('Create_Character_Controller')) {
                 'shield_check_penalty' => $_POST['shield_check_penalty'],
                 'shield_spell_failure' => $_POST['shield_spell_failure'],
                 'shield_special_properties' => $_POST['shield_special_properties']
+            );
+            */
+
+            $shield_entries = array(
+                'shield_name' => 0,
+                'shield_ac_bonus' => 0,
+                'shield_weight' => 0,
+                'shield_check_penalty' => 0,
+                'shield_spell_failure' => 0,
+                'shield_special_properties' => 0
             );
 
             $washed = Utils::washArray($shield_entries);
@@ -668,11 +811,20 @@ if(!class_exists('Create_Character_Controller')) {
             $protective_items = array();
 
             for($i = 1; $i < $_SESSION['no_of_protective_items'] + 1; $i++) {
+                /*
                 $protective_item_entries = array(
                     'protective_item_name' => $_POST['protective_item_name_' . $i],
                     'protective_item_ac_bonus' => $_POST['protective_item_ac_bonus_' . $i],
                     'protective_item_weight' => $_POST['protective_item_weight_' . $i],
                     'protective_item_special_properties' => $_POST['protective_item_special_properties_' . $i]
+                );
+                */
+
+                $protective_item_entries = array(
+                    'protective_item_name' => 0,
+                    'protective_item_ac_bonus' => 0,
+                    'protective_item_weight' => 0,
+                    'protective_item_special_properties' => 0
                 );
 
                 $washed = Utils::washArray($protective_item_entries);

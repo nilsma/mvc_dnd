@@ -36,7 +36,7 @@ if(!class_exists('Armor')) {
             if(!empty($ac_bonus) && $ac_bonus >= 0) {
                 $this->ac_bonus = $ac_bonus;
             } else {
-                $this->ac_bonus = 10;
+                $this->ac_bonus = 0;
             }
 
         }

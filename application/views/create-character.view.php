@@ -47,18 +47,18 @@ if(!class_exists('Create_Character_View')) {
             $html .= '<div id="character_creation">' . "\n";
             $html .= '<form name="create_character" action="' . $_SERVER['PHP_SELF'] . '" method="POST">' . "\n";
             $html .= $this->buildPersonalia($creation_array);
-            $html .= $this->buildStats($creation_array);
-            $html .= $this->buildArmorClass($creation_array);
+            //$html .= $this->buildStats($creation_array);
+            //$html .= $this->buildArmorClass($creation_array);
             $html .= $this->buildAttributes($creation_array);
-            $html .= $this->buildSavingThrows($creation_array);
-            $html .= $this->buildAttacks($creation_array);
-            $html .= $this->buildArmors($creation_array);
-            $html .= $this->buildSkills($creation_array);
-            $html .= $this->buildFeats();
-            $html .= $this->buildSpecialAbilities();
-            $html .= $this->buildLanguages($creation_array);
-            $html .= $this->buildPurse($creation_array);
-            $html .= $this->buildInventory($creation_array);
+            //$html .= $this->buildSavingThrows($creation_array);
+            //$html .= $this->buildAttacks($creation_array);
+            //$html .= $this->buildArmors($creation_array);
+            //$html .= $this->buildSkills($creation_array);
+            //$html .= $this->buildFeats();
+            //$html .= $this->buildSpecialAbilities();
+            //$html .= $this->buildLanguages($creation_array);
+            //$html .= $this->buildPurse($creation_array);
+            //$html .= $this->buildInventory($creation_array);
             $html .= '<input name="submit" type="submit"  value="Create Character">' . "\n";
             $html .= '</form>' . "\n";
             $html .= '</div> <!-- end #character_creation -->' . "\n";
@@ -72,15 +72,20 @@ if(!class_exists('Create_Character_View')) {
          */
         public function buildPersonalia($creation_array) {
             $prefix = 'personalia_';
+            /*
             $categories = array('name' => 'Name', 'class' => 'Class', 'level' => 'Level', 'size' => 'Size',
                 'age' => 'Age', 'gender' => 'Gender', 'height' => 'Height', 'weight' => 'Weight', 'eyes' => 'Eyes',
                 'hair' => 'Hair', 'skin' => 'Skin', 'race' => 'Race', 'alignment' => 'Alignment',
                 'deity' => 'Deity', 'xp' => 'XP', 'next_level' => 'Next Level'
             );
+            */
+
+            $categories = array('name' => 'Name');
 
             $html = '';
             $html .= '<div id="personalia">' . "\n";
             $html .= '<h2>Personalia</h2>' . "\n";
+            $html .= '<p>Don\'t worry, you can change everything later whenever you feel like it.</p>' . "\n";
 
             foreach($categories as $key => $val) {
                 if(isset($creation_array[$prefix . $key])) {
@@ -146,9 +151,9 @@ if(!class_exists('Create_Character_View')) {
             $html .= '<tr>' . "\n";
             $html .= '<td></td>' . "\n";
             $html .= '<td>Ability Score</td>' . "\n";
-            $html .= '<td>Ability Modifier</td>' . "\n";
-            $html .= '<td>Temp Score</td>' . "\n";
-            $html .= '<td>Temp Modifier</td>' . "\n";
+            //$html .= '<td>Ability Modifier</td>' . "\n";
+            //$html .= '<td>Temp Score</td>' . "\n";
+            //$html .= '<td>Temp Modifier</td>' . "\n";
             $html .= '</tr>' . "\n";
             $html .= '</thead>' . "\n";
 
@@ -160,9 +165,10 @@ if(!class_exists('Create_Character_View')) {
                 $html .= '<tr>' . "\n";
                 $html .= '<td>' . ucfirst($attribute) . ': </td>' . "\n";
 
-                $categories = array($attribute . '_score', $attribute . '_mod', $attribute . '_temp_score',
-                    $attribute . '_temp_mod'
-                );
+                //$categories = array($attribute . '_score', $attribute . '_mod', $attribute . '_temp_score',
+                //$attribute . '_temp_mod'
+                //);
+                $categories = array($attribute . '_score');
 
                 foreach($categories as $category) {
                     if(isset($creation_array[$category])) {
