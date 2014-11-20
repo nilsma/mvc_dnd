@@ -146,13 +146,13 @@ if(!class_exists('Character_Sheet_View')) {
             $html .= '<label for="armor_class_protective_items">Protective Items AC: </label>';
             $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_protective_items" name="armor_class_protective_item" type="number" value="{{ sumProtectiveItems() }}" disabled>' . "\n";
             $html .= '<label for="armor_class_total">Armor Class: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_total" name="armor_class_total" type="number" value="{{ sumArmorClass(armor_class_base, armor_ac_bonus, shield_ac_bonus, getSkillAbilityModifier(\'DEX\'), armor_class_size_mod, armor_class_natural_armor) }}" disabled>' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_total" name="armor_class_total" type="number" value="{{ sumArmorClass() }}" disabled>' . "\n";
             $html .= '</div>' . "\n";
             $html .= '<div>' . "\n";
             $html .= '<label for="armor_class_touch_ac">Touch AC: </label>';
             $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_touch_ac" name="armor_class_touch_ac" type="number" value="{{ sumTouchArmorClass(armor_class_base, getSkillAbilityModifier(\'DEX\'), armor_class_size_mod) }}" disabled>' . "\n";
             $html .= '<label for="armor_class_flat_footed_ac">Flat Footed AC: </label>';
-            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_flat_footed_ac" name="armor_class_flat_footed_ac" type="number" value="{{ sumFlatFootedArmorClass(armor_class_base, armor_class_armor_bonus, armor_class_shield_bonus, armor_class_size_mod, armor_class_natural_armor) }}" disabled>' . "\n";
+            $html .= '<input onchange="updateArmorClass();" class="armor_class_input" id="armor_class_flat_footed_ac" name="armor_class_flat_footed_ac" type="number" value="{{ sumFlatFootedArmorClass() }}" disabled>' . "\n";
             $html .= '</div>' . "\n";
 
             $html .= '</div> <!-- end #armor_class -->' . "\n";

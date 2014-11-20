@@ -119,6 +119,8 @@ myApp.factory('attributeGetter', function($http) {
 
 myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 'skillGetter', 'itemGetter', 'armorGetter', 'shieldGetter', 'armorClassGetter', 'statsGetter', 'protectiveItemsGetter', function($scope, attributeGetter, savingThrowGetter, skillGetter, itemGetter, armorGetter, shieldGetter, armorClassGetter, statsGetter, protectiveItemsGetter) {
     var handleAttributeSuccess = function(data) {
+        $scope.attributes = data;
+
         $scope.strength_base = data['strength']['ability_score'];
         //$scope.strength_ability_mod = $scope.getAbilityModifier($scope.strength_base);
         $scope.strength_temp_score = data['strength']['temp_score'];
@@ -312,19 +314,18 @@ myApp.controller('MainCtrl', ['$scope', 'attributeGetter', 'savingThrowGetter', 
         return (stats_hp - stats_wounds);
     };
 
-    //calculate the flat footed armor class sum
-    $scope.sumFlatFootedArmorClass = function(base, armor_bonus, shield_bonus, size_mod, natural_armor) {
-        return(base + armor_bonus + shield_bonus + size_mod + natural_armor);
+    $scope.sumFlatFootedArmorClass = function() {
+        return(10 + $scope.armor_ac_bonus + $scope.shield_ac_bonus + $scope.armor_class_size_mod + $scope.armor_class_natural_armor + $scope.sumProtectiveItems());
     };
 
     //calculate the touch armor class sum
-    $scope.sumTouchArmorClass = function(base, dex_mod, size_mod) {
-        return(base + dex_mod + size_mod);
+    $scope.sumTouchArmorClass = function() {
+        return(10 + $scope.getSkillAbilityModifier('DEX') + $scope.armor_class_size_mod + $scope.sumProtectiveItems());
     };
 
     //calculate the armor class sum
-    $scope.sumArmorClass = function(base, armor_bonus, shield_bonus, dex_mod, size_mod, natural_armor) {
-        return (base + armor_bonus + shield_bonus + dex_mod + size_mod + natural_armor);
+    $scope.sumArmorClass = function() {
+        return (10 + $scope.armor_ac_bonus + $scope.shield_ac_bonus + $scope.getSkillAbilityModifier('DEX') + $scope.armor_class_size_mod + $scope.armor_class_natural_armor + $scope.sumProtectiveItems());
     };
 
     //calculate the saving throw's sum
